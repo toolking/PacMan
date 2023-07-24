@@ -1,0 +1,9 @@
+---
+Checks: '*,-abseil-*,-fuchsia-*,-google-*,-llvm*,-zircon-*'
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle: webkit
+CheckOptions:
+  - key: modernize-use-nullptr.NullMacros
+    value: 'NULL'
