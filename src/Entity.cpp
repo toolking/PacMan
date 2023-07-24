@@ -45,7 +45,7 @@ void Entity::char_board_pos(unsigned char side_dir, Position& board_pos, float c
     }
 }
 
-bool Entity::wall_collision(short x, short y, Board::board_type const& actual_map, bool can_use_door)
+auto Entity::wall_collision(short x, short y, Board::board_type const& actual_map, bool can_use_door) -> bool
 {
     float cell_x = x / static_cast<float>(BOCK_SIZE_24);
     float cell_y = y / static_cast<float>(BOCK_SIZE_24);

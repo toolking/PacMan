@@ -164,7 +164,7 @@ void Board::copy_board(board_type& actual_map)
     std::copy(numeric_board_.begin(), numeric_board_.end(), actual_map.begin());
 }
 
-bool Board::is_extra_life()
+auto Board::is_extra_life() -> bool
 {
     if (is_extra_ || score_ < 10000) {
         return false;
@@ -184,7 +184,7 @@ void Board::decrease_lives()
     lives_--;
 }
 
-unsigned char Board::get_lives()
+auto Board::get_lives() -> unsigned char
 {
     return lives_;
 }

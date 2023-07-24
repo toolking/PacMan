@@ -1,6 +1,6 @@
 #include "Ghost.hpp"
 
-inline unsigned int direction2facing(Direction d)
+inline auto direction2facing(Direction d) -> unsigned int
 {
     switch (d) {
     case Direction::Right:
@@ -36,7 +36,7 @@ Ghost::~Ghost()
     eyes_.free();
 }
 
-bool Ghost::is_target_to_calculate(Pac const& pac)
+auto Ghost::is_target_to_calculate(Pac const& pac) -> bool
 {
     if (!is_alive()) {
         can_use_door_ = true;
@@ -94,7 +94,7 @@ void Ghost::calculate_direction(Board::board_type const& actual_map)
             float dist_x = abs(pos_x - Target.x);
             if (dist_x > WINDOW_WIDTH / 2)
                 dist_x = WINDOW_WIDTH - dist_x;
-            float dist = static_cast<float>(sqrt(pow(dist_x, 2) + pow(pos_y - Target.y, 2)));
+            auto dist = static_cast<float>(sqrt(pow(dist_x, 2) + pow(pos_y - Target.y, 2)));
             distances.push_back(dist);
             possible_directions.push_back(i);
         }
@@ -115,7 +115,7 @@ void Ghost::calculate_direction(Board::board_type const& actual_map)
     }
 }
 
-bool Ghost::is_home()
+auto Ghost::is_home() -> bool
 {
     return (position().x > 11 * BOCK_SIZE_24 && position().x < 17 * BOCK_SIZE_24)
         && (position().y > 15 * BOCK_SIZE_24 && position().y < 18 * BOCK_SIZE_24);

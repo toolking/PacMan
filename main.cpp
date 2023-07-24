@@ -5,7 +5,7 @@
 
 // Use arrow keys or WASD to move
 
-int main(int, char* [])
+auto main(int, char*[]) -> int
 {
     initialize_SDL();
 

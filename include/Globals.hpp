@@ -4,7 +4,9 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
+
 #include <string>
+#include <vector>
 
 constexpr unsigned char BOARD_WIDTH = 28;
 constexpr unsigned char BOARD_HEIGHT = 36;
@@ -73,4 +75,5 @@ void close_SDL();
 void init_frames(
     const unsigned char total_frames,
     SDL_Rect sprite_clips[],
-    unsigned char current_block_size = BLOCK_SIZE_32);
+    unsigned char current_block_size = BLOCK_SIZE_32
+);

@@ -1,9 +1,9 @@
 #include "Globals.hpp"
 
-SDL_Window* Window = NULL;
-SDL_Renderer* Renderer = NULL;
-TTF_Font* Font = NULL;
-TTF_Font* LittleFont = NULL;
+SDL_Window* Window = nullptr;
+SDL_Renderer* Renderer = nullptr;
+TTF_Font* Font = nullptr;
+TTF_Font* LittleFont = nullptr;
 
 void initialize_SDL()
 {
@@ -23,12 +23,12 @@ void close_SDL()
     SDL_DestroyWindow(Window);
 	TTF_CloseFont(Font);
 	TTF_CloseFont(LittleFont);
-    Window = NULL;
-    Renderer = NULL;
-    IMG_Quit();
-    TTF_Quit();
-    Mix_Quit();
-    SDL_Quit();
+        Window = nullptr;
+        Renderer = nullptr;
+        IMG_Quit();
+        TTF_Quit();
+        Mix_Quit();
+        SDL_Quit();
 }
 
 void init_frames(

@@ -48,7 +48,7 @@ void Pac::update_pos(std::vector<Direction>& mover, Board::board_type const& act
     }
 }
 
-unsigned char Pac::food_collision(Board::board_type& actual_map)
+auto Pac::food_collision(Board::board_type& actual_map) -> unsigned char
 {
     float cell_x = position().x / static_cast<float>(BOCK_SIZE_24);
     float cell_y = position().y / static_cast<float>(BOCK_SIZE_24);
@@ -66,7 +66,7 @@ unsigned char Pac::food_collision(Board::board_type& actual_map)
     return 2;
 }
 
-bool Pac::is_energized() const
+auto Pac::is_energized() const -> bool
 {
     return energy_status_;
 }
@@ -96,7 +96,7 @@ void Pac::set_facing(Direction mover)
     }
 }
 
-bool Pac::is_dead_animation_ended()
+auto Pac::is_dead_animation_ended() -> bool
 {
     return dead_animation_statement_;
 }

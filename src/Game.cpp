@@ -185,7 +185,7 @@ void Game::update(std::vector<Direction>& mover)
     entity_collisions();
 }
 
-unsigned short Game::get_level()
+auto Game::get_level() -> unsigned short
 {
     return level_;
 }
@@ -205,7 +205,7 @@ void Game::update_difficulty()
     }
 }
 
-bool Game::is_level_completed()
+auto Game::is_level_completed() -> bool
 {
     for (unsigned short i = 0; i < BOARD_HEIGHT * BOARD_WIDTH; i++) {
         if (actual_map_[i] == BlockType::Pellet)
@@ -278,7 +278,7 @@ void Game::draw_little_score()
             Texture this_lil_texture;
             std::stringstream ss;
             ss << little_score_scorers_.at(i);
-            this_lil_texture.load_from_rendered_text(ss.str(), WHITE, 1);
+            this_lil_texture.load_from_rendered_text(ss.str(), WHITE, true);
             Position ThisLilPos = little_score_positions_.at(i);
             this_lil_texture.render(ThisLilPos.x, ThisLilPos.y - BOCK_SIZE_24 / 2);
             this_lil_texture.free();
@@ -290,7 +290,7 @@ void Game::draw_little_score()
     }
 }
 
-bool Game::process(Timer& game_timer, std::vector<Direction>& mover, unsigned short& start_ticks)
+auto Game::process(Timer& game_timer, std::vector<Direction>& mover, unsigned short& start_ticks) -> bool
 {
     // Returns false when should render the last animation frame.
     // It's bad looking, so I don't want to render it.

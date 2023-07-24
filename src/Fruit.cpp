@@ -5,7 +5,6 @@
 #include <sstream>
 
 Fruit::Fruit()
-  : position_(13 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 20 * BOCK_SIZE_24)
 {
     fruit_texture_.load_from_file("Textures/Fruit32.png");
     init_frames(FRUIT_FRAMES, fruit_sprite_clips_);
@@ -29,12 +28,12 @@ void Fruit::update_food_counter()
             fruit_timer_.start();
 }
 
-bool Fruit::is_eatable()
+auto Fruit::is_eatable() -> bool
 {
     return fruit_timer_.is_started();
 }
 
-unsigned short Fruit::get_score_value()
+auto Fruit::get_score_value() -> unsigned short
 {
     return SCORE_TABLE[current_fruit_];
 }
@@ -50,7 +49,7 @@ void Fruit::reset_score_timer()
         score_timer_.reset();
 }
 
-bool Fruit::check_despawn()
+auto Fruit::check_despawn() -> bool
 {
     return fruit_timer_.get_ticks() > fruit_duration_;
 }
@@ -75,7 +74,7 @@ void Fruit::draw()
         std::stringstream ss;
         ss << SCORE_TABLE[current_fruit_];
         Texture score_texture;
-        score_texture.load_from_rendered_text(ss.str(), WHITE, 1);
+        score_texture.load_from_rendered_text(ss.str(), WHITE, true);
         score_texture.render(position().x, position().y - BOCK_SIZE_24 / 2);
         score_texture.free();
     }

@@ -38,5 +38,5 @@ private:
     unsigned char current_fruit_ {0};
     unsigned short fruit_duration_ {9000};
     unsigned char food_counter_ {0};
-    Position position_ {0, 0};
+    Position position_ {13 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 20 * BOCK_SIZE_24};
 };
