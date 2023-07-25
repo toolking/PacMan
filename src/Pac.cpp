@@ -1,22 +1,16 @@
 #include "Pac.hpp"
 
 Pac::Pac()
-  : Entity(EntityType::ePacMan)
+  : Entity(Entity::Type::PacMan)
 {
     living_pac_.load_from_file("Textures/PacMan32.png");
     death_pac_.load_from_file("Textures/GameOver32.png");
-    init_frames(LIVING_PAC_FRAMES, living_pac_sprite_clips_);
-    init_frames(DEATH_PAC_FRAMES, death_pac_sprite_clips_);
+    init_frames(living_pac_sprite_clips_);
+    init_frames(death_pac_sprite_clips_);
     curr_living_pac_frame_ = 0;
     curr_death_pac_frame_ = 0;
     energy_status_ = false;
     dead_animation_statement_ = false;
-}
-
-Pac::~Pac()
-{
-    living_pac_.free();
-    death_pac_.free();
 }
 
 void Pac::update_pos(std::vector<Direction>& mover, Board::board_type const& actual_map)
@@ -52,14 +46,14 @@ auto Pac::food_collision(Board::board_type& actual_map) -> unsigned char
 {
     float cell_x = position().x / static_cast<float>(BOCK_SIZE_24);
     float cell_y = position().y / static_cast<float>(BOCK_SIZE_24);
-    Position board_pos;
-    for (unsigned char SideDir = 0; SideDir < 4; SideDir++) {
-        char_board_pos(SideDir, board_pos, cell_x, cell_y);
-        if (BlockType::Pellet == actual_map[BOARD_WIDTH * board_pos.y + board_pos.x]) {
-            actual_map[BOARD_WIDTH * board_pos.y + board_pos.x] = BlockType::Nothing;
+    for (unsigned char side_dir = 0; side_dir < 4; side_dir++) {
+        Position board_pos = char_board_pos(side_dir, cell_x, cell_y);
+        auto& act_pos = actual_map[BOARD_WIDTH * board_pos.y + board_pos.x];
+        if (BlockType::Pellet == act_pos) {
+            act_pos = BlockType::Nothing;
             return 0;
-        } else if (BlockType::Energizer == actual_map[BOARD_WIDTH * board_pos.y + board_pos.x]) {
-            actual_map[BOARD_WIDTH * board_pos.y + board_pos.x] = BlockType::Nothing;
+        } else if (BlockType::Energizer == act_pos) {
+            act_pos = BlockType::Nothing;
             return 1;
         }
     }

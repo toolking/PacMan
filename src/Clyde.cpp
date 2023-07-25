@@ -1,7 +1,7 @@
 #include "Clyde.hpp"
 
 Clyde::Clyde()
-  : Ghost(ORANGE, EntityType::eClyde)
+  : Ghost(ORANGE, Entity::Type::Clyde)
 {
     ScatterTarget = Position(BOCK_SIZE_24 / 2, 35 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);
     Home = Position(15 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 17 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);

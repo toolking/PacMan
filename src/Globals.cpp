@@ -21,28 +21,12 @@ void close_SDL()
 {
     SDL_DestroyRenderer(Renderer);
     SDL_DestroyWindow(Window);
-	TTF_CloseFont(Font);
-	TTF_CloseFont(LittleFont);
-        Window = nullptr;
-        Renderer = nullptr;
-        IMG_Quit();
-        TTF_Quit();
-        Mix_Quit();
-        SDL_Quit();
-}
-
-void init_frames(
-    const unsigned char total_frames,
-    SDL_Rect sprite_clips[],
-    unsigned char current_block_size /* = BlockSize32 */
-)
-{
-    unsigned short counter = 0;
-    for (unsigned char i = 0; i < total_frames; i++) {
-        sprite_clips[i].x = counter;
-        sprite_clips[i].y = 0;
-        sprite_clips[i].w = current_block_size;
-        sprite_clips[i].h = current_block_size;
-        counter += current_block_size;
-    }
+    TTF_CloseFont(Font);
+    TTF_CloseFont(LittleFont);
+    Window = nullptr;
+    Renderer = nullptr;
+    IMG_Quit();
+    TTF_Quit();
+    Mix_Quit();
+    SDL_Quit();
 }

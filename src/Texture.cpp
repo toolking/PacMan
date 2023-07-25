@@ -25,7 +25,7 @@ auto Texture::load_from_file(std::string path) -> bool
         goto out_load_no_load;
     }
     // Color key image
-    SDL_SetColorKey(loaded_surface, SDL_TRUE, SDL_MapRGB(loaded_surface->format, 0, 0xFF, 0xFF));
+    SDL_SetColorKey(loaded_surface, SDL_TRUE, SDL_MapRGB(loaded_surface->format, 0, 255, 255));
 
     // Create texture from surface pixels
     new_texture = SDL_CreateTextureFromSurface(Renderer, loaded_surface);

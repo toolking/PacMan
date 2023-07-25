@@ -5,12 +5,12 @@
 #include "Globals.hpp"
 
 #include <vector>
+#include <array>
 
 class Pac : public Entity
 {
 public:
     Pac();
-    ~Pac();
     void update_pos(std::vector<Direction>& mover, Board::board_type const& actual_map);
     unsigned char food_collision(Board::board_type& actual_map);
     bool is_energized() const;
@@ -26,8 +26,8 @@ public:
 private:
     Texture living_pac_;
     Texture death_pac_;
-    SDL_Rect living_pac_sprite_clips_[LIVING_PAC_FRAMES];
-    SDL_Rect death_pac_sprite_clips_[DEATH_PAC_FRAMES];
+    std::array<SDL_Rect,LIVING_PAC_FRAMES> living_pac_sprite_clips_;
+    std::array<SDL_Rect,DEATH_PAC_FRAMES> death_pac_sprite_clips_;
     unsigned char curr_living_pac_frame_;
     unsigned char curr_death_pac_frame_;
     bool energy_status_;

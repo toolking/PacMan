@@ -1,7 +1,7 @@
 #include "Inky.hpp"
 
 Inky::Inky()
-  : Ghost(CYAN, EntityType::eInky)
+  : Ghost(CYAN, Entity::Type::Inky)
 {
     ScatterTarget = Position(26 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 35 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);
     Home = Position(11 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 17 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);

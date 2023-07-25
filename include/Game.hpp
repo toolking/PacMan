@@ -18,7 +18,6 @@ class Game
 {
 public:
     Game();
-    ~Game();
     void reset_ghosts_life_statement();
     void reset_ghosts_facing();
     void start();
@@ -62,7 +61,7 @@ private:
     unsigned short ghost_timer_target_;
     bool timed_status_;
     unsigned short scorer_;
-    std::vector<Timer> little_score_timer_;
+    std::vector<Timer> little_score_timers_;
     std::vector<Position> little_score_positions_;
     std::vector<unsigned short> little_score_scorers_;
     unsigned short little_timer_target_;

@@ -21,40 +21,32 @@ void Entity::get_possible_position(short& x, short& y, Direction mover)
     }
 }
 
-void Entity::char_board_pos(unsigned char side_dir, Position& board_pos, float cell_x, float cell_y)
+auto Entity::char_board_pos(unsigned char side_dir, float cell_x, float cell_y) -> Position
 {
     switch (side_dir) {
     case 0:
-        board_pos.x = static_cast<short>(floor(cell_x));
-        board_pos.y = static_cast<short>(floor(cell_y));
-        break;
+        return Position(static_cast<short>(floor(cell_x)), static_cast<short>(floor(cell_y)));
     case 1:
-        board_pos.x = static_cast<short>(ceil(cell_x));
-        board_pos.y = static_cast<short>(floor(cell_y));
-        break;
+        return Position(static_cast<short>(ceil(cell_x)), static_cast<short>(floor(cell_y)));
     case 2:
-        board_pos.x = static_cast<short>(floor(cell_x));
-        board_pos.y = static_cast<short>(ceil(cell_y));
-        break;
+        return Position(static_cast<short>(floor(cell_x)), static_cast<short>(ceil(cell_y)));
     case 3:
-        board_pos.x = static_cast<short>(ceil(cell_x));
-        board_pos.y = static_cast<short>(ceil(cell_y));
-        break;
+        return Position(static_cast<short>(ceil(cell_x)), static_cast<short>(ceil(cell_y)));
     default:
         break;
     }
+    return Position{};
 }
 
 auto Entity::wall_collision(short x, short y, Board::board_type const& actual_map, bool can_use_door) -> bool
 {
-    float cell_x = x / static_cast<float>(BOCK_SIZE_24);
-    float cell_y = y / static_cast<float>(BOCK_SIZE_24);
-    Position BoardPos;
-    for (unsigned char SideDir = 0; SideDir < 4; SideDir++) {
-        char_board_pos(SideDir, BoardPos, cell_x, cell_y);
-        if (BlockType::Wall == actual_map[BOARD_WIDTH * BoardPos.y + abs(BoardPos.x % BOARD_WIDTH)]) {
+    float const cell_x = x / static_cast<float>(BOCK_SIZE_24);
+    float const cell_y = y / static_cast<float>(BOCK_SIZE_24);
+    for (unsigned char side_dir = 0; side_dir < 4; side_dir++) {
+        Position board_pos = char_board_pos(side_dir, cell_x, cell_y);
+        if (BlockType::Wall == actual_map[BOARD_WIDTH * board_pos.y + abs(board_pos.x % BOARD_WIDTH)]) {
             return true;
-        } else if (BlockType::Door == actual_map[BOARD_WIDTH * BoardPos.y + abs(BoardPos.x % BOARD_WIDTH)]) {
+        } else if (BlockType::Door == actual_map[BOARD_WIDTH * board_pos.y + abs(board_pos.x % BOARD_WIDTH)]) {
             return !can_use_door;
         }
     }

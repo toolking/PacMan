@@ -6,12 +6,12 @@
 #include "Timer.hpp"
 
 #include <SDL2/SDL.h>
+#include <array>
 
 class Fruit
 {
 public:
     Fruit();
-    ~Fruit();
     void mod_current_fruit(unsigned short actual_actual_level);
     void update_food_counter();
     bool is_eatable();
@@ -34,7 +34,7 @@ private:
     Texture fruit_texture_;
     Timer fruit_timer_;
     Timer score_timer_;
-    SDL_Rect fruit_sprite_clips_[FRUIT_FRAMES];
+    std::array<SDL_Rect,FRUIT_FRAMES> fruit_sprite_clips_;
     unsigned char current_fruit_ {0};
     unsigned short fruit_duration_ {9000};
     unsigned char food_counter_ {0};

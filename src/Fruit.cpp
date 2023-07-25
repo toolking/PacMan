@@ -7,12 +7,7 @@
 Fruit::Fruit()
 {
     fruit_texture_.load_from_file("Textures/Fruit32.png");
-    init_frames(FRUIT_FRAMES, fruit_sprite_clips_);
-}
-
-Fruit::~Fruit()
-{
-    fruit_texture_.free();
+    init_frames(fruit_sprite_clips_);
 }
 
 void Fruit::mod_current_fruit(unsigned short actual_level)
@@ -76,6 +71,5 @@ void Fruit::draw()
         Texture score_texture;
         score_texture.load_from_rendered_text(ss.str(), WHITE, true);
         score_texture.render(position().x, position().y - BOCK_SIZE_24 / 2);
-        score_texture.free();
     }
 }

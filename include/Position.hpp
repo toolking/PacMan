@@ -5,7 +5,8 @@
 class Position
 {
 public:
-    explicit Position(short x = 0, short y = 0)
+    Position() = default;
+    Position(short x, short y)
       : x {x}, y {y}
     {}
     std::strong_ordering operator<=>(Position const& other) const = default;

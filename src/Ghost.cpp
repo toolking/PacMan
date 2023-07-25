@@ -16,24 +16,18 @@ inline auto direction2facing(Direction d) -> unsigned int
     }
 }
 
-Ghost::Ghost(SDL_Color color, EntityType identity)
+Ghost::Ghost(SDL_Color color, Entity::Type identity)
   : Entity(identity)
 {
     body_.load_from_file("Textures/GhostBody32.png");
     eyes_.load_from_file("Textures/GhostEyes32.png");
-    init_frames(GHOST_BODY_FRAMES, ghost_body_sprite_clips_);
-    init_frames(GHOST_EYE_FRAMES, ghost_eye_sprite_clips_);
+    init_frames(ghost_body_sprite_clips_);
+    init_frames(ghost_eye_sprite_clips_);
     color_ = color;
     current_body_frame_ = 0;
     can_use_door_ = false;
     status_ = false;
     DoorTarget = Position(13 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 15 * BOCK_SIZE_24);
-}
-
-Ghost::~Ghost()
-{
-    body_.free();
-    eyes_.free();
 }
 
 auto Ghost::is_target_to_calculate(Pac const& pac) -> bool
@@ -167,20 +161,20 @@ void Ghost::update_speed(Pac const& pac)
 void Ghost::draw(Pac const& pac, Timer ghost_timer, unsigned short timer_target)
 {
     if (pac.is_energized() && is_alive() && !is_home()) {
-        body_.setColor(0, 0, 255);
+        body_.set_color(0, 0, 255);
         if (ghost_timer.get_ticks() > timer_target - 2000u) {
             if ((ghost_timer.get_ticks() / 250) % 2 == 1) {
-                body_.setColor(255, 255, 255);
-                eyes_.setColor(255, 0, 0);
+                body_.set_color(255, 255, 255);
+                eyes_.set_color(255, 0, 0);
             } else {
-                eyes_.setColor(255, 255, 255);
+                eyes_.set_color(255, 255, 255);
             }
         } else {
-            eyes_.setColor(255, 255, 255);
+            eyes_.set_color(255, 255, 255);
         }
     } else {
-        eyes_.setColor(255, 255, 255);
-        body_.setColor(color_.r, color_.g, color_.b);
+        eyes_.set_color(255, 255, 255);
+        body_.set_color(color_.r, color_.g, color_.b);
     }
 
     if (is_alive()) {

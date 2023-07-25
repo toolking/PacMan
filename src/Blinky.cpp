@@ -2,7 +2,7 @@
 #include "Globals.hpp"
 
 Blinky::Blinky()
-  : Ghost(RED, EntityType::eBlinky)
+  : Ghost(RED, Entity::Type::Blinky)
 {
     ScatterTarget = Position(25 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, BOCK_SIZE_24 / 2);
     Home = Position(13 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 17 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);

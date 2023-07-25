@@ -5,7 +5,7 @@
 
 class Timer
 {
-    using ticks_t = uint32_t;
+    using ticks_type = uint32_t;
 
 public:
     void start()
@@ -13,7 +13,7 @@ public:
         started_ = true;
         paused_ = false;
         start_ticks_ = SDL_GetTicks();
-        paused_ticks_ = 0;
+        paused_ticks_ = ticks_type {};
     }
 
     void reset()
@@ -33,7 +33,7 @@ public:
             return;
         paused_ = true;
         paused_ticks_ = SDL_GetTicks() - start_ticks_;
-        start_ticks_ = 0;
+        start_ticks_ = ticks_type {};
     }
 
     void unpause()
@@ -42,13 +42,13 @@ public:
             return;
         paused_ = false;
         start_ticks_ = SDL_GetTicks() - paused_ticks_;
-        paused_ticks_ = 0;
+        paused_ticks_ = ticks_type {};
     }
 
-    ticks_t get_ticks() const
+    ticks_type get_ticks() const
     {
         if (!started_) {
-            return ticks_t {};
+            return ticks_type {};
         }
         if (paused_) {
             return paused_ticks_;
@@ -67,8 +67,8 @@ public:
     }
 
 private:
-    ticks_t start_ticks_ {}; // Ticks since start
-    ticks_t paused_ticks_ {}; // Ticks since stop
+    ticks_type start_ticks_ {}; // Ticks since start
+    ticks_type paused_ticks_ {}; // Ticks since stop
     bool paused_ {};
     bool started_ {};
 };

@@ -5,26 +5,26 @@
 #include "Globals.hpp"
 #include "Position.hpp"
 
-enum EntityType : unsigned char
-{
-    ePacMan,
-    eBlinky,
-    eInky,
-    ePinky,
-    eClyde,
-    Noone
-};
-
 class Board;
 
 class Entity
 {
 public:
-    Entity(EntityType identity)
+    enum class Type : unsigned char
+    {
+        Noone = 0,
+        PacMan,
+        Blinky,
+        Inky,
+        Pinky,
+        Clyde
+    };
+
+    Entity(Type identity)
       : identity_ {identity}
     {}
 
-    unsigned char identity() const
+    Type identity() const
     {
         return identity_;
     }
@@ -79,9 +79,10 @@ public:
         position_ = position;
     }
 
-    bool is_colliding(Position other)
+    bool is_colliding(Position const& other)
     {
-        return (other.x > position_.x - BOCK_SIZE_24 && other.x < position_.x + BOCK_SIZE_24) && (other.y > position_.y - BOCK_SIZE_24 && other.y < position_.y + BOCK_SIZE_24);
+        return (other.x > position_.x - BOCK_SIZE_24 && other.x < position_.x + BOCK_SIZE_24)
+            && (other.y > position_.y - BOCK_SIZE_24 && other.y < position_.y + BOCK_SIZE_24);
     }
 
 protected:
@@ -89,29 +90,30 @@ protected:
     void check_wrap();
     void get_possible_position(short& x, short& y, Direction mover);
     bool wall_collision(short x, short y, Board::board_type const& actual_map, bool can_use_door = false);
-    void char_board_pos(unsigned char side_dir, Position& board_pos, float cell_x, float cell_y);
+    auto char_board_pos(unsigned char side_dir, float cell_x, float cell_y) -> Position;
 
 private:
-    unsigned char identity_;
+    Type identity_;
     unsigned char speed_ {2};
-    Direction direction_ {Direction::Right};
-    unsigned char facing_ {0};
+    unsigned char facing_ {};
     bool life_statement_ {true};
-    Position position_ {Position {}};
+    Position position_ {};
+    Direction direction_ {Direction::Right};
 };
 
-inline auto entity_type_2_char(EntityType e) -> char
+inline auto entity_type_2_char(Entity::Type e) -> char
 {
     switch (e) {
-    case EntityType::ePacMan:
+        using enum Entity::Type;
+    case PacMan:
         return '0';
-    case EntityType::eBlinky:
+    case Blinky:
         return '1';
-    case EntityType::eInky:
+    case Inky:
         return '2';
-    case EntityType::ePinky:
+    case Pinky:
         return '3';
-    case EntityType::eClyde:
+    case Clyde:
         return '4';
     default:
         return ' ';

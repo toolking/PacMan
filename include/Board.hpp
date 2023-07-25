@@ -16,7 +16,6 @@ public:
     using board_type = std::array<block_type, BOARD_HEIGHT * BOARD_WIDTH>;
 
     Board();
-    ~Board();
     void convert_sketch();
     void copy_board(board_type& actual_map);
     void reset_position(Entity& entity);

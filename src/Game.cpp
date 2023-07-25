@@ -23,12 +23,6 @@ Game::Game()
     dead_ghosts_counter_ = 0;
 }
 
-Game::~Game()
-{
-    ready_.free();
-    game_over_texture_.free();
-}
-
 void Game::reset_ghosts_life_statement()
 {
     blinky_.life_statement(true);
@@ -241,7 +235,7 @@ void Game::deadly_ghost_pac_coll(Ghost& ghost)
         little_score_scorers_.push_back(scorer_);
         Timer ghost_lil_timer;
         ghost_lil_timer.start();
-        little_score_timer_.push_back(ghost_lil_timer);
+        little_score_timers_.push_back(ghost_lil_timer);
         Position this_lil_pos;
         this_lil_pos = ghost.position();
         little_score_positions_.push_back(this_lil_pos);
@@ -272,19 +266,18 @@ void Game::mod_death_sound_statement(bool new_death_sound_statement)
 
 void Game::draw_little_score()
 {
-    for (unsigned char i = 0; i < little_score_timer_.size(); i++) {
-        Timer this_lil_timer = little_score_timer_.at(i);
+    for (unsigned char i = 0; i < little_score_timers_.size(); i++) {
+        Timer this_lil_timer = little_score_timers_.at(i);
         if (this_lil_timer.get_ticks() < little_timer_target_) {
             Texture this_lil_texture;
             std::stringstream ss;
             ss << little_score_scorers_.at(i);
             this_lil_texture.load_from_rendered_text(ss.str(), WHITE, true);
-            Position ThisLilPos = little_score_positions_.at(i);
-            this_lil_texture.render(ThisLilPos.x, ThisLilPos.y - BOCK_SIZE_24 / 2);
-            this_lil_texture.free();
+            Position this_lil_pos = little_score_positions_.at(i);
+            this_lil_texture.render(this_lil_pos.x, this_lil_pos.y - BOCK_SIZE_24 / 2);
         } else {
             little_score_scorers_.erase(little_score_scorers_.begin() + i);
-            little_score_timer_.erase(little_score_timer_.begin() + i);
+            little_score_timers_.erase(little_score_timers_.begin() + i);
             little_score_positions_.erase(little_score_positions_.begin() + i);
         }
     }

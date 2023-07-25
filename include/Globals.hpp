@@ -72,8 +72,18 @@ inline Direction operator- (Direction const& dir)
 
 void initialize_SDL();
 void close_SDL();
+
+template<std::size_t Size>
+inline
 void init_frames(
-    const unsigned char total_frames,
-    SDL_Rect sprite_clips[],
-    unsigned char current_block_size = BLOCK_SIZE_32
-);
+    std::array<SDL_Rect, Size>& sprite_clips
+){
+    unsigned short x = 0;
+    for (auto& sprite : sprite_clips) {
+        sprite.x = x;
+        sprite.y = 0;
+        sprite.w = BLOCK_SIZE_32;
+        sprite.h = BLOCK_SIZE_32;
+        x += BLOCK_SIZE_32;
+    }
+}

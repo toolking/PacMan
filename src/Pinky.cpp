@@ -1,7 +1,7 @@
 #include "Pinky.hpp"
 
 Pinky::Pinky()
-  : Ghost(PINK, EntityType::ePinky)
+  : Ghost(PINK, Entity::Type::Pinky)
 {
     ScatterTarget = Position(2 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, BOCK_SIZE_24 / 2);
     Home = Position(13 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 17 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);

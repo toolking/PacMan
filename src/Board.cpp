@@ -53,21 +53,8 @@ Board::Board()
     lives_texture_.load_from_file("Textures/Lives32.png");
     score_word_texture_.load_from_rendered_text("Score", WHITE);
     high_score_word_texture_.load_from_rendered_text("High Score", WHITE);
-    map_texture_.setColor(0, 0, 255);
+    map_texture_.set_color(0, 0, 255);
     convert_sketch();
-}
-
-Board::~Board()
-{
-    map_texture_.free();
-    pellet_texture_.free();
-    energizer_texture_.free();
-    door_texture_.free();
-    lives_texture_.free();
-    score_word_texture_.free();
-    score_texture_.free();
-    high_score_word_texture_.free();
-    high_score_texture_.free();
 }
 
 void Board::convert_sketch()
@@ -95,11 +82,12 @@ void Board::reset_position(Entity& entity)
         unsigned char x = i % BOARD_WIDTH;
         if (x == 0)
             y++;
-        if (   (CharBoard[i] == '0' && entity.identity() == EntityType::ePacMan)
-            || (CharBoard[i] == '1' && entity.identity() == EntityType::eBlinky)
-            || (CharBoard[i] == '2' && entity.identity() == EntityType::eInky)
-            || (CharBoard[i] == '3' && entity.identity() == EntityType::ePinky)
-            || (CharBoard[i] == '4' && entity.identity() == EntityType::eClyde)) {
+        using enum Entity::Type;
+        if (   (CharBoard[i] == '0' && entity.identity() == PacMan)
+            || (CharBoard[i] == '1' && entity.identity() == Blinky)
+            || (CharBoard[i] == '2' && entity.identity() == Inky)
+            || (CharBoard[i] == '3' && entity.identity() == Pinky)
+            || (CharBoard[i] == '4' && entity.identity() == Clyde)) {
             entity.position(Position(x * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, y * BOCK_SIZE_24));
             return;
         }
@@ -131,11 +119,11 @@ void Board::set_high_score()
 
 void Board::draw(board_type const& actual_map, Timer map_animation_timer)
 {
-    score_word_texture_.render();
+    score_word_texture_.render(0,0);
     score_texture_.render(0, BLOCK_SIZE_32);
-    high_score_word_texture_.render(336);
+    high_score_word_texture_.render(336,0);
     high_score_texture_.render(336, BLOCK_SIZE_32);
-    map_texture_.render();
+    map_texture_.render(0,0);
     for (unsigned char i = 1; i <= lives_; i++) {
         lives_texture_.render(i * BLOCK_SIZE_32, 26 * BLOCK_SIZE_32 - BLOCK_SIZE_32 / 4);
     }
@@ -153,9 +141,9 @@ void Board::draw(board_type const& actual_map, Timer map_animation_timer)
         }
     } else {
         if ((map_animation_timer.get_ticks() / 250) % 2 == 1)
-            map_texture_.setColor(255, 255, 255);
+            map_texture_.set_color(255, 255, 255);
         else
-            map_texture_.setColor(0, 0, 255);
+            map_texture_.set_color(0, 0, 255);
     }
 }
 
