@@ -1,4 +1,9 @@
 #include "Pinky.hpp"
+#include "Entity.hpp"
+#include "Ghost.hpp"
+#include "Pac.hpp"
+#include "Position.hpp"
+#include "Globals.hpp"
 
 Pinky::Pinky()
   : Ghost(PINK, Entity::Type::Pinky)
@@ -9,25 +14,15 @@ Pinky::Pinky()
 
 void Pinky::calculate_target(Entity pac)
 {
-    short x = pac.position().x;
-    short y = pac.position().y;
-    switch (pac.direction()) {
-    case Direction::Right:
-        x += 4 * BOCK_SIZE_24;
-        break;
-    case Direction::Up:
-        y -= 4 * BOCK_SIZE_24;
-        break;
-    case Direction::Left:
-        x -= 4 * BOCK_SIZE_24;
-        break;
-    case Direction::Down:
-        y += 4 * BOCK_SIZE_24;
-        break;
-    default:
-        break;
-    }
-    Target = Position(x, y);
+    short const target_x = pac.position.x
+                  + ((pac.direction() == Direction::Right) ?  4 * BOCK_SIZE_24 :
+                     (pac.direction() == Direction::Left)  ? -4 * BOCK_SIZE_24 :
+                                                              0);
+    short const target_y = pac.position.y
+                  + ((pac.direction() == Direction::Down) ?  4 * BOCK_SIZE_24 :
+                     (pac.direction() == Direction::Up)   ? -4 * BOCK_SIZE_24 :
+                                                             0);
+    Target = {target_x, target_y};
 }
 
 void Pinky::update_pos(Board::board_type const& actual_board, Pac const& pac, bool timed_status)
@@ -36,8 +31,9 @@ void Pinky::update_pos(Board::board_type const& actual_board, Pac const& pac, bo
     update_status(pac, timed_status);
     for (unsigned char i = 0; i < speed(); i++) {
         update_facing(pac);
-        if (is_target_to_calculate(pac))
+        if (is_target_to_calculate(pac)) {
             calculate_target(pac);
+        }
         calculate_direction(actual_board);
         move(direction());
         check_wrap();

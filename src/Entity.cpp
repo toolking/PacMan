@@ -25,17 +25,17 @@ auto Entity::char_board_pos(unsigned char side_dir, float cell_x, float cell_y) 
 {
     switch (side_dir) {
     case 0:
-        return Position(static_cast<short>(floor(cell_x)), static_cast<short>(floor(cell_y)));
+        return {static_cast<short>(floor(cell_x)), static_cast<short>(floor(cell_y))};
     case 1:
-        return Position(static_cast<short>(ceil(cell_x)), static_cast<short>(floor(cell_y)));
+        return {static_cast<short>(ceil(cell_x)), static_cast<short>(floor(cell_y))};
     case 2:
-        return Position(static_cast<short>(floor(cell_x)), static_cast<short>(ceil(cell_y)));
+        return {static_cast<short>(floor(cell_x)), static_cast<short>(ceil(cell_y))};
     case 3:
-        return Position(static_cast<short>(ceil(cell_x)), static_cast<short>(ceil(cell_y)));
+        return {static_cast<short>(ceil(cell_x)), static_cast<short>(ceil(cell_y))};
     default:
         break;
     }
-    return Position{};
+    return {};
 }
 
 auto Entity::wall_collision(short x, short y, Board::board_type const& actual_map, bool can_use_door) -> bool
@@ -57,16 +57,16 @@ void Entity::move(Direction mover)
 {
     switch (mover) {
     case Direction::Right:
-        ++position_.x;
+        ++position.x;
         break;
     case Direction::Up:
-        --position_.y;
+        --position.y;
         break;
     case Direction::Left:
-        --position_.x;
+        --position.x;
         break;
     case Direction::Down:
-        ++position_.y;
+        ++position.y;
         break;
     default:
         break;
@@ -75,9 +75,9 @@ void Entity::move(Direction mover)
 
 void Entity::check_wrap()
 {
-    if (position_.x > WINDOW_WIDTH + BOCK_SIZE_24)
-        position_.x = -BOCK_SIZE_24;
-    if (position_.x < -BOCK_SIZE_24)
-        position_.x = WINDOW_WIDTH + BOCK_SIZE_24;
+    if (position.x > WINDOW_WIDTH + BOCK_SIZE_24)
+        position.x = -BOCK_SIZE_24;
+    if (position.x < -BOCK_SIZE_24)
+        position.x = WINDOW_WIDTH + BOCK_SIZE_24;
 }
 

@@ -12,9 +12,10 @@ public:
     ~Texture();
     bool load_from_file(std::string path);
     bool load_from_rendered_text(std::string texture_text, SDL_Color text_color, bool is_little = false);
-    void set_color(uint8_t red, uint8_t green, uint8_t blue)
+
+    void set_color(SDL_Color const& color)
     {
-        SDL_SetTextureColorMod(texture_, red, green, blue);
+        SDL_SetTextureColorMod(texture_, color.r, color.g, color.b);
     }
 
     void render(short x, short y, unsigned char facing = 0, SDL_Rect* clip = nullptr);

@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-
+constexpr unsigned short START_WAIT_TICKS = 4500u;
 constexpr unsigned char BOARD_WIDTH = 28;
 constexpr unsigned char BOARD_HEIGHT = 36;
 constexpr unsigned char BLOCK_SIZE_32 = 32;
@@ -30,6 +30,7 @@ constexpr SDL_Color RED = { .r = 255, .g = 0, .b = 0, .a = 0};
 constexpr SDL_Color CYAN = { .r = 0, .g = 192, .b = 255, .a = 0};
 constexpr SDL_Color PINK = { .r = 255, .g = 192, .b = 203, .a = 0};
 constexpr SDL_Color ORANGE = { .r = 255, .g = 128, .b = 0, .a = 0};
+constexpr SDL_Color BLUE = { .r = 0, .g = 0, .b = 255, .a = 0};
 
 extern SDL_Window* Window;
 extern SDL_Renderer* Renderer;

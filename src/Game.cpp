@@ -90,7 +90,7 @@ void Game::clock()
 void Game::update_positions(std::vector<Direction>& mover, bool timed_status)
 {
     blinky_.update_pos(actual_map_, pac_, timed_status);
-    inky_.update_pos(actual_map_, pac_, blinky_.position(), timed_status);
+    inky_.update_pos(actual_map_, pac_, blinky_.position, timed_status);
     pinky_.update_pos(actual_map_, pac_, timed_status);
     clyde_.update_pos(actual_map_, pac_, timed_status);
     pac_.update_pos(mover, actual_map_);
@@ -157,7 +157,7 @@ void Game::entity_collisions()
         }
     }
     if (fruit_.is_eatable()) {
-        if (pac_.is_colliding(fruit_.position())) {
+        if (pac_.is_colliding(fruit_.position)) {
             fruit_.start_score_timer();
             board_.score_increase(fruit_.get_score_value());
             fruit_.despawn();
@@ -220,16 +220,16 @@ void Game::clear_mover(std::vector<Direction>& mover)
 void Game::deadly_pac_ghost_coll()
 {
     if (
-        (pac_.is_colliding(blinky_.position()) && blinky_.is_alive())
-        || (pac_.is_colliding(inky_.position()) && inky_.is_alive())
-        || (pac_.is_colliding(pinky_.position()) && pinky_.is_alive())
-        || (pac_.is_colliding(clyde_.position()) && clyde_.is_alive()))
+        (pac_.is_colliding(blinky_.position) && blinky_.is_alive())
+        || (pac_.is_colliding(inky_.position) && inky_.is_alive())
+        || (pac_.is_colliding(pinky_.position) && pinky_.is_alive())
+        || (pac_.is_colliding(clyde_.position) && clyde_.is_alive()))
         pac_.life_statement(false);
 }
 
 void Game::deadly_ghost_pac_coll(Ghost& ghost)
 {
-    if (pac_.is_colliding(ghost.position()) && ghost.is_alive()) {
+    if (pac_.is_colliding(ghost.position) && ghost.is_alive()) {
         ghost.life_statement(false);
         board_.score_increase(scorer_);
         little_score_scorers_.push_back(scorer_);
@@ -237,7 +237,7 @@ void Game::deadly_ghost_pac_coll(Ghost& ghost)
         ghost_lil_timer.start();
         little_score_timers_.push_back(ghost_lil_timer);
         Position this_lil_pos;
-        this_lil_pos = ghost.position();
+        this_lil_pos = ghost.position;
         little_score_positions_.push_back(this_lil_pos);
         scorer_ *= 2;
         sound.play_ghost_death();

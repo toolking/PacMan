@@ -9,14 +9,13 @@ inline void free_sound(Mix_Chunk* sound)
     Mix_FreeChunk(sound);
     sound = NULL;
 }
-}
+} // namespace
 
 class Sound
 {
-    using self_cleanup_sound = std::unique_ptr<Mix_Chunk,decltype(&free_sound)>;
-    
-public:
+    using self_cleanup_sound = std::unique_ptr<Mix_Chunk, decltype(&free_sound)>;
 
+public:
     Sound()
     {
         Mix_Volume(-1, 10);
@@ -33,11 +32,11 @@ public:
     void stop_waka() { Mix_HaltChannel(6); }
 
 private:
-    self_cleanup_sound intro_ {Mix_LoadWAV("Sounds/Intro.wav"),free_sound};
-    self_cleanup_sound eat_fruit_ {Mix_LoadWAV("Sounds/EatFruit.wav"),free_sound};
-    self_cleanup_sound extra_life_ {Mix_LoadWAV("Sounds/ExtraLife.wav"),free_sound};
-    self_cleanup_sound pac_death_ {Mix_LoadWAV("Sounds/PacDeath.wav"),free_sound};
-    self_cleanup_sound ghost_death_ {Mix_LoadWAV("Sounds/GhostDeath.wav"),free_sound};
-    self_cleanup_sound scatter_ghost_ {Mix_LoadWAV("Sounds/ScatterGhost.wav"),free_sound};
-    self_cleanup_sound waka_ {Mix_LoadWAV("Sounds/Waka.wav"),free_sound};
+    self_cleanup_sound intro_ {Mix_LoadWAV("Sounds/Intro.wav"), free_sound};
+    self_cleanup_sound eat_fruit_ {Mix_LoadWAV("Sounds/EatFruit.wav"), free_sound};
+    self_cleanup_sound extra_life_ {Mix_LoadWAV("Sounds/ExtraLife.wav"), free_sound};
+    self_cleanup_sound pac_death_ {Mix_LoadWAV("Sounds/PacDeath.wav"), free_sound};
+    self_cleanup_sound ghost_death_ {Mix_LoadWAV("Sounds/GhostDeath.wav"), free_sound};
+    self_cleanup_sound scatter_ghost_ {Mix_LoadWAV("Sounds/ScatterGhost.wav"), free_sound};
+    self_cleanup_sound waka_ {Mix_LoadWAV("Sounds/Waka.wav"), free_sound};
 };

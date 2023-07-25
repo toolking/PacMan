@@ -1,9 +1,8 @@
----
-Checks: '*,-abseil-*,-fuchsia-*,-google-*,-llvm*,-zircon-*'
+Checks: '*,-abseil-*,-fuchsia-*,-google-*,-llvm*,-zircon-*,-altera-*'
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
 FormatStyle: webkit
 CheckOptions:
-  - key: modernize-use-nullptr.NullMacros
-    value: 'NULL'
+- key: modernize-use-nullptr.NullMacros
+  value: 'NULL'

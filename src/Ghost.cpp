@@ -35,16 +35,18 @@ auto Ghost::is_target_to_calculate(Pac const& pac) -> bool
     if (!is_alive()) {
         can_use_door_ = true;
         Target = Home;
-        if (position() == Home)
+        if (position == Home) {
             life_statement(true);
+        }
         return false;
     }
 
     if (is_home() && pac.is_energized()) {
-        if (position() == Home)
+        if (position == Home) {
             Target.y = Home.y - BOCK_SIZE_24;
-        else if (position().x == Home.x && position().y == Home.y - BOCK_SIZE_24)
+        } else if (position.x == Home.x && position.y == Home.y - BOCK_SIZE_24) {
             Target.y = Home.y;
+        }
         return false;
     }
 
@@ -81,8 +83,8 @@ void Ghost::calculate_direction(Board::board_type const& actual_map)
     std::vector<float> distances;
     std::vector<Direction> possible_directions;
     for (Direction i : {Direction::Right, Direction::Up, Direction::Left, Direction::Down}) {
-        short pos_x = position().x;
-        short pos_y = position().y;
+        short pos_x = position.x;
+        short pos_y = position.y;
         get_possible_position(pos_x, pos_y, i);
         if (!wall_collision(pos_x, pos_y, actual_map, can_use_door_)) {
             float dist_x = abs(pos_x - Target.x);
@@ -111,8 +113,8 @@ void Ghost::calculate_direction(Board::board_type const& actual_map)
 
 auto Ghost::is_home() -> bool
 {
-    return (position().x > 11 * BOCK_SIZE_24 && position().x < 17 * BOCK_SIZE_24)
-        && (position().y > 15 * BOCK_SIZE_24 && position().y < 18 * BOCK_SIZE_24);
+    return (position.x > 11 * BOCK_SIZE_24 && position.x < 17 * BOCK_SIZE_24)
+        && (position.y > 15 * BOCK_SIZE_24 && position.y < 18 * BOCK_SIZE_24);
 }
 
 void Ghost::mod_status(bool status)
@@ -160,31 +162,25 @@ void Ghost::update_speed(Pac const& pac)
 
 void Ghost::draw(Pac const& pac, Timer ghost_timer, unsigned short timer_target)
 {
+    body_.set_color(color_);
+    eyes_.set_color(WHITE);
+
     if (pac.is_energized() && is_alive() && !is_home()) {
-        body_.set_color(0, 0, 255);
+        body_.set_color(BLUE);
         if (ghost_timer.get_ticks() > timer_target - 2000u) {
             if ((ghost_timer.get_ticks() / 250) % 2 == 1) {
-                body_.set_color(255, 255, 255);
-                eyes_.set_color(255, 0, 0);
-            } else {
-                eyes_.set_color(255, 255, 255);
+                body_.set_color(WHITE);
+                eyes_.set_color(RED);
             }
-        } else {
-            eyes_.set_color(255, 255, 255);
         }
-    } else {
-        eyes_.set_color(255, 255, 255);
-        body_.set_color(color_.r, color_.g, color_.b);
     }
 
     if (is_alive()) {
-        auto clip = &ghost_body_sprite_clips_[current_body_frame_ / GHOST_BODY_FRAMES];
-        body_.render(position().x - 4, position().y - 4, 0, clip);
+        auto const clip = &ghost_body_sprite_clips_[current_body_frame_ / GHOST_BODY_FRAMES];
+        body_.render(position.x - 4, position.y - 4, 0, clip);
     }
-    auto clip = &ghost_eye_sprite_clips_[facing()];
-    eyes_.render(position().x - 4, position().y - 4, 0, clip);
+    auto const clip = &ghost_eye_sprite_clips_[facing()];
+    eyes_.render(position.x - 4, position.y - 4, 0, clip);
     current_body_frame_++;
-    if (current_body_frame_ / GHOST_BODY_FRAMES >= GHOST_BODY_FRAMES) {
-        current_body_frame_ = 0;
-    }
+    current_body_frame_ %= GHOST_BODY_FRAMES;
 }

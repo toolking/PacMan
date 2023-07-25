@@ -1,4 +1,8 @@
 #include "Blinky.hpp"
+#include "Entity.hpp"
+#include "Ghost.hpp"
+#include "Pac.hpp"
+#include "Position.hpp"
 #include "Globals.hpp"
 
 Blinky::Blinky()
@@ -19,8 +23,9 @@ void Blinky::update_pos(Board::board_type const& actual_board, Pac const& pac, b
     update_status(pac, timed_status);
     for (unsigned char i = 0; i < speed(); i++) {
         update_facing(pac);
-        if (is_target_to_calculate(pac))
-            calculate_target(pac.position());
+        if (is_target_to_calculate(pac)) {
+            calculate_target(pac.position);
+        }
         calculate_direction(actual_board);
         move(direction());
         check_wrap();

@@ -49,11 +49,6 @@ public:
         return life_statement_;
     }
 
-    Position position() const
-    {
-        return position_;
-    }
-
     void speed(unsigned char speed)
     {
         speed_ = speed;
@@ -74,16 +69,13 @@ public:
         life_statement_ = life_statement;
     }
 
-    void position(Position const& position)
-    {
-        position_ = position;
-    }
-
     bool is_colliding(Position const& other)
     {
-        return (other.x > position_.x - BOCK_SIZE_24 && other.x < position_.x + BOCK_SIZE_24)
-            && (other.y > position_.y - BOCK_SIZE_24 && other.y < position_.y + BOCK_SIZE_24);
+        return (other.x > position.x - BOCK_SIZE_24 && other.x < position.x + BOCK_SIZE_24)
+            && (other.y > position.y - BOCK_SIZE_24 && other.y < position.y + BOCK_SIZE_24);
     }
+
+    Position position {};
 
 protected:
     void move(Direction mover);
@@ -97,7 +89,6 @@ private:
     unsigned char speed_ {2};
     unsigned char facing_ {};
     bool life_statement_ {true};
-    Position position_ {};
     Direction direction_ {Direction::Right};
 };
 
