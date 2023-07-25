@@ -10,7 +10,7 @@ class Board;
 class Entity
 {
 public:
-    enum class Type : unsigned char
+    enum class Type
     {
         Noone = 0,
         PacMan,
@@ -39,7 +39,7 @@ public:
         return direction_;
     }
 
-    unsigned char facing() const
+    unsigned int facing() const
     {
         return facing_;
     }
@@ -59,7 +59,7 @@ public:
         direction_ = direction;
     }
 
-    void facing(unsigned char facing)
+    void facing(unsigned int facing)
     {
         facing_ = facing;
     }
@@ -67,12 +67,6 @@ public:
     void life_statement(bool life_statement)
     {
         life_statement_ = life_statement;
-    }
-
-    bool is_colliding(Position const& other)
-    {
-        return (other.x > position.x - BOCK_SIZE_24 && other.x < position.x + BOCK_SIZE_24)
-            && (other.y > position.y - BOCK_SIZE_24 && other.y < position.y + BOCK_SIZE_24);
     }
 
     Position position {};
@@ -86,27 +80,8 @@ protected:
 
 private:
     Type identity_;
-    unsigned char speed_ {2};
-    unsigned char facing_ {};
+    unsigned int speed_ {2};
+    unsigned int facing_ {};
     bool life_statement_ {true};
     Direction direction_ {Direction::Right};
 };
-
-inline auto entity_type_2_char(Entity::Type e) -> char
-{
-    switch (e) {
-        using enum Entity::Type;
-    case PacMan:
-        return '0';
-    case Blinky:
-        return '1';
-    case Inky:
-        return '2';
-    case Pinky:
-        return '3';
-    case Clyde:
-        return '4';
-    default:
-        return ' ';
-    }
-}

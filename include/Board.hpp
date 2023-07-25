@@ -3,22 +3,31 @@
 #include "Globals.hpp"
 #include "Texture.hpp"
 #include "Timer.hpp"
+#include "Position.hpp"
 
 #include <array>
 
 class Entity;
 
+enum class BlockType
+{
+    Nothing=0,
+    Wall,
+    Door,
+    Pellet,
+    Energizer
+};
+
 class Board
 {
 public:
 
-    using block_type = unsigned char;
+    using block_type = BlockType;
     using board_type = std::array<block_type, BOARD_HEIGHT * BOARD_WIDTH>;
 
     Board();
-    void convert_sketch();
-    void copy_board(board_type& actual_map);
-    void reset_position(Entity& entity);
+    auto map() const -> Board::board_type;
+    auto entity_start_position(Entity const&) const -> Position; 
     void set_score();
     void set_high_score();
     bool is_extra_life();
@@ -34,12 +43,12 @@ private:
     Texture energizer_texture_;
     Texture door_texture_;
     Texture lives_texture_;
-    Texture score_word_texture_;
+    Texture score_label_texture_;
     Texture score_texture_;
-    Texture high_score_word_texture_;
+    Texture high_score_label_texture_;
     Texture high_score_texture_;
     board_type numeric_board_;
-    unsigned int score_ {0};
-    bool is_extra_ {false};
-    char lives_ {4};
+    unsigned int score_ {};
+    bool is_extra_ {};
+    unsigned int lives_ {4};
 };

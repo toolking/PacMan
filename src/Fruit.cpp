@@ -70,6 +70,6 @@ void Fruit::draw()
         ss << SCORE_TABLE[current_fruit_];
         Texture score_texture;
         score_texture.load_from_rendered_text(ss.str(), WHITE, true);
-        score_texture.render(position.x, position.y - BOCK_SIZE_24 / 2);
+        score_texture.render(position.x, position.y - BLOCK_SIZE_24 / 2);
     }
 }

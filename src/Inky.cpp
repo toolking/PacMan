@@ -8,19 +8,19 @@
 Inky::Inky()
   : Ghost(CYAN, Entity::Type::Inky)
 {
-    ScatterTarget = Position(26 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 35 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);
-    Home = Position(11 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 17 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);
+    ScatterTarget = Position(26 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 35 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2);
+    Home = Position(11 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 17 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2);
 }
 
 void Inky::calculate_target(Entity pac, Position pos_blinky)
 {
     short const x = pac.position.x
-                  + ((pac.direction() == Direction::Right) ?  2 * BOCK_SIZE_24 :
-                     (pac.direction() == Direction::Left)  ? -2 * BOCK_SIZE_24 :
+                  + ((pac.direction() == Direction::Right) ?  2 * BLOCK_SIZE_24 :
+                     (pac.direction() == Direction::Left)  ? -2 * BLOCK_SIZE_24 :
                                                               0);
     short const y = pac.position.y
-                  + ((pac.direction() == Direction::Down) ?  2 * BOCK_SIZE_24 :
-                     (pac.direction() == Direction::Up)   ? -2 * BOCK_SIZE_24 :
+                  + ((pac.direction() == Direction::Down) ?  2 * BLOCK_SIZE_24 :
+                     (pac.direction() == Direction::Up)   ? -2 * BLOCK_SIZE_24 :
                                                              0);
     Target = Position(x + x - pos_blinky.x, y + y - pos_blinky.y);
 }

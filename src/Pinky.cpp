@@ -8,19 +8,19 @@
 Pinky::Pinky()
   : Ghost(PINK, Entity::Type::Pinky)
 {
-    ScatterTarget = Position(2 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, BOCK_SIZE_24 / 2);
-    Home = Position(13 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 17 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);
+    ScatterTarget = Position(2 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, BLOCK_SIZE_24 / 2);
+    Home = Position(13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 17 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2);
 }
 
 void Pinky::calculate_target(Entity pac)
 {
     short const target_x = pac.position.x
-                  + ((pac.direction() == Direction::Right) ?  4 * BOCK_SIZE_24 :
-                     (pac.direction() == Direction::Left)  ? -4 * BOCK_SIZE_24 :
+                  + ((pac.direction() == Direction::Right) ?  4 * BLOCK_SIZE_24 :
+                     (pac.direction() == Direction::Left)  ? -4 * BLOCK_SIZE_24 :
                                                               0);
     short const target_y = pac.position.y
-                  + ((pac.direction() == Direction::Down) ?  4 * BOCK_SIZE_24 :
-                     (pac.direction() == Direction::Up)   ? -4 * BOCK_SIZE_24 :
+                  + ((pac.direction() == Direction::Down) ?  4 * BLOCK_SIZE_24 :
+                     (pac.direction() == Direction::Up)   ? -4 * BLOCK_SIZE_24 :
                                                              0);
     Target = {target_x, target_y};
 }

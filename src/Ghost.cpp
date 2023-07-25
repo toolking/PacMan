@@ -27,7 +27,7 @@ Ghost::Ghost(SDL_Color color, Entity::Type identity)
     current_body_frame_ = 0;
     can_use_door_ = false;
     status_ = false;
-    DoorTarget = Position(13 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 15 * BOCK_SIZE_24);
+    DoorTarget = Position(13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 15 * BLOCK_SIZE_24);
 }
 
 auto Ghost::is_target_to_calculate(Pac const& pac) -> bool
@@ -43,8 +43,8 @@ auto Ghost::is_target_to_calculate(Pac const& pac) -> bool
 
     if (is_home() && pac.is_energized()) {
         if (position == Home) {
-            Target.y = Home.y - BOCK_SIZE_24;
-        } else if (position.x == Home.x && position.y == Home.y - BOCK_SIZE_24) {
+            Target.y = Home.y - BLOCK_SIZE_24;
+        } else if (position.x == Home.x && position.y == Home.y - BLOCK_SIZE_24) {
             Target.y = Home.y;
         }
         return false;
@@ -113,8 +113,8 @@ void Ghost::calculate_direction(Board::board_type const& actual_map)
 
 auto Ghost::is_home() -> bool
 {
-    return (position.x > 11 * BOCK_SIZE_24 && position.x < 17 * BOCK_SIZE_24)
-        && (position.y > 15 * BOCK_SIZE_24 && position.y < 18 * BOCK_SIZE_24);
+    return (position.x > 11 * BLOCK_SIZE_24 && position.x < 17 * BLOCK_SIZE_24)
+        && (position.y > 15 * BLOCK_SIZE_24 && position.y < 18 * BLOCK_SIZE_24);
 }
 
 void Ghost::mod_status(bool status)

@@ -44,8 +44,8 @@ void Pac::update_pos(std::vector<Direction>& mover, Board::board_type const& act
 
 auto Pac::food_collision(Board::board_type& actual_map) -> unsigned char
 {
-    float cell_x = position.x / static_cast<float>(BOCK_SIZE_24);
-    float cell_y = position.y / static_cast<float>(BOCK_SIZE_24);
+    float const cell_x = position.x / static_cast<float>(BLOCK_SIZE_24);
+    float const cell_y = position.y / static_cast<float>(BLOCK_SIZE_24);
     for (unsigned char side_dir = 0; side_dir < 4; side_dir++) {
         Position board_pos = char_board_pos(side_dir, cell_x, cell_y);
         auto& act_pos = actual_map[BOARD_WIDTH * board_pos.y + board_pos.x];

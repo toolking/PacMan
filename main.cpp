@@ -36,14 +36,26 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int
             if (event.key.state != SDL_PRESSED) {
                 continue;
             }
-            if ((event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)) {
-                mover.emplace_back(Direction::Right);
-            } else if ((event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)) {
-                mover.emplace_back(Direction::Up);
-            } else if ((event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)) {
-                mover.emplace_back(Direction::Left);
-            } else if ((event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)) {
-                mover.emplace_back(Direction::Down);
+            using enum Direction;
+            switch (event.key.keysym.sym) {
+                case SDLK_RIGHT:
+                case SDLK_d:
+                    mover.emplace_back(Right);
+                    break;
+                case SDLK_UP:
+                case SDLK_w:
+                    mover.emplace_back(Up);
+                    break;
+                case SDLK_LEFT:
+                case SDLK_a:
+                    mover.emplace_back(Left);
+                    break;
+                case SDLK_DOWN:
+                case SDLK_s:
+                    mover.emplace_back(Down);
+                    break;
+                default:
+                    break;
             }
             if (mover.size() > 2) {
                 mover.erase(mover.begin() + 1);
@@ -58,11 +70,12 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int
         }
 
         uint64_t const iteration_end = SDL_GetPerformanceCounter();
-        float const elapsed_ms = static_cast<float>(iteration_end - iteration_start) / (static_cast<float>(SDL_GetPerformanceFrequency() * 1000U));
-        SDL_Delay(floor(11.111F - elapsed_ms));
+        float const elapsed_ms = static_cast<float>(iteration_end - iteration_start)
+                               / (static_cast<float>(SDL_GetPerformanceFrequency() * 1000U));
+        SDL_Delay(floor(FRAME_DURATION_MS - elapsed_ms));
     }
 
     close_SDL();
 
-    return 0;
+    return EXIT_SUCCESS;
 }

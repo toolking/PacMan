@@ -10,8 +10,8 @@
 Clyde::Clyde()
   : Ghost(ORANGE, Entity::Type::Clyde)
 {
-    ScatterTarget = Position(BOCK_SIZE_24 / 2, 35 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);
-    Home = Position(15 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 17 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);
+    ScatterTarget = Position(BLOCK_SIZE_24 / 2, 35 * 2 * BLOCK_SIZE_24 / 2);
+    Home = Position(15 * 2 * BLOCK_SIZE_24 / 2, 17 * 2 * BLOCK_SIZE_24 / 2);
 }
 
 void Clyde::calculate_target(Position pac_pos)
@@ -20,7 +20,7 @@ void Clyde::calculate_target(Position pac_pos)
     if (dist_x > WINDOW_WIDTH / 2)
         dist_x = WINDOW_WIDTH - dist_x;
     auto const dist = static_cast<float>(sqrt(pow(dist_x, 2) + pow(position.y - pac_pos.y, 2)));
-    Target = (dist > 8 * BOCK_SIZE_24) ? pac_pos : ScatterTarget;
+    Target = (dist > 8 * BLOCK_SIZE_24) ? pac_pos : ScatterTarget;
 }
 
 void Clyde::update_pos(Board::board_type const& actual_board, Pac const& pac, bool timed_status)

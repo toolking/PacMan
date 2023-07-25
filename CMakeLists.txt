@@ -5,7 +5,7 @@ find_package(SDL2 REQUIRED)
 find_package(fmt REQUIRED)
 
 find_program(CLANG_TIDY_EXE NAMES "clang-tidy-17")
-set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
+#set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
 
 add_executable(PacMan main.cpp
     src/Blinky.cpp

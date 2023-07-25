@@ -8,8 +8,8 @@
 Blinky::Blinky()
   : Ghost(RED, Entity::Type::Blinky)
 {
-    ScatterTarget = Position(25 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, BOCK_SIZE_24 / 2);
-    Home = Position(13 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 17 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2);
+    ScatterTarget = Position(25 * 2 * BLOCK_SIZE_24 / 2, BLOCK_SIZE_24 / 2);
+    Home = Position(13 * 2 * BLOCK_SIZE_24 / 2, 17 * 2 * BLOCK_SIZE_24 / 2);
 }
 
 void Blinky::calculate_target(Position pac)

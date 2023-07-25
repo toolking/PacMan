@@ -12,7 +12,7 @@ void initialize_SDL()
     Renderer = SDL_CreateRenderer(Window, -1, SDL_RENDERER_PRESENTVSYNC);
     IMG_Init(IMG_INIT_PNG);
     TTF_Init();
-    Font = TTF_OpenFont("Fonts/emulogic.ttf", BOCK_SIZE_24);
+    Font = TTF_OpenFont("Fonts/emulogic.ttf", BLOCK_SIZE_24);
     LittleFont = TTF_OpenFont("Fonts/VpPixel.ttf", 20);
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
 }

@@ -7,13 +7,17 @@
 
 #include <string>
 #include <vector>
+
+constexpr unsigned short MIN_FPS = 90;
+constexpr float FRAME_DURATION_MS = 1000.0 / MIN_FPS;
+
 constexpr unsigned short START_WAIT_TICKS = 4500u;
 constexpr unsigned char BOARD_WIDTH = 28;
 constexpr unsigned char BOARD_HEIGHT = 36;
 constexpr unsigned char BLOCK_SIZE_32 = 32;
-constexpr unsigned char BOCK_SIZE_24 = 24;
-constexpr unsigned short WINDOW_WIDTH = BOARD_WIDTH * BOCK_SIZE_24;
-constexpr unsigned short WINDOW_HEIGHT = BOARD_HEIGHT * BOCK_SIZE_24;
+constexpr unsigned char BLOCK_SIZE_24 = 24;
+constexpr unsigned short WINDOW_WIDTH = BOARD_WIDTH * BLOCK_SIZE_24;
+constexpr unsigned short WINDOW_HEIGHT = BOARD_HEIGHT * BLOCK_SIZE_24;
 
 constexpr unsigned char LIVING_PAC_FRAMES = 3;
 constexpr unsigned char DEATH_PAC_FRAMES = 10;
@@ -44,15 +48,6 @@ enum class Direction : unsigned char
     Up,
     Left,
     Down
-};
-
-enum BlockType : unsigned char
-{
-    Wall,
-    Door,
-    Pellet,
-    Energizer,
-    Nothing
 };
 
 inline Direction operator- (Direction const& dir)

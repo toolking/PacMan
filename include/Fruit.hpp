@@ -23,7 +23,7 @@ public:
     void reset_food_counter();
     void draw();
 
-    Position position {13 * BOCK_SIZE_24 + BOCK_SIZE_24 / 2, 20 * BOCK_SIZE_24};
+    Position position {13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 20 * BLOCK_SIZE_24};
 
 private:
     Texture fruit_texture_;

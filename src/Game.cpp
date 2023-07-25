@@ -3,12 +3,13 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 Game::Game()
 {
     ready_.load_from_rendered_text("ready!", YELLOW);
     game_over_texture_.load_from_rendered_text("game  over", RED);
-    board_.copy_board(actual_map_);
+    actual_map_=board_.map();
     is_game_started_ = false;
     scatter_time_ = 7000;
     chasing_time_ = 20000;
@@ -42,17 +43,17 @@ void Game::reset_ghosts_facing()
 void Game::start()
 {
     if (is_game_started_) {
-        ready_.render(11 * BOCK_SIZE_24, 20 * BOCK_SIZE_24 - 5);
+        ready_.render(11 * BLOCK_SIZE_24, 20 * BLOCK_SIZE_24 - 5);
         return;
     }
     if (is_level_completed()) {
-        board_.copy_board(actual_map_);
+        actual_map_=board_.map();
     }
-    board_.reset_position(pac_);
-    board_.reset_position(blinky_);
-    board_.reset_position(inky_);
-    board_.reset_position(pinky_);
-    board_.reset_position(clyde_);
+    pac_.position=board_.entity_start_position(pac_);
+    blinky_.position=board_.entity_start_position(blinky_);
+    inky_.position=board_.entity_start_position(inky_);
+    pinky_.position=board_.entity_start_position(pinky_);
+    clyde_.position=board_.entity_start_position(clyde_);
     pac_.change_energy_status(false);
     reset_ghosts_life_statement();
     reset_ghosts_facing();
@@ -61,7 +62,7 @@ void Game::start()
     is_game_started_ = true;
     ghost_timer_.start();
 
-    ready_.render(11 * BOCK_SIZE_24, 20 * BOCK_SIZE_24 - 5);
+    ready_.render(11 * BLOCK_SIZE_24, 20 * BLOCK_SIZE_24 - 5);
 }
 
 void Game::mod_start_statement(bool new_start_statement)
@@ -157,7 +158,7 @@ void Game::entity_collisions()
         }
     }
     if (fruit_.is_eatable()) {
-        if (pac_.is_colliding(fruit_.position)) {
+        if (is_colliding(pac_.position,fruit_.position)) {
             fruit_.start_score_timer();
             board_.score_increase(fruit_.get_score_value());
             fruit_.despawn();
@@ -201,35 +202,30 @@ void Game::update_difficulty()
 
 auto Game::is_level_completed() -> bool
 {
-    for (unsigned short i = 0; i < BOARD_HEIGHT * BOARD_WIDTH; i++) {
-        if (actual_map_[i] == BlockType::Pellet)
-            return false;
-        if (actual_map_[i] == BlockType::Energizer)
-            return false;
-    }
-    return true;
+    using enum BlockType;
+    return std::none_of(actual_map_.cbegin(),actual_map_.cend(),[](Board::block_type b){
+        return b == Pellet || b == Energizer;
+    });
 }
 
 void Game::clear_mover(std::vector<Direction>& mover)
 {
-    while (!mover.empty())
-        mover.erase(mover.begin());
-    mover.push_back(Direction::Nowhere);
+    mover.clear();
+    mover.emplace_back(Direction::Nowhere);
 }
 
 void Game::deadly_pac_ghost_coll()
 {
-    if (
-        (pac_.is_colliding(blinky_.position) && blinky_.is_alive())
-        || (pac_.is_colliding(inky_.position) && inky_.is_alive())
-        || (pac_.is_colliding(pinky_.position) && pinky_.is_alive())
-        || (pac_.is_colliding(clyde_.position) && clyde_.is_alive()))
+    if (   (is_colliding(pac_.position,blinky_.position) && blinky_.is_alive())
+        || (is_colliding(pac_.position,inky_.position) && inky_.is_alive())
+        || (is_colliding(pac_.position,pinky_.position) && pinky_.is_alive())
+        || (is_colliding(pac_.position,clyde_.position) && clyde_.is_alive()))
         pac_.life_statement(false);
 }
 
 void Game::deadly_ghost_pac_coll(Ghost& ghost)
 {
-    if (pac_.is_colliding(ghost.position) && ghost.is_alive()) {
+    if (is_colliding(pac_.position,ghost.position) && ghost.is_alive()) {
         ghost.life_statement(false);
         board_.score_increase(scorer_);
         little_score_scorers_.push_back(scorer_);
@@ -252,11 +248,12 @@ void Game::mod_to_waka(bool new_waka)
 
 void Game::death_sound()
 {
-    if (is_to_death_pac_sound_) {
-        sound.stop_waka();
-        sound.play_pac_death();
-        is_to_death_pac_sound_ = false;
+    if (!is_to_death_pac_sound_) {
+        return;
     }
+    sound.stop_waka();
+    sound.play_pac_death();
+    is_to_death_pac_sound_ = false;
 }
 
 void Game::mod_death_sound_statement(bool new_death_sound_statement)
@@ -274,7 +271,7 @@ void Game::draw_little_score()
             ss << little_score_scorers_.at(i);
             this_lil_texture.load_from_rendered_text(ss.str(), WHITE, true);
             Position this_lil_pos = little_score_positions_.at(i);
-            this_lil_texture.render(this_lil_pos.x, this_lil_pos.y - BOCK_SIZE_24 / 2);
+            this_lil_texture.render(this_lil_pos.x, this_lil_pos.y - BLOCK_SIZE_24 / 2);
         } else {
             little_score_scorers_.erase(little_score_scorers_.begin() + i);
             little_score_timers_.erase(little_score_timers_.begin() + i);
@@ -349,7 +346,7 @@ void Game::draw()
     board_.set_score();
     board_.draw(actual_map_, map_animation_timer_);
     if (!is_game_started_) {
-        game_over_texture_.render(9 * BOCK_SIZE_24, 20 * BOCK_SIZE_24 - 5);
+        game_over_texture_.render(9 * BLOCK_SIZE_24, 20 * BLOCK_SIZE_24 - 5);
         return;
     }
     fruit_.draw();
