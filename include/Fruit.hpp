@@ -3,7 +3,6 @@
 #include "Globals.hpp"
 #include "Position.hpp"
 #include "Texture.hpp"
-#include "Texture2.hpp"
 #include "Timer.hpp"
 
 #include <SDL2/SDL.h>
