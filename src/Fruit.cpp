@@ -7,7 +7,6 @@
 Fruit::Fruit()
 {
     fruit_texture_.load_from_file("Textures/Fruit32.png");
-    init_frames(fruit_sprite_clips_);
 }
 
 void Fruit::mod_current_fruit(unsigned short actual_level)

@@ -2,17 +2,13 @@
 
 inline auto direction2facing(Direction d) -> unsigned int
 {
+    using enum Direction;
     switch (d) {
-    case Direction::Right:
-        return 0;
-    case Direction::Up:
-        return 1;
-    case Direction::Left:
-        return 2;
-    case Direction::Down:
-        return 3;
-    default:
-        return 4;
+    case Right: return 0;
+    case Up: return 1;
+    case Left: return 2;
+    case Down: return 3;
+    default: return 4;
     }
 }
 
@@ -21,8 +17,6 @@ Ghost::Ghost(SDL_Color color, Entity::Type identity)
 {
     body_.load_from_file("Textures/GhostBody32.png");
     eyes_.load_from_file("Textures/GhostEyes32.png");
-    init_frames(ghost_body_sprite_clips_);
-    init_frames(ghost_eye_sprite_clips_);
     color_ = color;
     current_body_frame_ = 0;
     can_use_door_ = false;

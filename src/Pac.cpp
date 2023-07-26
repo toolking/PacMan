@@ -5,8 +5,6 @@ Pac::Pac()
 {
     living_pac_.load_from_file("Textures/PacMan32.png");
     death_pac_.load_from_file("Textures/GameOver32.png");
-    init_frames(living_pac_sprite_clips_);
-    init_frames(death_pac_sprite_clips_);
     curr_living_pac_frame_ = 0;
     curr_death_pac_frame_ = 0;
     energy_status_ = false;

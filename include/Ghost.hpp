@@ -32,8 +32,8 @@ protected:
 private:
     Texture body_;
     Texture eyes_;
-    std::array<SDL_Rect,GHOST_BODY_FRAMES> ghost_body_sprite_clips_;
-    std::array<SDL_Rect,GHOST_EYE_FRAMES> ghost_eye_sprite_clips_;
+    std::array<SDL_Rect,GHOST_BODY_FRAMES> ghost_body_sprite_clips_{init_frames<GHOST_BODY_FRAMES>()};
+    std::array<SDL_Rect,GHOST_EYE_FRAMES> ghost_eye_sprite_clips_{init_frames<GHOST_EYE_FRAMES>()};
     SDL_Color color_;
     unsigned char current_body_frame_;
     bool can_use_door_;

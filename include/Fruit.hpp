@@ -3,6 +3,7 @@
 #include "Globals.hpp"
 #include "Position.hpp"
 #include "Texture.hpp"
+#include "Texture2.hpp"
 #include "Timer.hpp"
 
 #include <SDL2/SDL.h>
@@ -29,7 +30,7 @@ private:
     Texture fruit_texture_;
     Timer fruit_timer_;
     Timer score_timer_;
-    std::array<SDL_Rect,FRUIT_FRAMES> fruit_sprite_clips_;
+    std::array<SDL_Rect,FRUIT_FRAMES> fruit_sprite_clips_{init_frames<FRUIT_FRAMES>()};
     unsigned char current_fruit_ {0};
     unsigned short fruit_duration_ {9000};
     unsigned char food_counter_ {0};

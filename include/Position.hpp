@@ -4,14 +4,13 @@
 
 #include <compare>
 
-class Position
+struct Position
 {
-public:
     Position() = default;
     Position(short x, short y)
       : x {x}, y {y}
     {}
-    std::strong_ordering operator<=>(Position const& other) const = default;
+    std::weak_ordering operator<=>(Position const& other) const = default;
     short x{}, y{};
 };
 

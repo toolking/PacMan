@@ -26,8 +26,8 @@ public:
 private:
     Texture living_pac_;
     Texture death_pac_;
-    std::array<SDL_Rect,LIVING_PAC_FRAMES> living_pac_sprite_clips_;
-    std::array<SDL_Rect,DEATH_PAC_FRAMES> death_pac_sprite_clips_;
+    std::array<SDL_Rect,LIVING_PAC_FRAMES> living_pac_sprite_clips_{init_frames<LIVING_PAC_FRAMES>()};
+    std::array<SDL_Rect,DEATH_PAC_FRAMES> death_pac_sprite_clips_{init_frames<DEATH_PAC_FRAMES>()};
     unsigned char curr_living_pac_frame_;
     unsigned char curr_death_pac_frame_;
     bool energy_status_;
