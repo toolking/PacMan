@@ -2,6 +2,8 @@
 #include "Globals.hpp"
 #include "Timer.hpp"
 
+#include <centurion.hpp>
+
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_render.h>
