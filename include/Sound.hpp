@@ -1,42 +1,45 @@
 #pragma once
 
-#include <SDL2/SDL_mixer.h>
-#include <memory>
-
-namespace {
-inline void free_sound(Mix_Chunk* sound)
-{
-    Mix_FreeChunk(sound);
-    sound = NULL;
-}
-} // namespace
+#include <centurion.hpp>
 
 class Sound
 {
-    using self_cleanup_sound = std::unique_ptr<Mix_Chunk, decltype(&free_sound)>;
-
 public:
     Sound()
     {
+        #if SDL_MIXER_VERSION_ATLEAST(2, 6, 0)
+        cen::sound_effect::mix_master_volume(10);
+        #else
         Mix_Volume(-1, 10);
+        #endif
+
+        #ifdef CENTURION_MOCK_FRIENDLY_MODE
+        intro_.set_channel(0);
+        eat_fruit_.set_channel(1);
+        extra_life_.set_channel(2);
+        pac_death_.set_channel(3);
+        ghost_death_.set_channel(4);
+        scatter_ghost_.set_channel(5);
+        waka_.set_channel(6);
+        #endif
     }
 
-    void play_intro() { Mix_PlayChannel(0, intro_.get(), 0); }
-    void play_eat_fruit() { Mix_PlayChannel(1, eat_fruit_.get(), 0); }
-    void play_extra_life() { Mix_PlayChannel(2, extra_life_.get(), 0); }
-    void play_pac_death() { Mix_PlayChannel(3, pac_death_.get(), 0); }
-    void play_ghost_death() { Mix_PlayChannel(4, ghost_death_.get(), 0); }
-    void play_scatter_ghost() { Mix_PlayChannel(5, scatter_ghost_.get(), -1); }
-    void stop_scatter_ghost() { Mix_HaltChannel(5); }
-    void play_waka() { Mix_PlayChannel(6, waka_.get(), -1); }
-    void stop_waka() { Mix_HaltChannel(6); }
+    void play_intro() { intro_.play(); }
+    void play_eat_fruit() { eat_fruit_.play(); }
+    void play_extra_life() { extra_life_.play(); }
+    void play_pac_death() { pac_death_.play(); }
+    void play_ghost_death() { ghost_death_.play(); }
+    void play_scatter_ghost() { scatter_ghost_.play(-1); }
+    void stop_scatter_ghost() { scatter_ghost_.stop(); }
+    void play_waka() { waka_.play(-1); }
+    void stop_waka() { waka_.stop(); }
 
 private:
-    self_cleanup_sound intro_ {Mix_LoadWAV("Sounds/Intro.wav"), free_sound};
-    self_cleanup_sound eat_fruit_ {Mix_LoadWAV("Sounds/EatFruit.wav"), free_sound};
-    self_cleanup_sound extra_life_ {Mix_LoadWAV("Sounds/ExtraLife.wav"), free_sound};
-    self_cleanup_sound pac_death_ {Mix_LoadWAV("Sounds/PacDeath.wav"), free_sound};
-    self_cleanup_sound ghost_death_ {Mix_LoadWAV("Sounds/GhostDeath.wav"), free_sound};
-    self_cleanup_sound scatter_ghost_ {Mix_LoadWAV("Sounds/ScatterGhost.wav"), free_sound};
-    self_cleanup_sound waka_ {Mix_LoadWAV("Sounds/Waka.wav"), free_sound};
+    cen::sound_effect intro_ {"Sounds/Intro.wav"};
+    cen::sound_effect eat_fruit_ {"Sounds/EatFruit.wav"};
+    cen::sound_effect extra_life_ {"Sounds/ExtraLife.wav"};
+    cen::sound_effect pac_death_ {"Sounds/PacDeath.wav"};
+    cen::sound_effect ghost_death_ {"Sounds/GhostDeath.wav"};
+    cen::sound_effect scatter_ghost_ {"Sounds/ScatterGhost.wav"};
+    cen::sound_effect waka_ {"Sounds/Waka.wav"};
 };

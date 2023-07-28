@@ -12,72 +12,83 @@
 #include <cstdint>
 #include <vector>
 
+SDL_Renderer* Renderer = nullptr;
+TTF_Font* Font = nullptr;
+TTF_Font* LittleFont = nullptr;
+
 // Use arrow keys or WASD to move
 
 auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int
 {
-    initialize_SDL();
+    const cen::sdl sdl {{.flags = SDL_INIT_VIDEO}};
+    const cen::img img {{.flags = IMG_INIT_PNG}};
+    const cen::ttf ttf;
+    const cen::mix mix {{.frequency = 44100,
+        .format = MIX_DEFAULT_FORMAT,
+        .channels = 2,
+        .chunk_size = 1024}};
+
+    cen::window window {"PacMan", {WINDOW_WIDTH, WINDOW_HEIGHT}, cen::window::shown};
+    cen::renderer renderer = window.make_renderer(cen::renderer::vsync);
+    Renderer = renderer.get();
+    cen::font font {"Fonts/emulogic.ttf", BLOCK_SIZE_24};
+    cen::font little_font {"Fonts/VpPixel.ttf", 20};
+    Font = font.get();
+    LittleFont = little_font.get();
 
     Game game;
     Timer game_timer;
-    SDL_Event event;
-    bool quit = false;
     unsigned short start_ticks = START_WAIT_TICKS;
     std::vector<Direction> mover;
     mover.push_back(Direction::Right);
     game_timer.start();
     game.sound.play_intro();
 
-    while (!quit) {
-        uint64_t const iteration_start {SDL_GetPerformanceCounter()};
-
-        while (SDL_PollEvent(&event) != 0) {
-            if (event.type == SDL_QUIT) {
-                quit = true;
+    cen::event_handler handler;
+    bool running = true;
+    while (running) {
+        uint64_t const iteration_start {cen::now()};
+        while (handler.poll()) {
+            if (handler.is<cen::quit_event>()) {
+                running = false;
+                break;
             }
-            if (event.key.state != SDL_PRESSED) {
-                continue;
-            }
-            using enum Direction;
-            switch (event.key.keysym.sym) {
-                case SDLK_RIGHT:
-                case SDLK_d:
-                    mover.emplace_back(Right);
-                    break;
-                case SDLK_UP:
-                case SDLK_w:
-                    mover.emplace_back(Up);
-                    break;
-                case SDLK_LEFT:
-                case SDLK_a:
-                    mover.emplace_back(Left);
-                    break;
-                case SDLK_DOWN:
-                case SDLK_s:
-                    mover.emplace_back(Down);
-                    break;
-                default:
-                    break;
-            }
-            if (mover.size() > 2) {
-                mover.erase(mover.begin() + 1);
+            if (handler.is<cen::keyboard_event>()) {
+                const auto& keyboardEvent = handler.get<cen::keyboard_event>();
+                if (!keyboardEvent.pressed()) {
+                    continue;
+                }
+                if (   keyboardEvent.is_active(cen::scancodes::right)
+                    || keyboardEvent.is_active(cen::scancodes::d)) {
+                    mover.emplace_back(Direction::Right);
+                }
+                else if (   keyboardEvent.is_active(cen::scancodes::up)
+                         || keyboardEvent.is_active(cen::scancodes::w)) {
+                    mover.emplace_back(Direction::Up);
+                }
+                else if (   keyboardEvent.is_active(cen::scancodes::left)
+                         || keyboardEvent.is_active(cen::scancodes::a)) {
+                    mover.emplace_back(Direction::Left);
+                }
+                else if (   keyboardEvent.is_active(cen::scancodes::down)
+                         || keyboardEvent.is_active(cen::scancodes::s)) {
+                    mover.emplace_back(Direction::Down);
+                }
             }
         }
 
-        SDL_RenderClear(Renderer);
+        renderer.clear();
 
         if (game.process(game_timer, mover, start_ticks)) {
             game.draw();
-            SDL_RenderPresent(Renderer);
+            renderer.present();
         }
 
-        uint64_t const iteration_end = SDL_GetPerformanceCounter();
-        float const elapsed_ms = static_cast<float>(iteration_end - iteration_start)
-                               / (static_cast<float>(SDL_GetPerformanceFrequency() * 1000U));
-        SDL_Delay(floor(FRAME_DURATION_MS - elapsed_ms));
+        uint64_t const iteration_end = cen::now();
+        auto const elapsed_ms = (iteration_end - iteration_start)
+            / (cen::frequency() * 1000U);
+        cen::thread::sleep(std::chrono::milliseconds{FRAME_DURATION_MS - elapsed_ms});
     }
-
-    close_SDL();
 
     return EXIT_SUCCESS;
 }

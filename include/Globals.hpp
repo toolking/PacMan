@@ -9,7 +9,7 @@
 #include <vector>
 
 constexpr unsigned short MIN_FPS = 90;
-constexpr float FRAME_DURATION_MS = 1000.0 / MIN_FPS;
+constexpr unsigned long FRAME_DURATION_MS = 1000 / MIN_FPS;
 
 constexpr unsigned short START_WAIT_TICKS = 4500u;
 constexpr unsigned char BOARD_WIDTH = 28;
@@ -36,7 +36,6 @@ constexpr SDL_Color PINK = { .r = 255, .g = 192, .b = 203, .a = 0};
 constexpr SDL_Color ORANGE = { .r = 255, .g = 128, .b = 0, .a = 0};
 constexpr SDL_Color BLUE = { .r = 0, .g = 0, .b = 255, .a = 0};
 
-extern SDL_Window* Window;
 extern SDL_Renderer* Renderer;
 extern TTF_Font* Font;
 extern TTF_Font* LittleFont;
@@ -65,9 +64,6 @@ inline Direction operator- (Direction const& dir)
         return Direction::Nowhere;
     }
 }
-
-void initialize_SDL();
-void close_SDL();
 
 template<std::size_t Size>
 inline

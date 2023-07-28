@@ -23,6 +23,7 @@ public:
 private:
     void free();
 
+    SDL_Renderer* renderer_ {nullptr};
     SDL_Texture* texture_ {nullptr};
     unsigned short width_ {0u};
     unsigned short height_ {0u};

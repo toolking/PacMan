@@ -25,7 +25,6 @@ add_executable( PacMan main.cpp
     src/Fruit.cpp
     src/Game.cpp
     src/Ghost.cpp
-    src/Globals.cpp
     src/Inky.cpp
     src/Pac.cpp
     src/Pinky.cpp
@@ -34,6 +33,7 @@ add_executable( PacMan main.cpp
 
 target_include_directories( PacMan PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include )
 target_include_directories( PacMan SYSTEM PRIVATE ${SDL2_INCLUDE_DIRS} ${centurion_SOURCE_DIR}/src )
+add_compile_definitions(CENTURION_MOCK_FRIENDLY_MODE)
 target_link_libraries( PacMan PRIVATE fmt::fmt ${SDL2_LIBRARIES} SDL2_mixer SDL2_ttf SDL2_image )
 
 target_compile_features( PacMan
