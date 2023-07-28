@@ -75,6 +75,9 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int
                     mover.emplace_back(Direction::Down);
                 }
             }
+            if (mover.size() > 2) {
+                mover.erase(mover.begin() + 1);
+            }
         }
 
         renderer.clear();
