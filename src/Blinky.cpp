@@ -5,8 +5,8 @@
 #include "Position.hpp"
 #include "Globals.hpp"
 
-Blinky::Blinky()
-  : Ghost(RED, Entity::Type::Blinky)
+Blinky::Blinky(cen::renderer const& renderer)
+  : Ghost(renderer, RED, Entity::Type::Blinky)
 {
     ScatterTarget = Position(25 * 2 * BLOCK_SIZE_24 / 2, BLOCK_SIZE_24 / 2);
     Home = Position(13 * 2 * BLOCK_SIZE_24 / 2, 17 * 2 * BLOCK_SIZE_24 / 2);
@@ -17,7 +17,7 @@ void Blinky::calculate_target(Position pac)
     Target = pac;
 }
 
-void Blinky::update_pos(Board::board_type const& actual_board, Pac const& pac, bool timed_status)
+void Blinky::update_pos(board_type const& actual_board, Pac const& pac, bool timed_status)
 {
     update_speed(pac);
     update_status(pac, timed_status);

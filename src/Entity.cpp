@@ -38,7 +38,7 @@ auto Entity::char_board_pos(unsigned char side_dir, float cell_x, float cell_y) 
     return {};
 }
 
-auto Entity::wall_collision(short x, short y, Board::board_type const& actual_map, bool can_use_door) -> bool
+auto Entity::wall_collision(short x, short y, board_type const& actual_map, bool can_use_door) -> bool
 {
     float const cell_x = x / static_cast<float>(BLOCK_SIZE_24);
     float const cell_y = y / static_cast<float>(BLOCK_SIZE_24);

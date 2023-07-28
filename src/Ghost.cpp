@@ -12,16 +12,15 @@ inline auto direction2facing(Direction d) -> unsigned int
     }
 }
 
-Ghost::Ghost(SDL_Color color, Entity::Type identity)
+Ghost::Ghost(cen::renderer const& renderer, SDL_Color color, Entity::Type identity)
   : Entity(identity)
+  , renderer_{renderer}
+  , body_{renderer}
+  , eyes_{renderer}
+  , color_{color}
 {
     body_.load_from_file("Textures/GhostBody32.png");
     eyes_.load_from_file("Textures/GhostEyes32.png");
-    color_ = color;
-    current_body_frame_ = 0;
-    can_use_door_ = false;
-    status_ = false;
-    DoorTarget = Position(13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 15 * BLOCK_SIZE_24);
 }
 
 auto Ghost::is_target_to_calculate(Pac const& pac) -> bool
@@ -72,7 +71,7 @@ void Ghost::poss_dirs_bubble_sort(std::vector<float>& distances, std::vector<Dir
     }
 }
 
-void Ghost::calculate_direction(Board::board_type const& actual_map)
+void Ghost::calculate_direction(board_type const& actual_map)
 {
     std::vector<float> distances;
     std::vector<Direction> possible_directions;

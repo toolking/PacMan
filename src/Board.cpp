@@ -5,84 +5,13 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <string_view>
 #include <unordered_map>
-
-constexpr std::string_view CHAR_BOARD = "                            "
-                                        "                            "
-                                        "                            "
-                                        "############################"
-                                        "#............##............#"
-                                        "#.####.#####.##.#####.####.#"
-                                        "#o####.#####.##.#####.####o#"
-                                        "#.####.#####.##.#####.####.#"
-                                        "#..........................#"
-                                        "#.####.##.########.##.####.#"
-                                        "#.####.##.########.##.####.#"
-                                        "#......##....##....##......#"
-                                        "######.##### ## #####.######"
-                                        "     #.##### ## #####.#     "
-                                        "     #.##    1     ##.#     "
-                                        "     #.## ###==### ##.#     "
-                                        "######.## #      # ##.######"
-                                        "      .   #2 3 4 #   .      "
-                                        "######.## #      # ##.######"
-                                        "     #.## ######## ##.#     "
-                                        "     #.##          ##.#     "
-                                        "     #.## ######## ##.#     "
-                                        "######.## ######## ##.######"
-                                        "#............##............#"
-                                        "#.####.#####.##.#####.####.#"
-                                        "#.####.#####.##.#####.####.#"
-                                        "#o..##.......0 .......##..o#"
-                                        "###.##.##.########.##.##.###"
-                                        "###.##.##.########.##.##.###"
-                                        "#......##....##....##......#"
-                                        "#.##########.##.##########.#"
-                                        "#.##########.##.##########.#"
-                                        "#..........................#"
-                                        "############################"
-                                        "                            "
-                                        "                            ";
-
-constexpr auto char_board_2_bin_board(std::string_view char_board) -> Board::board_type
-{
-    Board::board_type bin_board;
-    std::transform(char_board.begin(), char_board.end(), bin_board.begin(), [](char c) {
-        switch (c) {
-        case '#':
-            return BlockType::Wall;
-        case '=':
-            return BlockType::Door;
-        case '.':
-            return BlockType::Pellet;
-        case 'o':
-            return BlockType::Energizer;
-        default:
-            return BlockType::Nothing;
-        }
-    });
-    return bin_board;
-}
-
-Board::Board()
-{
-    map_texture_.load_from_file("Textures/Map24.png");
-    pellet_texture_.load_from_file("Textures/Pellet24.png");
-    energizer_texture_.load_from_file("Textures/Energizer24.png");
-    door_texture_.load_from_file("Textures/Door.png");
-    lives_texture_.load_from_file("Textures/Lives32.png");
-    score_label_texture_.load_from_rendered_text("Score", WHITE);
-    high_score_label_texture_.load_from_rendered_text("High Score", WHITE);
-    map_texture_.set_color(BLUE);
-    numeric_board_ = char_board_2_bin_board(CHAR_BOARD);
-}
 
 auto Board::entity_start_position(Entity const& e) const -> Position
 {
     using enum Entity::Type;
     auto const et {e.identity()};
-    char const c = (et == PacMan) ? '0' 
+    char const c = (et == PacMan) ? '0'
                  : (et == Blinky) ? '1'
                  : (et == Inky)   ? '2'
                  : (et == Pinky)  ? '3'
@@ -147,7 +76,7 @@ void Board::draw(board_type const& actual_map, Timer map_animation_timer)
     }
 }
 
-auto Board::map() const -> Board::board_type
+auto Board::map() const -> board_type
 {
     return numeric_board_;
 }

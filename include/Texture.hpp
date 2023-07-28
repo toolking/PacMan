@@ -1,14 +1,18 @@
 #pragma once
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_blendmode.h>
-#include <SDL2/SDL_image.h>
+#include <centurion.hpp>
+
 #include <string>
 
 class Texture
 {
 public:
-    Texture() = default;
+    explicit Texture(cen::renderer const& renderer) : renderer_(renderer) {}
+    //Texture(Texture const&) = delete;
+    //Texture(Texture&&) = delete;
+    //Texture& operator=(Texture const&) = delete;
+    //Texture& operator=(Texture&&) = delete;
+
     ~Texture();
     bool load_from_file(std::string path);
     bool load_from_rendered_text(std::string texture_text, SDL_Color text_color, bool is_little = false);
@@ -22,8 +26,7 @@ public:
 
 private:
     void free();
-
-    SDL_Renderer* renderer_ {nullptr};
+    cen::renderer const& renderer_;
     SDL_Texture* texture_ {nullptr};
     unsigned short width_ {0u};
     unsigned short height_ {0u};

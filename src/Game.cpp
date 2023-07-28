@@ -5,25 +5,6 @@
 #include <sstream>
 #include <algorithm>
 
-Game::Game()
-{
-    ready_.load_from_rendered_text("ready!", YELLOW);
-    game_over_texture_.load_from_rendered_text("game  over", RED);
-    actual_map_=board_.map();
-    is_game_started_ = false;
-    scatter_time_ = 7000;
-    chasing_time_ = 20000;
-    ghost_timer_target_ = chasing_time_;
-    timed_status_ = false;
-    scorer_ = 200;
-    little_timer_target_ = 1000;
-    level_ = 1;
-    is_to_scatter_sound_ = true;
-    is_to_waka_sound_ = true;
-    is_to_death_pac_sound_ = true;
-    dead_ghosts_counter_ = 0;
-}
-
 void Game::reset_ghosts_life_statement()
 {
     blinky_.life_statement(true);
@@ -203,7 +184,7 @@ void Game::update_difficulty()
 auto Game::is_level_completed() -> bool
 {
     using enum BlockType;
-    return std::none_of(actual_map_.cbegin(),actual_map_.cend(),[](Board::block_type b){
+    return std::none_of(actual_map_.cbegin(),actual_map_.cend(),[](block_type b){
         return b == Pellet || b == Energizer;
     });
 }
@@ -266,7 +247,7 @@ void Game::draw_little_score()
     for (unsigned char i = 0; i < little_score_timers_.size(); i++) {
         Timer this_lil_timer = little_score_timers_.at(i);
         if (this_lil_timer.get_ticks() < little_timer_target_) {
-            Texture this_lil_texture;
+            Texture this_lil_texture{renderer_};
             std::stringstream ss;
             ss << little_score_scorers_.at(i);
             this_lil_texture.load_from_rendered_text(ss.str(), WHITE, true);

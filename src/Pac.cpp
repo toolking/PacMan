@@ -1,17 +1,6 @@
 #include "Pac.hpp"
 
-Pac::Pac()
-  : Entity(Entity::Type::PacMan)
-{
-    living_pac_.load_from_file("Textures/PacMan32.png");
-    death_pac_.load_from_file("Textures/GameOver32.png");
-    curr_living_pac_frame_ = 0;
-    curr_death_pac_frame_ = 0;
-    energy_status_ = false;
-    dead_animation_statement_ = false;
-}
-
-void Pac::update_pos(std::vector<Direction>& mover, Board::board_type const& actual_map)
+void Pac::update_pos(std::vector<Direction>& mover, board_type const& actual_map)
 {
     for (unsigned char i = 0; i < speed(); i++) {
         short TempX = position.x;
@@ -40,7 +29,7 @@ void Pac::update_pos(std::vector<Direction>& mover, Board::board_type const& act
     }
 }
 
-auto Pac::food_collision(Board::board_type& actual_map) -> unsigned char
+auto Pac::food_collision(board_type& actual_map) -> unsigned char
 {
     float const cell_x = position.x / static_cast<float>(BLOCK_SIZE_24);
     float const cell_y = position.y / static_cast<float>(BLOCK_SIZE_24);

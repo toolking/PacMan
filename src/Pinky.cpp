@@ -5,8 +5,8 @@
 #include "Position.hpp"
 #include "Globals.hpp"
 
-Pinky::Pinky()
-  : Ghost(PINK, Entity::Type::Pinky)
+Pinky::Pinky(cen::renderer const& renderer)
+  : Ghost(renderer,PINK, Entity::Type::Pinky)
 {
     ScatterTarget = Position(2 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, BLOCK_SIZE_24 / 2);
     Home = Position(13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 17 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2);
@@ -25,7 +25,7 @@ void Pinky::calculate_target(Entity pac)
     Target = {target_x, target_y};
 }
 
-void Pinky::update_pos(Board::board_type const& actual_board, Pac const& pac, bool timed_status)
+void Pinky::update_pos(board_type const& actual_board, Pac const& pac, bool timed_status)
 {
     update_speed(pac);
     update_status(pac, timed_status);

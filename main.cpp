@@ -20,13 +20,19 @@ TTF_Font* LittleFont = nullptr;
 
 auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int
 {
-    const cen::sdl sdl {{.flags = SDL_INIT_VIDEO}};
-    const cen::img img {{.flags = IMG_INIT_PNG}};
+    const cen::sdl sdl {{
+        .flags = SDL_INIT_VIDEO
+    }};
+    const cen::img img {{
+        .flags = IMG_INIT_PNG
+    }};
     const cen::ttf ttf;
-    const cen::mix mix {{.frequency = 44100,
+    const cen::mix mix {{
+        .frequency = 44100,
         .format = MIX_DEFAULT_FORMAT,
         .channels = 2,
-        .chunk_size = 1024}};
+        .chunk_size = 1024
+    }};
 
     cen::window window {"PacMan", {WINDOW_WIDTH, WINDOW_HEIGHT}, cen::window::shown};
     cen::renderer renderer = window.make_renderer(cen::renderer::vsync);
@@ -36,7 +42,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int
     Font = font.get();
     LittleFont = little_font.get();
 
-    Game game;
+    Game game{renderer};
     Timer game_timer;
     unsigned short start_ticks = START_WAIT_TICKS;
     std::vector<Direction> mover;
@@ -47,7 +53,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int
     cen::event_handler handler;
     bool running = true;
     while (running) {
-        uint64_t const iteration_start {cen::now()};
+        auto const iteration_start {cen::now()};
         while (handler.poll()) {
             if (handler.is<cen::quit_event>()) {
                 running = false;
@@ -58,20 +64,21 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int
                 if (!keyboardEvent.pressed()) {
                     continue;
                 }
-                if (   keyboardEvent.is_active(cen::scancodes::right)
-                    || keyboardEvent.is_active(cen::scancodes::d)) {
+                namespace sc = cen::scancodes;
+                if (   keyboardEvent.is_active(sc::right)
+                    || keyboardEvent.is_active(sc::d)) {
                     mover.emplace_back(Direction::Right);
                 }
-                else if (   keyboardEvent.is_active(cen::scancodes::up)
-                         || keyboardEvent.is_active(cen::scancodes::w)) {
+                else if (   keyboardEvent.is_active(sc::up)
+                         || keyboardEvent.is_active(sc::w)) {
                     mover.emplace_back(Direction::Up);
                 }
-                else if (   keyboardEvent.is_active(cen::scancodes::left)
-                         || keyboardEvent.is_active(cen::scancodes::a)) {
+                else if (   keyboardEvent.is_active(sc::left)
+                         || keyboardEvent.is_active(sc::a)) {
                     mover.emplace_back(Direction::Left);
                 }
-                else if (   keyboardEvent.is_active(cen::scancodes::down)
-                         || keyboardEvent.is_active(cen::scancodes::s)) {
+                else if (   keyboardEvent.is_active(sc::down)
+                         || keyboardEvent.is_active(sc::s)) {
                     mover.emplace_back(Direction::Down);
                 }
             }
@@ -87,7 +94,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int
             renderer.present();
         }
 
-        uint64_t const iteration_end = cen::now();
+        auto const iteration_end = cen::now();
         auto const elapsed_ms = (iteration_end - iteration_start)
             / (cen::frequency() * 1000U);
         cen::thread::sleep(std::chrono::milliseconds{FRAME_DURATION_MS - elapsed_ms});

@@ -4,7 +4,9 @@
 #include <iostream>
 #include <sstream>
 
-Fruit::Fruit()
+Fruit::Fruit(cen::renderer const& renderer)
+    : renderer_(renderer)
+    , fruit_texture_(renderer_)
 {
     fruit_texture_.load_from_file("Textures/Fruit32.png");
 }
@@ -67,7 +69,7 @@ void Fruit::draw()
     if (score_timer_.is_started() && score_timer_.get_ticks() < 1000) {
         std::stringstream ss;
         ss << SCORE_TABLE[current_fruit_];
-        Texture score_texture;
+        Texture score_texture{renderer_};
         score_texture.load_from_rendered_text(ss.str(), WHITE, true);
         score_texture.render(position.x, position.y - BLOCK_SIZE_24 / 2);
     }

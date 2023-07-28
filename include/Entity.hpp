@@ -75,7 +75,7 @@ protected:
     void move(Direction mover);
     void check_wrap();
     void get_possible_position(short& x, short& y, Direction mover);
-    bool wall_collision(short x, short y, Board::board_type const& actual_map, bool can_use_door = false);
+    bool wall_collision(short x, short y, board_type const& actual_map, bool can_use_door = false);
     auto char_board_pos(unsigned char side_dir, float cell_x, float cell_y) -> Position;
 
 private:

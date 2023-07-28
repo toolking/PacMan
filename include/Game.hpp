@@ -17,7 +17,21 @@
 class Game
 {
 public:
-    Game();
+    Game(cen::renderer const& renderer)
+      : renderer_ {renderer}
+      , board_ {renderer_}
+      , pac_ {renderer_}
+      , blinky_ {renderer_}
+      , inky_ {renderer_}
+      , pinky_ {renderer_}
+      , clyde_ {renderer_}
+      , fruit_ {renderer_}
+      , ready_ {renderer_}
+      , game_over_texture_ {renderer_}
+    {
+        ready_.load_from_rendered_text("ready!", YELLOW);
+        game_over_texture_.load_from_rendered_text("game  over", RED);
+    }
     void reset_ghosts_life_statement();
     void reset_ghosts_facing();
     void start();
@@ -43,6 +57,7 @@ public:
     Sound sound;
 
 private:
+    cen::renderer const& renderer_;
     Board board_;
     Pac pac_;
     Blinky blinky_;
@@ -53,22 +68,22 @@ private:
     Timer map_animation_timer_;
     Texture ready_;
     Texture game_over_texture_;
-    Board::board_type actual_map_;
-    bool is_game_started_;
+    board_type actual_map_ = board_.map();
+    bool is_game_started_ = false;
     Timer ghost_timer_;
-    unsigned short scatter_time_;
-    unsigned short chasing_time_;
-    unsigned short ghost_timer_target_;
-    bool timed_status_;
-    unsigned short scorer_;
+    unsigned short scatter_time_ = 7000;
+    unsigned short chasing_time_ = 20000;
+    unsigned short ghost_timer_target_ = chasing_time_;
+    bool timed_status_ = false;
+    unsigned short scorer_ = 200;
     std::vector<Timer> little_score_timers_;
     std::vector<Position> little_score_positions_;
     std::vector<unsigned short> little_score_scorers_;
-    unsigned short little_timer_target_;
-    unsigned short level_;
-    bool is_to_scatter_sound_;
-    bool is_to_waka_sound_;
+    unsigned short little_timer_target_ = 1000;
+    unsigned short level_ = 1;
+    bool is_to_scatter_sound_ = true;
+    bool is_to_waka_sound_ = true;
     Timer waka_timer_;
-    bool is_to_death_pac_sound_;
-    unsigned char dead_ghosts_counter_;
+    bool is_to_death_pac_sound_ = true;
+    unsigned char dead_ghosts_counter_ = 0;
 };
