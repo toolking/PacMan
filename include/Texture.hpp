@@ -9,7 +9,7 @@
 class TextureImg
 {
 public:
-    TextureImg(cen::renderer_handle const& renderer, std::string path);
+    TextureImg(cen::renderer_handle& renderer, std::string path);
 
     TextureImg(TextureImg const&) = delete;
     TextureImg(TextureImg&&) = delete;
@@ -25,7 +25,7 @@ public:
     void render(short x, short y);
 
 private:
-    cen::renderer_handle renderer_;
+    cen::renderer_handle& renderer_;
     cen::surface surface_;
     cen::texture texture_;
 };
@@ -34,7 +34,7 @@ template <bool IsLittle = false>
 class TextureFont
 {
 public:
-    TextureFont(cen::renderer_handle const& renderer, std::string texture_text, cen::color text_color)
+    TextureFont(cen::renderer_handle& renderer, std::string texture_text, cen::color text_color = cen::colors::white)
       : renderer_ {renderer}
       , font_ {IsLittle ? cen::font {"Fonts/VpPixel.ttf", 20} : cen::font {"Fonts/emulogic.ttf", BLOCK_SIZE_24}}
       , surface_ {font_.render_solid(texture_text.c_str(), text_color)}
@@ -50,7 +50,7 @@ public:
         texture_.set_color_mod(color);
     }
 
-    void set_new_text(std::string texture_text, cen::color text_color)
+    void set_new_text(std::string texture_text, cen::color text_color = cen::colors::white)
     {
         surface_ = font_.render_solid(texture_text.c_str(), text_color);
         texture_ = renderer_.make_texture(surface_);
@@ -62,7 +62,7 @@ public:
     }
 
 private:
-    cen::renderer_handle renderer_;
+    cen::renderer_handle& renderer_;
     cen::font font_;
     cen::surface surface_;
     cen::texture texture_;

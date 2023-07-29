@@ -14,6 +14,7 @@
 
 #include <centurion.hpp>
 #include <vector>
+#include <list>
 
 class Game
 {
@@ -33,31 +34,32 @@ public:
 
     void run();
 
-    void reset_ghosts_life_statement();
-    void reset_ghosts_facing();
-    void start();
-    void mod_start_statement(bool new_start_statement);
-    void clock();
-    void update_positions(std::vector<Direction>& mover, bool timed_status);
-    void food();
-    void entity_collisions();
-    void update(std::vector<Direction>& mover);
-    unsigned short get_level();
-    void increase_level();
-    void update_difficulty();
-    bool is_level_completed();
+private:
     void clear_mover(std::vector<Direction>& mover);
-    void deadly_pac_ghost_coll();
+    void clock();
     void deadly_ghost_pac_coll(Ghost& ghost);
-    void mod_to_waka(bool new_waka);
+    void deadly_pac_ghost_coll();
     void death_sound();
-    void mod_death_sound_statement(bool new_death_sound_statement);
     void draw_little_score();
-    bool process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms& start_ticks);
     void draw();
+    void entity_collisions();
+    void food();
+    auto get_level() -> unsigned short;
+    void increase_level();
+    auto is_level_completed() -> bool;
+    void mod_death_sound_statement(bool new_death_sound_statement);
+    void mod_start_statement(bool new_start_statement);
+    void mod_to_waka(bool new_waka);
+    auto process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms& start_ticks) -> bool;
+    void reset_ghosts_facing();
+    void reset_ghosts_life_statement();
+    void start();
+    void update_difficulty();
+    void update_positions(std::vector<Direction>& mover, bool timed_status);
+    void update(std::vector<Direction>& mover);
+
     Sound sound;
 
-private:
     cen::renderer_handle renderer_;
     Board board_;
     Pac pac_;
@@ -77,9 +79,7 @@ private:
     cen::u64ms ghost_timer_target_ {chasing_time_};
     bool timed_status_ = false;
     unsigned short scorer_ = 200;
-    std::vector<Timer> little_score_timers_;
-    std::vector<Position> little_score_positions_;
-    std::vector<unsigned short> little_score_scorers_;
+    std::list<std::tuple<Timer,Position,unsigned short>> little_score_entries_;
     cen::u64ms little_timer_target_ {1000};
     unsigned short level_ = 1;
     bool is_to_scatter_sound_ = true;

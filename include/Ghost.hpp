@@ -11,7 +11,7 @@
 class Ghost : public Entity
 {
 public:
-    Ghost(cen::renderer_handle const& renderer, cen::color color, Entity::Type identity);
+    Ghost(cen::renderer_handle& renderer, cen::color color, Entity::Type identity);
     bool is_target_to_calculate(Pac const& pac);
     void poss_dirs_bubble_sort(std::vector<float>& distances, std::vector<Direction>& possible_directions);
     void calculate_direction(board_type const& actual_map);
@@ -29,7 +29,7 @@ protected:
     Position Home;
 
 private:
-    cen::renderer_handle renderer_;
+    cen::renderer_handle& renderer_;
     TextureImg body_;
     TextureImg eyes_;
     std::array<cen::irect,GHOST_BODY_FRAMES> ghost_body_sprite_clips_{init_frames<GHOST_BODY_FRAMES>()};

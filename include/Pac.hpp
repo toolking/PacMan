@@ -10,11 +10,11 @@
 class Pac : public Entity
 {
 public:
-    Pac(cen::renderer_handle const& renderer)
+    Pac(cen::renderer_handle& renderer)
       : Entity(Entity::Type::PacMan)
       , renderer_ {renderer}
-      , living_pac_ {renderer_,"Textures/PacMan32.png"}
-      , death_pac_ {renderer_,"Textures/GameOver32.png"}
+      , living_pac_ {renderer_, "Textures/PacMan32.png"}
+      , death_pac_ {renderer_, "Textures/GameOver32.png"}
     {
     }
 
@@ -31,7 +31,7 @@ public:
     void draw();
 
 private:
-    cen::renderer_handle renderer_;
+    cen::renderer_handle& renderer_;
     TextureImg living_pac_;
     TextureImg death_pac_;
     std::array<cen::irect, LIVING_PAC_FRAMES> living_pac_sprite_clips_ {init_frames<LIVING_PAC_FRAMES>()};

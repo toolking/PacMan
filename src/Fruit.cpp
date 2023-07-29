@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-Fruit::Fruit(cen::renderer_handle const& renderer)
+Fruit::Fruit(cen::renderer_handle& renderer)
     : renderer_{renderer}
     , fruit_texture_{renderer_,"Textures/Fruit32.png"}
 {
@@ -65,12 +65,12 @@ void Fruit::draw()
     using namespace std::chrono_literals;
     if (fruit_timer_.is_started()) {
         auto clip = fruit_sprite_clips_[current_fruit_];
-        fruit_texture_.render(position.x - 4, position.y - 4, 0, clip);
+        fruit_texture_.render(position.x() - 4, position.y() - 4, 0, clip);
     }
     if (score_timer_.is_started() && score_timer_.get_ticks() < 1000ms) {
         std::stringstream ss;
         ss << SCORE_TABLE[current_fruit_];
         TextureFont<true> score_texture{renderer_, ss.str(), cen::colors::white};
-        score_texture.render(position.x, position.y - BLOCK_SIZE_24 / 2);
+        score_texture.render(position.x(), position.y() - BLOCK_SIZE_24 / 2);
     }
 }

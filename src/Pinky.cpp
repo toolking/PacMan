@@ -5,20 +5,20 @@
 #include "Position.hpp"
 #include "Globals.hpp"
 
-Pinky::Pinky(cen::renderer_handle const& renderer)
+Pinky::Pinky(cen::renderer_handle& renderer)
   : Ghost(renderer,cen::colors::pink, Entity::Type::Pinky)
 {
-    ScatterTarget = Position(2 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, BLOCK_SIZE_24 / 2);
-    Home = Position(13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 17 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2);
+    ScatterTarget = coord_to_position(2,0);
+    Home = coord_to_position(13,17);
 }
 
 void Pinky::calculate_target(Entity pac)
 {
-    short const target_x = pac.position.x
+    short const target_x = pac.position.x()
                   + ((pac.direction() == Direction::Right) ?  4 * BLOCK_SIZE_24 :
                      (pac.direction() == Direction::Left)  ? -4 * BLOCK_SIZE_24 :
                                                               0);
-    short const target_y = pac.position.y
+    short const target_y = pac.position.y()
                   + ((pac.direction() == Direction::Down) ?  4 * BLOCK_SIZE_24 :
                      (pac.direction() == Direction::Up)   ? -4 * BLOCK_SIZE_24 :
                                                              0);

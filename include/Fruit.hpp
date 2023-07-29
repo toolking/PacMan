@@ -10,7 +10,7 @@
 class Fruit
 {
 public:
-    Fruit(cen::renderer_handle const& renderer);
+    Fruit(cen::renderer_handle& renderer);
     void mod_current_fruit(unsigned short actual_actual_level);
     void update_food_counter();
     bool is_eatable();
@@ -25,7 +25,7 @@ public:
     Position position {13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 20 * BLOCK_SIZE_24};
 
 private:
-    cen::renderer_handle renderer_;
+    cen::renderer_handle& renderer_;
     TextureImg fruit_texture_;
     Timer fruit_timer_;
     Timer score_timer_;

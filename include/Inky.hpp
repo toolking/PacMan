@@ -8,7 +8,7 @@
 class Inky : public Ghost
 {
 public:
-    Inky(cen::renderer_handle const& renderer);
+    Inky(cen::renderer_handle& renderer);
     void update_pos(board_type const& actual_board, Pac const& pac, Position  const& blinky, bool timed_status);
 
 private:

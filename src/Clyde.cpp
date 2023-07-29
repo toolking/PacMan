@@ -7,19 +7,19 @@
 
 #include <cmath>
 
-Clyde::Clyde(cen::renderer_handle const& renderer)
+Clyde::Clyde(cen::renderer_handle& renderer)
   : Ghost(renderer, cen::colors::orange, Entity::Type::Clyde)
 {
-    ScatterTarget = Position(BLOCK_SIZE_24 / 2, 35 * 2 * BLOCK_SIZE_24 / 2);
-    Home = Position(15 * 2 * BLOCK_SIZE_24 / 2, 17 * 2 * BLOCK_SIZE_24 / 2);
+    ScatterTarget = coord_to_position(0, 35);
+    Home = coord_to_position(15,17);
 }
 
 void Clyde::calculate_target(Position pac_pos)
 {
-    auto dist_x = static_cast<float>(abs(position.x - pac_pos.x));
+    auto dist_x = static_cast<float>(abs(position.x() - pac_pos.x()));
     if (dist_x > WINDOW_WIDTH / 2)
         dist_x = WINDOW_WIDTH - dist_x;
-    auto const dist = static_cast<float>(sqrt(pow(dist_x, 2) + pow(position.y - pac_pos.y, 2)));
+    auto const dist = static_cast<float>(sqrt(pow(dist_x, 2) + pow(position.y() - pac_pos.y(), 2)));
     Target = (dist > 8 * BLOCK_SIZE_24) ? pac_pos : ScatterTarget;
 }
 

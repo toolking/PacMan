@@ -9,12 +9,13 @@
 
 auto Board::entity_start_position(Entity const& e) const -> Position
 {
+    using enum Entity::Type;
     auto const et {e.identity()};
-    char const c = (et == Entity::Type::PacMan) ? '0'
-                 : (et == Entity::Type::Blinky) ? '1'
-                 : (et == Entity::Type::Inky)   ? '2'
-                 : (et == Entity::Type::Pinky)  ? '3'
-                 : (et == Entity::Type::Clyde)  ? '4'
+    char const c = (et == PacMan) ? '0'
+        : (et == Blinky)          ? '1'
+        : (et == Inky)            ? '2'
+        : (et == Pinky)           ? '3'
+        : (et == Clyde)           ? '4'
                                   : ' ';
     auto const i = CHAR_BOARD.find(c);
     unsigned char const x = i % BOARD_WIDTH;
@@ -24,26 +25,20 @@ auto Board::entity_start_position(Entity const& e) const -> Position
 
 void Board::set_score()
 {
-    std::stringstream ss;
-    ss << score_;
-    score_texture_.set_new_text(ss.str(), cen::colors::white);
+    score_texture_.set_new_text(std::to_string(score_), cen::colors::white);
 }
 
 void Board::set_high_score()
 {
     unsigned int high;
-    std::ifstream high_scores("HighScore.txt");
-    high_scores >> high;
-    std::stringstream ss;
+    std::fstream high_score_file("HighScore.txt");
+    high_score_file >> high;
     if (score_ > high) {
-        ss << score_;
-        std::ofstream high_scores("HighScore.txt");
-        high_scores << ss.str();
-    } else {
-        ss << high;
+        high = score_;
+        high_score_file << high;
     }
-    high_score_texture_.set_new_text(ss.str(), cen::colors::white);
-    high_scores.close();
+    high_score_texture_.set_new_text(std::to_string(high), cen::colors::white);
+    high_score_file.close();
 }
 
 void Board::draw(board_type const& actual_map, Timer map_animation_timer)
@@ -56,23 +51,23 @@ void Board::draw(board_type const& actual_map, Timer map_animation_timer)
     for (unsigned char i = 1; i <= lives_; i++) {
         lives_texture_.render(i * BLOCK_SIZE_32, 26 * BLOCK_SIZE_32 - BLOCK_SIZE_32 / 4);
     }
-    if (!map_animation_timer.is_started()) {
-        door_texture_.render(WINDOW_WIDTH / 2 - 23, WINDOW_HEIGHT / 2 - 57);
-        //char y = -1;
-        unsigned short i = 0;
-        for (auto const& c: actual_map) {
-            if ( c==BlockType::Pellet )
-                pellet_texture_.render(i%BOARD_WIDTH * BLOCK_SIZE_24, i/BOARD_WIDTH * BLOCK_SIZE_24);
-            else if (c==BlockType::Energizer)
-                energizer_texture_.render(i%BOARD_WIDTH * BLOCK_SIZE_24, i/BOARD_WIDTH * BLOCK_SIZE_24);
-            i++;
-        }
-    } else {
+    if (map_animation_timer.is_started()) {
         using namespace std::chrono_literals;
-        if ((map_animation_timer.get_ticks() / 250) % 2 == 1ms)
-            map_texture_.set_color(cen::colors::white);
-        else
-            map_texture_.set_color(cen::colors::blue);
+        auto const color {
+            ((map_animation_timer.get_ticks() / 250) % 2 == 1ms)
+                ? cen::colors::white
+                : cen::colors::blue};
+        map_texture_.set_color(color);
+        return;
+    }
+    door_texture_.render(WINDOW_WIDTH / 2 - 23, WINDOW_HEIGHT / 2 - 57);
+    unsigned short i = 0;
+    for (auto const& c : actual_map) {
+        if (c == BlockType::Pellet)
+            pellet_texture_.render(i % BOARD_WIDTH * BLOCK_SIZE_24, i / BOARD_WIDTH * BLOCK_SIZE_24);
+        else if (c == BlockType::Energizer)
+            energizer_texture_.render(i % BOARD_WIDTH * BLOCK_SIZE_24, i / BOARD_WIDTH * BLOCK_SIZE_24);
+        ++i;
     }
 }
 
@@ -109,14 +104,8 @@ auto Board::get_lives() -> unsigned char
 void Board::score_increase(unsigned short scorer)
 {
     switch (scorer) {
-    case 0:
-        score_ += 10;
-        break;
-    case 1:
-        score_ += 50;
-        break;
-    default:
-        score_ += scorer;
-        break;
+    case 0: score_ += 10; break;
+    case 1: score_ += 50; break;
+    default: score_ += scorer; break;
     }
 }

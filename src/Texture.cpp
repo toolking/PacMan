@@ -3,7 +3,7 @@
 
 #include <fmt/format.h>
 
-TextureImg::TextureImg(cen::renderer_handle const& renderer, std::string path)
+TextureImg::TextureImg(cen::renderer_handle& renderer, std::string path)
   : renderer_ {renderer}
   , surface_ {path}
   , texture_ {renderer_.make_texture(surface_)}

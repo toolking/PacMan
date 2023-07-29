@@ -5,24 +5,24 @@
 #include "Pac.hpp"
 #include "Position.hpp"
 
-Inky::Inky(cen::renderer_handle const& renderer)
+Inky::Inky(cen::renderer_handle& renderer)
   : Ghost(renderer, cen::colors::cyan, Entity::Type::Inky)
 {
-    ScatterTarget = Position(26 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 35 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2);
-    Home = Position(11 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 17 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2);
+    ScatterTarget = coord_to_position(26,35);
+    Home = coord_to_position(11,17);
 }
 
 void Inky::calculate_target(Entity pac, Position pos_blinky)
 {
-    short const x = pac.position.x
+    auto const x = pac.position.x()
                   + ((pac.direction() == Direction::Right) ?  2 * BLOCK_SIZE_24 :
                      (pac.direction() == Direction::Left)  ? -2 * BLOCK_SIZE_24 :
                                                               0);
-    short const y = pac.position.y
+    auto const y = pac.position.y()
                   + ((pac.direction() == Direction::Down) ?  2 * BLOCK_SIZE_24 :
                      (pac.direction() == Direction::Up)   ? -2 * BLOCK_SIZE_24 :
                                                              0);
-    Target = Position(x + x - pos_blinky.x, y + y - pos_blinky.y);
+    Target = Position(x + x - pos_blinky.x(), y + y - pos_blinky.y());
 }
 
 void Inky::update_pos(board_type const& actual_board, Pac const& pac, Position const& pos_blinky, bool timed_status)

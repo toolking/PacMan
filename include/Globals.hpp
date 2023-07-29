@@ -35,26 +35,22 @@ enum class Direction : unsigned char
 
 inline Direction operator- (Direction const& dir)
 {
+    using enum Direction;
     switch (dir) {
-    case Direction::Right:
-        return Direction::Left;
-    case Direction::Up:
-        return Direction::Down;
-    case Direction::Left:
-        return Direction::Right;
-    case Direction::Down:
-        return Direction::Up;
-    default:
-        return Direction::Nowhere;
+    case Right: return Left;
+    case Up: return Down;
+    case Left: return Right;
+    case Down: return Up;
+    default: return Nowhere;
     }
 }
 
 template<std::size_t Size>
-inline
+inline constexpr
 auto init_frames() -> auto
 {
     std::array<cen::irect, Size> sprite_clips;
-    unsigned short x = 0;
+    auto x = 0;
     for (auto& sprite : sprite_clips) {
         sprite.set_position(x, 0);
         sprite.set_size(BLOCK_SIZE_32, BLOCK_SIZE_32);

@@ -1,9 +1,9 @@
 #include "Game.hpp"
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <algorithm>
 
 void Game::reset_ghosts_life_statement()
 {
@@ -28,13 +28,13 @@ void Game::start()
         return;
     }
     if (is_level_completed()) {
-        actual_map_=board_.map();
+        actual_map_ = board_.map();
     }
-    pac_.position=board_.entity_start_position(pac_);
-    blinky_.position=board_.entity_start_position(blinky_);
-    inky_.position=board_.entity_start_position(inky_);
-    pinky_.position=board_.entity_start_position(pinky_);
-    clyde_.position=board_.entity_start_position(clyde_);
+    pac_.position = board_.entity_start_position(pac_);
+    blinky_.position = board_.entity_start_position(blinky_);
+    inky_.position = board_.entity_start_position(inky_);
+    pinky_.position = board_.entity_start_position(pinky_);
+    clyde_.position = board_.entity_start_position(clyde_);
     pac_.change_energy_status(false);
     reset_ghosts_life_statement();
     reset_ghosts_facing();
@@ -140,7 +140,7 @@ void Game::entity_collisions()
         }
     }
     if (fruit_.is_eatable()) {
-        if (is_colliding(pac_.position,fruit_.position)) {
+        if (is_colliding(pac_.position, fruit_.position)) {
             fruit_.start_score_timer();
             board_.score_increase(fruit_.get_score_value());
             fruit_.despawn();
@@ -185,8 +185,9 @@ void Game::update_difficulty()
 
 auto Game::is_level_completed() -> bool
 {
-    return std::none_of(actual_map_.cbegin(),actual_map_.cend(),[](BlockType b){
-        return b == BlockType::Pellet || b == BlockType::Energizer;
+    using enum BlockType;
+    return std::none_of(actual_map_.cbegin(), actual_map_.cend(), [](BlockType b) {
+        return b == Pellet || b == Energizer;
     });
 }
 
@@ -198,25 +199,21 @@ void Game::clear_mover(std::vector<Direction>& mover)
 
 void Game::deadly_pac_ghost_coll()
 {
-    if (   (is_colliding(pac_.position,blinky_.position) && blinky_.is_alive())
-        || (is_colliding(pac_.position,inky_.position) && inky_.is_alive())
-        || (is_colliding(pac_.position,pinky_.position) && pinky_.is_alive())
-        || (is_colliding(pac_.position,clyde_.position) && clyde_.is_alive()))
+    if ((is_colliding(pac_.position, blinky_.position) && blinky_.is_alive())
+        || (is_colliding(pac_.position, inky_.position) && inky_.is_alive())
+        || (is_colliding(pac_.position, pinky_.position) && pinky_.is_alive())
+        || (is_colliding(pac_.position, clyde_.position) && clyde_.is_alive()))
         pac_.life_statement(false);
 }
 
 void Game::deadly_ghost_pac_coll(Ghost& ghost)
 {
-    if (is_colliding(pac_.position,ghost.position) && ghost.is_alive()) {
+    if (is_colliding(pac_.position, ghost.position) && ghost.is_alive()) {
         ghost.life_statement(false);
         board_.score_increase(scorer_);
-        little_score_scorers_.push_back(scorer_);
-        Timer ghost_lil_timer;
-        ghost_lil_timer.start();
-        little_score_timers_.push_back(ghost_lil_timer);
-        Position this_lil_pos;
-        this_lil_pos = ghost.position;
-        little_score_positions_.push_back(this_lil_pos);
+        Timer little_score_timer;
+        little_score_timer.start();
+        little_score_entries_.emplace_back(little_score_timer, ghost.position, scorer_);
         scorer_ *= 2;
         sound.play_ghost_death();
         dead_ghosts_counter_++;
@@ -245,23 +242,23 @@ void Game::mod_death_sound_statement(bool new_death_sound_statement)
 
 void Game::draw_little_score()
 {
-    for (unsigned char i = 0; i < little_score_timers_.size(); i++) {
-        Timer this_lil_timer = little_score_timers_.at(i);
-        if (this_lil_timer.get_ticks() < little_timer_target_) {
-            TextureFont<true> this_lil_texture{renderer_, std::to_string(little_score_scorers_.at(i)), cen::colors::white};
-            Position this_lil_pos = little_score_positions_.at(i);
-            this_lil_texture.render(this_lil_pos.x, this_lil_pos.y - BLOCK_SIZE_24 / 2);
-        } else {
-            little_score_scorers_.erase(little_score_scorers_.begin() + i);
-            little_score_timers_.erase(little_score_timers_.begin() + i);
-            little_score_positions_.erase(little_score_positions_.begin() + i);
+    for (auto i = little_score_entries_.begin(); i != little_score_entries_.end(); i++) {
+        auto const& this_lil_timer {std::get<Timer>(*i)};
+        if (this_lil_timer.get_ticks() >= little_timer_target_) {
+            little_score_entries_.erase(i);
+            --i;
+            continue;
         }
+        auto const score {std::get<2>(*i)};
+        auto const& position {std::get<Position>(*i)};
+        TextureFont<true> this_lil_texture {renderer_, std::to_string(score), cen::colors::white};
+        this_lil_texture.render(position.x(), position.y() - BLOCK_SIZE_24 / 2);
     }
 }
 
 auto Game::process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms& start_ticks) -> bool
 {
-                using namespace std::chrono_literals;
+    using namespace std::chrono_literals;
     // Returns false when should render the last animation frame.
     // It's bad looking, so I don't want to render it.
     if (game_timer.get_ticks() < start_ticks) {
@@ -364,20 +361,17 @@ void Game::run()
                     continue;
                 }
                 namespace sc = cen::scancodes;
-                if (   keyboardEvent.is_active(sc::right)
+                if (keyboardEvent.is_active(sc::right)
                     || keyboardEvent.is_active(sc::d)) {
                     mover.emplace_back(Direction::Right);
-                }
-                else if (   keyboardEvent.is_active(sc::up)
-                         || keyboardEvent.is_active(sc::w)) {
+                } else if (keyboardEvent.is_active(sc::up)
+                    || keyboardEvent.is_active(sc::w)) {
                     mover.emplace_back(Direction::Up);
-                }
-                else if (   keyboardEvent.is_active(sc::left)
-                         || keyboardEvent.is_active(sc::a)) {
+                } else if (keyboardEvent.is_active(sc::left)
+                    || keyboardEvent.is_active(sc::a)) {
                     mover.emplace_back(Direction::Left);
-                }
-                else if (   keyboardEvent.is_active(sc::down)
-                         || keyboardEvent.is_active(sc::s)) {
+                } else if (keyboardEvent.is_active(sc::down)
+                    || keyboardEvent.is_active(sc::s)) {
                     mover.emplace_back(Direction::Down);
                 }
             }
@@ -396,6 +390,6 @@ void Game::run()
         auto const iteration_end = cen::now();
         auto const elapsed_ms = (iteration_end - iteration_start)
             / (cen::frequency() * 1000U);
-        cen::thread::sleep(std::chrono::milliseconds{FRAME_DURATION_MS - elapsed_ms});
+        cen::thread::sleep(std::chrono::milliseconds {FRAME_DURATION_MS - elapsed_ms});
     }
 }

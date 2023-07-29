@@ -18,7 +18,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int
         .channels = 2,
         .chunk_size = 1024
     }};
- 
+
     cen::window window {"PacMan", {WINDOW_WIDTH, WINDOW_HEIGHT}, cen::window::shown};
     cen::renderer renderer {window.make_renderer(cen::renderer::vsync)};
 
