@@ -4,11 +4,10 @@
 #include <iostream>
 #include <sstream>
 
-Fruit::Fruit(cen::renderer const& renderer)
+Fruit::Fruit(cen::renderer_handle const& renderer)
     : renderer_(renderer)
-    , fruit_texture_(renderer_)
+    , fruit_texture_(renderer_,"Textures/Fruit32.png")
 {
-    fruit_texture_.load_from_file("Textures/Fruit32.png");
 }
 
 void Fruit::mod_current_fruit(unsigned short actual_level)
@@ -63,14 +62,13 @@ void Fruit::reset_food_counter()
 void Fruit::draw()
 {
     if (fruit_timer_.is_started()) {
-        auto clip = &fruit_sprite_clips_[current_fruit_];
+        auto clip = fruit_sprite_clips_[current_fruit_];
         fruit_texture_.render(position.x - 4, position.y - 4, 0, clip);
     }
     if (score_timer_.is_started() && score_timer_.get_ticks() < 1000) {
         std::stringstream ss;
         ss << SCORE_TABLE[current_fruit_];
-        Texture score_texture{renderer_};
-        score_texture.load_from_rendered_text(ss.str(), WHITE, true);
+        TextureFont<true> score_texture{renderer_, ss.str(), WHITE};
         score_texture.render(position.x, position.y - BLOCK_SIZE_24 / 2);
     }
 }

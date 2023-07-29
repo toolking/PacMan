@@ -7,7 +7,7 @@
 class Blinky : public Ghost
 {
 public:
-    Blinky(cen::renderer const& renderer);
+    Blinky(cen::renderer_handle const& renderer);
     void update_pos(board_type const& actual_board, Pac const& pac, bool timed_status);
 
 private:

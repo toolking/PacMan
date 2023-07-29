@@ -5,7 +5,7 @@
 #include "Position.hpp"
 #include "Globals.hpp"
 
-Blinky::Blinky(cen::renderer const& renderer)
+Blinky::Blinky(cen::renderer_handle const& renderer)
   : Ghost(renderer, RED, Entity::Type::Blinky)
 {
     ScatterTarget = Position(25 * 2 * BLOCK_SIZE_24 / 2, BLOCK_SIZE_24 / 2);

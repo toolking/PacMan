@@ -7,7 +7,7 @@
 
 #include <cmath>
 
-Clyde::Clyde(cen::renderer const& renderer)
+Clyde::Clyde(cen::renderer_handle const& renderer)
   : Ghost(renderer, ORANGE, Entity::Type::Clyde)
 {
     ScatterTarget = Position(BLOCK_SIZE_24 / 2, 35 * 2 * BLOCK_SIZE_24 / 2);

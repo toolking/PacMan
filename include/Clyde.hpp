@@ -7,7 +7,7 @@
 class Clyde : public Ghost
 {
 public:
-    Clyde(cen::renderer const& renderer);
+    Clyde(cen::renderer_handle const& renderer);
     void update_pos(board_type const& actual_board, Pac const& pac, bool timed_status);
 
 private:

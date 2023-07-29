@@ -12,7 +12,7 @@ FetchContent_MakeAvailable( centurion )
 find_package( SDL2 REQUIRED )
 find_package( fmt REQUIRED )
 
-find_program( CLANG_TIDY_EXE NAMES "clang-tidy-17" )
+find_program( CLANG_TIDY_EXE NAMES "clang-tidy" )
 
 # set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
 
@@ -41,4 +41,14 @@ target_compile_features( PacMan
     cxx_std_23
 )
 
-target_compile_options( PacMan PRIVATE -Wall -Wextra -Werror )
+target_compile_options( PacMan
+  PRIVATE
+    -Wall
+    -Wextra
+    -Werror
+    #-Wconversion
+    #-Wsign-conversion
+    #-Wshadow
+    #-pedantic
+    #-pedantic-errors
+)

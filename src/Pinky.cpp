@@ -5,7 +5,7 @@
 #include "Position.hpp"
 #include "Globals.hpp"
 
-Pinky::Pinky(cen::renderer const& renderer)
+Pinky::Pinky(cen::renderer_handle const& renderer)
   : Ghost(renderer,PINK, Entity::Type::Pinky)
 {
     ScatterTarget = Position(2 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, BLOCK_SIZE_24 / 2);

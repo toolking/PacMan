@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Globals.hpp"
+#include "Position.hpp"
 #include "Texture.hpp"
 #include "Timer.hpp"
-#include "Position.hpp"
 
 #include <array>
 #include <string_view>
@@ -49,15 +49,14 @@ class Entity;
 
 enum class BlockType
 {
-    Nothing=0,
+    Nothing = 0,
     Wall,
     Door,
     Pellet,
     Energizer
 };
 
-    using block_type = BlockType;
-    using board_type = std::array<block_type, BOARD_HEIGHT * BOARD_WIDTH>;
+using board_type = std::array<BlockType, BOARD_HEIGHT * BOARD_WIDTH>;
 
 constexpr auto char_board_2_bin_board(std::string_view char_board) -> board_type
 {
@@ -82,32 +81,23 @@ constexpr auto char_board_2_bin_board(std::string_view char_board) -> board_type
 class Board
 {
 public:
-
-    Board(cen::renderer const& renderer)
+    Board(cen::renderer_handle const& renderer)
       : renderer_(renderer)
-      , map_texture_{renderer_}
-      , pellet_texture_{renderer_}
-      , energizer_texture_{renderer_}
-      , door_texture_{renderer_}
-      , lives_texture_{renderer_}
-      , score_label_texture_{renderer_}
-      , score_texture_{renderer_}
-      , high_score_label_texture_{renderer_}
-      , high_score_texture_{renderer_}
+      , map_texture_ {renderer_, "Textures/Map24.png"}
+      , pellet_texture_ {renderer_, "Textures/Pellet24.png"}
+      , energizer_texture_ {renderer_, "Textures/Energizer24.png"}
+      , door_texture_ {renderer_, "Textures/Door.png"}
+      , lives_texture_ {renderer_, "Textures/Lives32.png"}
+      , score_label_texture_ {renderer_,"Score", cen::colors::white}
+      , score_texture_ {renderer_,"0", cen::colors::white}
+      , high_score_label_texture_ {renderer_,"High Score", cen::colors::white}
+      , high_score_texture_ {renderer_,"0", cen::colors::white}
     {
-    map_texture_.load_from_file("Textures/Map24.png");
-    pellet_texture_.load_from_file("Textures/Pellet24.png");
-    energizer_texture_.load_from_file("Textures/Energizer24.png");
-    door_texture_.load_from_file("Textures/Door.png");
-    lives_texture_.load_from_file("Textures/Lives32.png");
-    score_label_texture_.load_from_rendered_text("Score", WHITE);
-    high_score_label_texture_.load_from_rendered_text("High Score", WHITE);
-    map_texture_.set_color(BLUE);
-    numeric_board_ = char_board_2_bin_board(CHAR_BOARD);
-
+        map_texture_.set_color(cen::colors::blue);
+        numeric_board_ = char_board_2_bin_board(CHAR_BOARD);
     }
     auto map() const -> board_type;
-    auto entity_start_position(Entity const&) const -> Position; 
+    auto entity_start_position(Entity const&) const -> Position;
     void set_score();
     void set_high_score();
     bool is_extra_life();
@@ -118,16 +108,16 @@ public:
     void draw(board_type const& actual_map, Timer map_animation_timer);
 
 private:
-    cen::renderer const& renderer_;
-    Texture map_texture_;
-    Texture pellet_texture_;
-    Texture energizer_texture_;
-    Texture door_texture_;
-    Texture lives_texture_;
-    Texture score_label_texture_;
-    Texture score_texture_;
-    Texture high_score_label_texture_;
-    Texture high_score_texture_;
+    cen::renderer_handle renderer_;
+    TextureImg map_texture_;
+    TextureImg pellet_texture_;
+    TextureImg energizer_texture_;
+    TextureImg door_texture_;
+    TextureImg lives_texture_;
+    TextureFont<> score_label_texture_;
+    TextureFont<> score_texture_;
+    TextureFont<> high_score_label_texture_;
+    TextureFont<> high_score_texture_;
     board_type numeric_board_;
     unsigned int score_ {};
     bool is_extra_ {};

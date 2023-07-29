@@ -183,9 +183,8 @@ void Game::update_difficulty()
 
 auto Game::is_level_completed() -> bool
 {
-    using enum BlockType;
-    return std::none_of(actual_map_.cbegin(),actual_map_.cend(),[](block_type b){
-        return b == Pellet || b == Energizer;
+    return std::none_of(actual_map_.cbegin(),actual_map_.cend(),[](BlockType b){
+        return b == BlockType::Pellet || b == BlockType::Energizer;
     });
 }
 
@@ -247,10 +246,9 @@ void Game::draw_little_score()
     for (unsigned char i = 0; i < little_score_timers_.size(); i++) {
         Timer this_lil_timer = little_score_timers_.at(i);
         if (this_lil_timer.get_ticks() < little_timer_target_) {
-            Texture this_lil_texture{renderer_};
             std::stringstream ss;
             ss << little_score_scorers_.at(i);
-            this_lil_texture.load_from_rendered_text(ss.str(), WHITE, true);
+            TextureFont<true> this_lil_texture{renderer_,ss.str(), WHITE};
             Position this_lil_pos = little_score_positions_.at(i);
             this_lil_texture.render(this_lil_pos.x, this_lil_pos.y - BLOCK_SIZE_24 / 2);
         } else {

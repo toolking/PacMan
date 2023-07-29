@@ -24,16 +24,11 @@ void Entity::get_possible_position(short& x, short& y, Direction mover)
 auto Entity::char_board_pos(unsigned char side_dir, float cell_x, float cell_y) -> Position
 {
     switch (side_dir) {
-    case 0:
-        return {static_cast<short>(floor(cell_x)), static_cast<short>(floor(cell_y))};
-    case 1:
-        return {static_cast<short>(ceil(cell_x)), static_cast<short>(floor(cell_y))};
-    case 2:
-        return {static_cast<short>(floor(cell_x)), static_cast<short>(ceil(cell_y))};
-    case 3:
-        return {static_cast<short>(ceil(cell_x)), static_cast<short>(ceil(cell_y))};
-    default:
-        break;
+    case 0: return {static_cast<short>(floor(cell_x)), static_cast<short>(floor(cell_y))};
+    case 1: return {static_cast<short>(ceil(cell_x)), static_cast<short>(floor(cell_y))};
+    case 2: return {static_cast<short>(floor(cell_x)), static_cast<short>(ceil(cell_y))};
+    case 3: return {static_cast<short>(ceil(cell_x)), static_cast<short>(ceil(cell_y))};
+    default: break;
     }
     return {};
 }

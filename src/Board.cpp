@@ -27,7 +27,7 @@ void Board::set_score()
 {
     std::stringstream ss;
     ss << score_;
-    score_texture_.load_from_rendered_text(ss.str(), WHITE);
+    score_texture_.set_new_text(ss.str(), WHITE);
 }
 
 void Board::set_high_score()
@@ -43,7 +43,7 @@ void Board::set_high_score()
     } else {
         ss << high;
     }
-    high_score_texture_.load_from_rendered_text(ss.str(), WHITE);
+    high_score_texture_.set_new_text(ss.str(), WHITE);
     high_scores.close();
 }
 
@@ -70,9 +70,9 @@ void Board::draw(board_type const& actual_map, Timer map_animation_timer)
         }
     } else {
         if ((map_animation_timer.get_ticks() / 250) % 2 == 1)
-            map_texture_.set_color(WHITE);
+            map_texture_.set_color(cen::colors::white);
         else
-            map_texture_.set_color(BLUE);
+            map_texture_.set_color(cen::colors::blue);
     }
 }
 

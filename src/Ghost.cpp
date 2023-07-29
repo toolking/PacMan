@@ -12,16 +12,13 @@ inline auto direction2facing(Direction d) -> unsigned int
     }
 }
 
-Ghost::Ghost(cen::renderer const& renderer, SDL_Color color, Entity::Type identity)
+Ghost::Ghost(cen::renderer_handle const& renderer, cen::color color, Entity::Type identity)
   : Entity(identity)
   , renderer_{renderer}
-  , body_{renderer}
-  , eyes_{renderer}
+  , body_{renderer_,"Textures/GhostBody32.png"}
+  , eyes_{renderer_,"Textures/GhostEyes32.png"}
   , color_{color}
-{
-    body_.load_from_file("Textures/GhostBody32.png");
-    eyes_.load_from_file("Textures/GhostEyes32.png");
-}
+{}
 
 auto Ghost::is_target_to_calculate(Pac const& pac) -> bool
 {
@@ -156,23 +153,23 @@ void Ghost::update_speed(Pac const& pac)
 void Ghost::draw(Pac const& pac, Timer ghost_timer, unsigned short timer_target)
 {
     body_.set_color(color_);
-    eyes_.set_color(WHITE);
+    eyes_.set_color(cen::colors::white);
 
     if (pac.is_energized() && is_alive() && !is_home()) {
-        body_.set_color(BLUE);
+        body_.set_color(cen::colors::blue);
         if (ghost_timer.get_ticks() > timer_target - 2000u) {
             if ((ghost_timer.get_ticks() / 250) % 2 == 1) {
-                body_.set_color(WHITE);
-                eyes_.set_color(RED);
+                body_.set_color(cen::colors::white);
+                eyes_.set_color(cen::colors::red);
             }
         }
     }
 
     if (is_alive()) {
-        auto const clip = &ghost_body_sprite_clips_[current_body_frame_ / GHOST_BODY_FRAMES];
+        auto const clip = ghost_body_sprite_clips_[current_body_frame_ / GHOST_BODY_FRAMES];
         body_.render(position.x - 4, position.y - 4, 0, clip);
     }
-    auto const clip = &ghost_eye_sprite_clips_[facing()];
+    auto const clip = ghost_eye_sprite_clips_[facing()];
     eyes_.render(position.x - 4, position.y - 4, 0, clip);
     current_body_frame_++;
     current_body_frame_ %= GHOST_BODY_FRAMES;

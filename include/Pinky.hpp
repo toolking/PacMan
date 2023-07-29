@@ -7,7 +7,7 @@
 class Pinky : public Ghost
 {
 public:
-    Pinky(cen::renderer const& renderer);
+    Pinky(cen::renderer_handle const& renderer);
     void update_pos(board_type const& actual_board, Pac const& pac, bool timed_status);
 
 private:

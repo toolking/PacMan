@@ -1,9 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
+#include <centurion.hpp>
 
 #include <string>
 #include <vector>
@@ -27,18 +24,14 @@ constexpr unsigned char FRUIT_FRAMES = 8;
 
 constexpr unsigned short SCORE_TABLE[FRUIT_FRAMES] = {100, 300, 500, 700, 1000, 2000, 3000, 5000};
 
-constexpr SDL_Color BLACK = { .r = 0, .g = 0, .b = 0, .a = 0};
-constexpr SDL_Color WHITE = { .r = 255, .g = 255, .b = 255, .a = 0};
-constexpr SDL_Color YELLOW = { .r = 255, .g = 255, .b = 0, .a = 0};
-constexpr SDL_Color RED = { .r = 255, .g = 0, .b = 0, .a = 0};
-constexpr SDL_Color CYAN = { .r = 0, .g = 192, .b = 255, .a = 0};
-constexpr SDL_Color PINK = { .r = 255, .g = 192, .b = 203, .a = 0};
-constexpr SDL_Color ORANGE = { .r = 255, .g = 128, .b = 0, .a = 0};
-constexpr SDL_Color BLUE = { .r = 0, .g = 0, .b = 255, .a = 0};
-
-extern SDL_Renderer* Renderer;
-extern TTF_Font* Font;
-extern TTF_Font* LittleFont;
+constexpr auto BLACK = cen::colors::black;
+constexpr auto WHITE = cen::colors::white;
+constexpr auto YELLOW = cen::colors::yellow;
+constexpr auto RED = cen::colors::red;
+constexpr auto CYAN = cen::colors::cyan;
+constexpr auto PINK = cen::colors::pink;
+constexpr auto ORANGE = cen::colors::orange;
+constexpr auto BLUE = cen::colors::blue;
 
 enum class Direction : unsigned char
 {
@@ -67,15 +60,13 @@ inline Direction operator- (Direction const& dir)
 
 template<std::size_t Size>
 inline
-auto init_frames() -> std::array<SDL_Rect, Size>
+auto init_frames() -> auto
 {
-    std::array<SDL_Rect, Size> sprite_clips;
+    std::array<cen::irect, Size> sprite_clips;
     unsigned short x = 0;
     for (auto& sprite : sprite_clips) {
-        sprite.x = x;
-        sprite.y = 0;
-        sprite.w = BLOCK_SIZE_32;
-        sprite.h = BLOCK_SIZE_32;
+        sprite.set_position(x, 0);
+        sprite.set_size(BLOCK_SIZE_32, BLOCK_SIZE_32);
         x += BLOCK_SIZE_32;
     }
     return sprite_clips;

@@ -1,33 +1,69 @@
 #pragma once
 
+#include "Globals.hpp"
+
 #include <centurion.hpp>
 
 #include <string>
 
-class Texture
+class TextureImg
 {
 public:
-    explicit Texture(cen::renderer const& renderer) : renderer_(renderer) {}
-    //Texture(Texture const&) = delete;
-    //Texture(Texture&&) = delete;
-    //Texture& operator=(Texture const&) = delete;
-    //Texture& operator=(Texture&&) = delete;
+    TextureImg(cen::renderer_handle const& renderer, std::string path);
 
-    ~Texture();
-    bool load_from_file(std::string path);
-    bool load_from_rendered_text(std::string texture_text, SDL_Color text_color, bool is_little = false);
+    TextureImg(TextureImg const&) = delete;
+    TextureImg(TextureImg&&) = delete;
+    TextureImg& operator=(TextureImg const&) = delete;
+    TextureImg& operator=(TextureImg&&) = delete;
 
-    void set_color(SDL_Color const& color)
+    void set_color(cen::color const& color)
     {
-        SDL_SetTextureColorMod(texture_, color.r, color.g, color.b);
+        texture_.set_color_mod(color);
     }
 
-    void render(short x, short y, unsigned char facing = 0, SDL_Rect* clip = nullptr);
+    void render(short x, short y, unsigned char facing, cen::irect const& clip);
+    void render(short x, short y);
 
 private:
-    void free();
-    cen::renderer const& renderer_;
-    SDL_Texture* texture_ {nullptr};
-    unsigned short width_ {0u};
-    unsigned short height_ {0u};
+    cen::renderer_handle renderer_;
+    cen::surface surface_;
+    cen::texture texture_;
+};
+
+template <bool IsLittle = false>
+class TextureFont
+{
+public:
+    TextureFont(cen::renderer_handle const& renderer, std::string texture_text, cen::color text_color)
+      : renderer_ {renderer}
+      , font_ {IsLittle ? cen::font {"Fonts/VpPixel.ttf", 20} : cen::font {"Fonts/emulogic.ttf", BLOCK_SIZE_24}}
+      , surface_ {font_.render_solid(texture_text.c_str(), text_color)}
+      , texture_ {renderer_.make_texture(surface_)}
+    {}
+    TextureFont(TextureFont const&) = delete;
+    TextureFont(TextureFont&&) = delete;
+    TextureFont& operator=(TextureFont const&) = delete;
+    TextureFont& operator=(TextureFont&&) = delete;
+
+    void set_color(cen::color const& color)
+    {
+        texture_.set_color_mod(color);
+    }
+
+    void set_new_text(std::string texture_text, cen::color text_color)
+    {
+        surface_ = font_.render_solid(texture_text.c_str(), text_color);
+        texture_ = renderer_.make_texture(surface_);
+    }
+
+    void render(short x, short y)
+    {
+        renderer_.render(texture_, cen::ipoint{x, y});
+    }
+
+private:
+    cen::renderer_handle renderer_;
+    cen::font font_;
+    cen::surface surface_;
+    cen::texture texture_;
 };

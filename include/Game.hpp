@@ -26,12 +26,10 @@ public:
       , pinky_ {renderer_}
       , clyde_ {renderer_}
       , fruit_ {renderer_}
-      , ready_ {renderer_}
-      , game_over_texture_ {renderer_}
-    {
-        ready_.load_from_rendered_text("ready!", YELLOW);
-        game_over_texture_.load_from_rendered_text("game  over", RED);
-    }
+      , ready_ {renderer_, "ready!", cen::colors::yellow}
+      , game_over_texture_ {renderer_, "game  over", cen::colors::red}
+    {}
+
     void reset_ghosts_life_statement();
     void reset_ghosts_facing();
     void start();
@@ -57,7 +55,7 @@ public:
     Sound sound;
 
 private:
-    cen::renderer const& renderer_;
+    cen::renderer_handle renderer_;
     Board board_;
     Pac pac_;
     Blinky blinky_;
@@ -66,8 +64,8 @@ private:
     Clyde clyde_;
     Fruit fruit_;
     Timer map_animation_timer_;
-    Texture ready_;
-    Texture game_over_texture_;
+    TextureFont<> ready_;
+    TextureFont<> game_over_texture_;
     board_type actual_map_ = board_.map();
     bool is_game_started_ = false;
     Timer ghost_timer_;
