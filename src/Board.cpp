@@ -9,13 +9,12 @@
 
 auto Board::entity_start_position(Entity const& e) const -> Position
 {
-    using enum Entity::Type;
     auto const et {e.identity()};
-    char const c = (et == PacMan) ? '0'
-                 : (et == Blinky) ? '1'
-                 : (et == Inky)   ? '2'
-                 : (et == Pinky)  ? '3'
-                 : (et == Clyde)  ? '4'
+    char const c = (et == Entity::Type::PacMan) ? '0'
+                 : (et == Entity::Type::Blinky) ? '1'
+                 : (et == Entity::Type::Inky)   ? '2'
+                 : (et == Entity::Type::Pinky)  ? '3'
+                 : (et == Entity::Type::Clyde)  ? '4'
                                   : ' ';
     auto const i = CHAR_BOARD.find(c);
     unsigned char const x = i % BOARD_WIDTH;
@@ -27,7 +26,7 @@ void Board::set_score()
 {
     std::stringstream ss;
     ss << score_;
-    score_texture_.set_new_text(ss.str(), WHITE);
+    score_texture_.set_new_text(ss.str(), cen::colors::white);
 }
 
 void Board::set_high_score()
@@ -43,7 +42,7 @@ void Board::set_high_score()
     } else {
         ss << high;
     }
-    high_score_texture_.set_new_text(ss.str(), WHITE);
+    high_score_texture_.set_new_text(ss.str(), cen::colors::white);
     high_scores.close();
 }
 
@@ -69,7 +68,8 @@ void Board::draw(board_type const& actual_map, Timer map_animation_timer)
             i++;
         }
     } else {
-        if ((map_animation_timer.get_ticks() / 250) % 2 == 1)
+        using namespace std::chrono_literals;
+        if ((map_animation_timer.get_ticks() / 250) % 2 == 1ms)
             map_texture_.set_color(cen::colors::white);
         else
             map_texture_.set_color(cen::colors::blue);

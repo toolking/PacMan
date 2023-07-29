@@ -6,7 +6,7 @@
 #include "Globals.hpp"
 
 Blinky::Blinky(cen::renderer_handle const& renderer)
-  : Ghost(renderer, RED, Entity::Type::Blinky)
+  : Ghost(renderer, cen::colors::red, Entity::Type::Blinky)
 {
     ScatterTarget = Position(25 * 2 * BLOCK_SIZE_24 / 2, BLOCK_SIZE_24 / 2);
     Home = Position(13 * 2 * BLOCK_SIZE_24 / 2, 17 * 2 * BLOCK_SIZE_24 / 2);

@@ -5,13 +5,13 @@
 
 class Timer
 {
-    using ticks_type = uint32_t;
+    using ticks_type = cen::u64ms;
 
 public:
     void start()
     {
         started_ = true;
-        start_ticks_ = SDL_GetTicks();
+        start_ticks_ = cen::ticks64();
     }
 
     void reset()
@@ -30,7 +30,7 @@ public:
         if (!started_) {
             return ticks_type {};
         }
-        return SDL_GetTicks() - start_ticks_;
+        return cen::ticks64() - start_ticks_;
     }
 
     bool is_started() const

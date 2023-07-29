@@ -5,8 +5,8 @@
 #include <sstream>
 
 Fruit::Fruit(cen::renderer_handle const& renderer)
-    : renderer_(renderer)
-    , fruit_texture_(renderer_,"Textures/Fruit32.png")
+    : renderer_{renderer}
+    , fruit_texture_{renderer_,"Textures/Fruit32.png"}
 {
 }
 
@@ -40,7 +40,8 @@ void Fruit::start_score_timer()
 
 void Fruit::reset_score_timer()
 {
-    if (score_timer_.get_ticks() > 1000)
+    using namespace std::chrono_literals;
+    if (score_timer_.get_ticks() > 1000ms)
         score_timer_.reset();
 }
 
@@ -61,14 +62,15 @@ void Fruit::reset_food_counter()
 
 void Fruit::draw()
 {
+    using namespace std::chrono_literals;
     if (fruit_timer_.is_started()) {
         auto clip = fruit_sprite_clips_[current_fruit_];
         fruit_texture_.render(position.x - 4, position.y - 4, 0, clip);
     }
-    if (score_timer_.is_started() && score_timer_.get_ticks() < 1000) {
+    if (score_timer_.is_started() && score_timer_.get_ticks() < 1000ms) {
         std::stringstream ss;
         ss << SCORE_TABLE[current_fruit_];
-        TextureFont<true> score_texture{renderer_, ss.str(), WHITE};
+        TextureFont<true> score_texture{renderer_, ss.str(), cen::colors::white};
         score_texture.render(position.x, position.y - BLOCK_SIZE_24 / 2);
     }
 }

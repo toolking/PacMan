@@ -6,7 +6,7 @@
 #include "Position.hpp"
 
 Inky::Inky(cen::renderer_handle const& renderer)
-  : Ghost(renderer, CYAN, Entity::Type::Inky)
+  : Ghost(renderer, cen::colors::cyan, Entity::Type::Inky)
 {
     ScatterTarget = Position(26 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 35 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2);
     Home = Position(11 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 17 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2);

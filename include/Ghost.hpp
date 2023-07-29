@@ -5,7 +5,6 @@
 #include "Texture.hpp"
 #include "Timer.hpp"
 
-#include <SDL2/SDL.h>
 #include <vector>
 #include <array>
 
@@ -21,7 +20,7 @@ public:
     void update_status(Pac const& pac, bool timed_status);
     void update_facing(Pac const& pac);
     void update_speed(Pac const& pac);
-    void draw(Pac const& pac, Timer timer, unsigned short timer_target);
+    void draw(Pac const& pac, Timer timer, cen::u64ms timer_target);
 
 protected:
     Position Target;

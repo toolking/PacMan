@@ -24,15 +24,6 @@ constexpr unsigned char FRUIT_FRAMES = 8;
 
 constexpr unsigned short SCORE_TABLE[FRUIT_FRAMES] = {100, 300, 500, 700, 1000, 2000, 3000, 5000};
 
-constexpr auto BLACK = cen::colors::black;
-constexpr auto WHITE = cen::colors::white;
-constexpr auto YELLOW = cen::colors::yellow;
-constexpr auto RED = cen::colors::red;
-constexpr auto CYAN = cen::colors::cyan;
-constexpr auto PINK = cen::colors::pink;
-constexpr auto ORANGE = cen::colors::orange;
-constexpr auto BLUE = cen::colors::blue;
-
 enum class Direction : unsigned char
 {
     Nowhere=0,

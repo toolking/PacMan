@@ -12,6 +12,7 @@
 #include "Texture.hpp"
 #include "Timer.hpp"
 
+#include <centurion.hpp>
 #include <vector>
 
 class Game
@@ -29,6 +30,8 @@ public:
       , ready_ {renderer_, "ready!", cen::colors::yellow}
       , game_over_texture_ {renderer_, "game  over", cen::colors::red}
     {}
+
+    void run();
 
     void reset_ghosts_life_statement();
     void reset_ghosts_facing();
@@ -50,7 +53,7 @@ public:
     void death_sound();
     void mod_death_sound_statement(bool new_death_sound_statement);
     void draw_little_score();
-    bool process(Timer& game_timer, std::vector<Direction>& mover, unsigned short& start_ticks);
+    bool process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms& start_ticks);
     void draw();
     Sound sound;
 
@@ -69,15 +72,15 @@ private:
     board_type actual_map_ = board_.map();
     bool is_game_started_ = false;
     Timer ghost_timer_;
-    unsigned short scatter_time_ = 7000;
-    unsigned short chasing_time_ = 20000;
-    unsigned short ghost_timer_target_ = chasing_time_;
+    cen::u64ms scatter_time_ {7000};
+    cen::u64ms chasing_time_ {20000};
+    cen::u64ms ghost_timer_target_ {chasing_time_};
     bool timed_status_ = false;
     unsigned short scorer_ = 200;
     std::vector<Timer> little_score_timers_;
     std::vector<Position> little_score_positions_;
     std::vector<unsigned short> little_score_scorers_;
-    unsigned short little_timer_target_ = 1000;
+    cen::u64ms little_timer_target_ {1000};
     unsigned short level_ = 1;
     bool is_to_scatter_sound_ = true;
     bool is_to_waka_sound_ = true;

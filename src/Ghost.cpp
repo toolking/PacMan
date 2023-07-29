@@ -150,15 +150,16 @@ void Ghost::update_speed(Pac const& pac)
     }
 }
 
-void Ghost::draw(Pac const& pac, Timer ghost_timer, unsigned short timer_target)
+void Ghost::draw(Pac const& pac, Timer ghost_timer, cen::u64ms timer_target)
 {
+    using namespace std::chrono_literals;
     body_.set_color(color_);
     eyes_.set_color(cen::colors::white);
 
     if (pac.is_energized() && is_alive() && !is_home()) {
         body_.set_color(cen::colors::blue);
-        if (ghost_timer.get_ticks() > timer_target - 2000u) {
-            if ((ghost_timer.get_ticks() / 250) % 2 == 1) {
+        if (ghost_timer.get_ticks() > timer_target - 2000ms) {
+            if ((ghost_timer.get_ticks() / 250) % 2 == 1ms) {
                 body_.set_color(cen::colors::white);
                 eyes_.set_color(cen::colors::red);
             }

@@ -8,7 +8,7 @@
 #include <cmath>
 
 Clyde::Clyde(cen::renderer_handle const& renderer)
-  : Ghost(renderer, ORANGE, Entity::Type::Clyde)
+  : Ghost(renderer, cen::colors::orange, Entity::Type::Clyde)
 {
     ScatterTarget = Position(BLOCK_SIZE_24 / 2, 35 * 2 * BLOCK_SIZE_24 / 2);
     Home = Position(15 * 2 * BLOCK_SIZE_24 / 2, 17 * 2 * BLOCK_SIZE_24 / 2);

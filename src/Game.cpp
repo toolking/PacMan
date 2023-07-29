@@ -108,7 +108,8 @@ void Game::food()
             waka_timer_.start();
         break;
     }
-    if (waka_timer_.get_ticks() > 300) {
+    using namespace std::chrono_literals;
+    if (waka_timer_.get_ticks() > 300ms) {
         sound.stop_waka();
         is_to_waka_sound_ = true;
     }
@@ -173,10 +174,11 @@ void Game::increase_level()
 
 void Game::update_difficulty()
 {
+    using namespace std::chrono_literals;
     if (level_ % 3 == 0) {
-        chasing_time_ += 1000;
-        if (scatter_time_ > 2000) {
-            scatter_time_ -= 1000;
+        chasing_time_ += 1000ms;
+        if (scatter_time_ > 2000ms) {
+            scatter_time_ -= 1000ms;
         }
     }
 }
@@ -246,9 +248,7 @@ void Game::draw_little_score()
     for (unsigned char i = 0; i < little_score_timers_.size(); i++) {
         Timer this_lil_timer = little_score_timers_.at(i);
         if (this_lil_timer.get_ticks() < little_timer_target_) {
-            std::stringstream ss;
-            ss << little_score_scorers_.at(i);
-            TextureFont<true> this_lil_texture{renderer_,ss.str(), WHITE};
+            TextureFont<true> this_lil_texture{renderer_, std::to_string(little_score_scorers_.at(i)), cen::colors::white};
             Position this_lil_pos = little_score_positions_.at(i);
             this_lil_texture.render(this_lil_pos.x, this_lil_pos.y - BLOCK_SIZE_24 / 2);
         } else {
@@ -259,8 +259,9 @@ void Game::draw_little_score()
     }
 }
 
-auto Game::process(Timer& game_timer, std::vector<Direction>& mover, unsigned short& start_ticks) -> bool
+auto Game::process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms& start_ticks) -> bool
 {
+                using namespace std::chrono_literals;
     // Returns false when should render the last animation frame.
     // It's bad looking, so I don't want to render it.
     if (game_timer.get_ticks() < start_ticks) {
@@ -272,8 +273,8 @@ auto Game::process(Timer& game_timer, std::vector<Direction>& mover, unsigned sh
             update(mover);
         } else {
             if (!map_animation_timer_.is_started()) {
-                if (start_ticks != 2500)
-                    start_ticks = 2500;
+                if (start_ticks != 2500ms)
+                    start_ticks = 2500ms;
                 pac_.reset_current_living_frame();
                 fruit_.despawn();
                 fruit_.reset_food_counter();
@@ -281,7 +282,7 @@ auto Game::process(Timer& game_timer, std::vector<Direction>& mover, unsigned sh
                 sound.stop_scatter_ghost();
                 mod_to_waka(true);
                 map_animation_timer_.start();
-            } else if (map_animation_timer_.get_ticks() > 2100) {
+            } else if (map_animation_timer_.get_ticks() > 2100ms) {
                 clear_mover(mover);
                 increase_level();
                 fruit_.mod_current_fruit(get_level());
@@ -295,8 +296,8 @@ auto Game::process(Timer& game_timer, std::vector<Direction>& mover, unsigned sh
     } else {
         if (board_.get_lives() > 0) {
             if (pac_.is_dead_animation_ended()) {
-                if (start_ticks != 2500)
-                    start_ticks = 2500;
+                if (start_ticks != 2500ms)
+                    start_ticks = 2500ms;
                 clear_mover(mover);
                 pac_.mod_dead_animation_statement(false);
                 pac_.life_statement(true);
@@ -337,4 +338,64 @@ void Game::draw()
         draw_little_score();
     }
     pac_.draw();
+}
+
+void Game::run()
+{
+    Timer game_timer;
+    cen::u64ms start_ticks {START_WAIT_TICKS};
+    std::vector<Direction> mover;
+    mover.push_back(Direction::Right);
+    game_timer.start();
+    sound.play_intro();
+
+    cen::event_handler handler;
+    bool running = true;
+    while (running) {
+        auto const iteration_start {cen::now()};
+        while (handler.poll()) {
+            if (handler.is<cen::quit_event>()) {
+                running = false;
+                break;
+            }
+            if (handler.is<cen::keyboard_event>()) {
+                const auto& keyboardEvent = handler.get<cen::keyboard_event>();
+                if (!keyboardEvent.pressed()) {
+                    continue;
+                }
+                namespace sc = cen::scancodes;
+                if (   keyboardEvent.is_active(sc::right)
+                    || keyboardEvent.is_active(sc::d)) {
+                    mover.emplace_back(Direction::Right);
+                }
+                else if (   keyboardEvent.is_active(sc::up)
+                         || keyboardEvent.is_active(sc::w)) {
+                    mover.emplace_back(Direction::Up);
+                }
+                else if (   keyboardEvent.is_active(sc::left)
+                         || keyboardEvent.is_active(sc::a)) {
+                    mover.emplace_back(Direction::Left);
+                }
+                else if (   keyboardEvent.is_active(sc::down)
+                         || keyboardEvent.is_active(sc::s)) {
+                    mover.emplace_back(Direction::Down);
+                }
+            }
+            if (mover.size() > 2) {
+                mover.erase(mover.begin() + 1);
+            }
+        }
+
+        renderer_.clear();
+
+        if (process(game_timer, mover, start_ticks)) {
+            draw();
+            renderer_.present();
+        }
+
+        auto const iteration_end = cen::now();
+        auto const elapsed_ms = (iteration_end - iteration_start)
+            / (cen::frequency() * 1000U);
+        cen::thread::sleep(std::chrono::milliseconds{FRAME_DURATION_MS - elapsed_ms});
+    }
 }
