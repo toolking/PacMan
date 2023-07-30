@@ -47,7 +47,7 @@ auto Ghost::is_target_to_calculate(Pac const& pac) -> bool
     }
 
     can_use_door_ = false;
-    if (status_) {
+    if (status_ == Status::Scatter) {
         Target = ScatterTarget;
         return false;
     }
@@ -103,27 +103,31 @@ auto Ghost::is_home() -> bool
     return home.contains(position);
 }
 
-void Ghost::mod_status(bool status)
+void Ghost::mod_status(Status status)
 {
     status_ = status;
 }
 
-void Ghost::update_status(Pac const& pac, bool timed_status)
+void Ghost::update_status(Pac const& pac, Status timed_status)
 {
-    status_ = pac.is_energized()?true:timed_status;
+    status_ = pac.is_energized()
+                ?Status::Scatter
+                :timed_status;
 }
 
 void Ghost::update_facing(Pac const& pac)
 {
     if (is_home()) {
-        return (direction == Direction::Down) ? facing(3) : facing(1);
+        facing = (direction == Direction::Down) ? 3 : 1;
+        return;
     }
 
     if (pac.is_energized()) {
-        return (!is_alive) ? facing(direction2facing(direction)) : facing(4);
+        facing = (!is_alive) ? direction2facing(direction) : 4;
+        return;
     }
 
-    facing(direction2facing(direction));
+    facing = direction2facing(direction);
 }
 
 void Ghost::update_speed(Pac const& pac)
@@ -152,7 +156,7 @@ void Ghost::draw(Pac const& pac, Timer ghost_timer, cen::u64ms timer_target)
         auto const clip = ghost_body_sprite_clips_[current_body_frame_ / GHOST_BODY_FRAMES];
         body_.render(position.x() - 4, position.y() - 4, 0, clip);
     }
-    auto const clip = ghost_eye_sprite_clips_[facing()];
+    auto const clip = ghost_eye_sprite_clips_[facing];
     eyes_.render(position.x() - 4, position.y() - 4, 0, clip);
     current_body_frame_++;
     current_body_frame_ %= GHOST_BODY_FRAMES;

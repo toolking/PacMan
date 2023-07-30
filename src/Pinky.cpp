@@ -25,7 +25,7 @@ void Pinky::calculate_target(Entity pac)
     Target = {target_x, target_y};
 }
 
-void Pinky::update_pos(board_type const& actual_board, Pac const& pac, bool timed_status)
+void Pinky::update_pos(board_type const& actual_board, Pac const& pac, Status timed_status)
 {
     update_speed(pac);
     update_status(pac, timed_status);

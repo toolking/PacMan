@@ -25,7 +25,7 @@ void Inky::calculate_target(Entity pac, Position pos_blinky)
     Target = Position(x + x - pos_blinky.x(), y + y - pos_blinky.y());
 }
 
-void Inky::update_pos(board_type const& actual_board, Pac const& pac, Position const& pos_blinky, bool timed_status)
+void Inky::update_pos(board_type const& actual_board, Pac const& pac, Position const& pos_blinky, Status timed_status)
 {
     update_speed(pac);
     update_status(pac, timed_status);

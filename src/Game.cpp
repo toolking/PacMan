@@ -15,10 +15,10 @@ void Game::reset_ghosts_life_statement()
 
 void Game::reset_ghosts_facing()
 {
-    blinky_.facing(0);
-    inky_.facing(1);
-    pinky_.facing(1);
-    clyde_.facing(1);
+    blinky_.facing = 0;
+    inky_.facing = 1;
+    pinky_.facing = 1;
+    clyde_.facing = 1;
 }
 
 void Game::start()
@@ -59,17 +59,17 @@ void Game::clock()
         if (pac_.is_energized()) {
             pac_.change_energy_status(false);
         }
-        timed_status_ = false;
+        timed_status_ = Ghost::Status::Chase;
         ghost_timer_target_ = chasing_time_;
         ghost_timer_.restart();
     } else if (ghost_timer_target_ == chasing_time_) {
-        timed_status_ = true;
+        timed_status_ = Ghost::Status::Scatter;
         ghost_timer_target_ = scatter_time_;
         ghost_timer_.restart();
     }
 }
 
-void Game::update_positions(std::vector<Direction>& mover, bool timed_status)
+void Game::update_positions(std::vector<Direction>& mover, Ghost::Status timed_status)
 {
     blinky_.update_pos(actual_map_, pac_, timed_status);
     inky_.update_pos(actual_map_, pac_, blinky_.position, timed_status);

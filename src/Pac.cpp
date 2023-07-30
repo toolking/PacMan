@@ -57,10 +57,10 @@ void Pac::set_facing(Direction mover)
 {
     using enum Direction;
     switch (mover) {
-    case Right: facing(0); break;
-    case Up: facing(3); break;
-    case Left: facing(2); break;
-    case Down: facing(1); break;
+    case Right: facing = 0; break;
+    case Up: facing = 3; break;
+    case Left: facing = 2; break;
+    case Down: facing = 1; break;
     default: break;
     }
 }
@@ -97,10 +97,10 @@ void Pac::draw()
 {
     if (is_alive) {
         auto clip = living_pac_sprite_clips_[curr_living_pac_frame_ / (LIVING_PAC_FRAMES * 4)];
-        living_pac_.render(position.x() - 4, position.y() - 4, facing(), clip);
+        living_pac_.render(position.x() - 4, position.y() - 4, facing, clip);
     } else {
         auto clip = death_pac_sprite_clips_[curr_death_pac_frame_ / DEATH_PAC_FRAMES];
-        death_pac_.render(position.x() - 4, position.y() - 4, facing(), clip);
+        death_pac_.render(position.x() - 4, position.y() - 4, facing, clip);
         curr_death_pac_frame_++;
         if (curr_death_pac_frame_ / DEATH_PAC_FRAMES >= DEATH_PAC_FRAMES) {
             dead_animation_statement_ = true;

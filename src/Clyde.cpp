@@ -23,7 +23,7 @@ void Clyde::calculate_target(Position pac_pos)
     Target = (dist > 8 * BLOCK_SIZE_24) ? pac_pos : ScatterTarget;
 }
 
-void Clyde::update_pos(board_type const& actual_board, Pac const& pac, bool timed_status)
+void Clyde::update_pos(board_type const& actual_board, Pac const& pac, Status timed_status)
 {
     update_speed(pac);
     update_status(pac, timed_status);

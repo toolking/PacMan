@@ -17,7 +17,7 @@ void Blinky::calculate_target(Position pac)
     Target = pac;
 }
 
-void Blinky::update_pos(board_type const& actual_board, Pac const& pac, bool timed_status)
+void Blinky::update_pos(board_type const& actual_board, Pac const& pac, Status timed_status)
 {
     update_speed(pac);
     update_status(pac, timed_status);

@@ -55,7 +55,7 @@ private:
     void reset_ghosts_life_statement();
     void start();
     void update_difficulty();
-    void update_positions(std::vector<Direction>& mover, bool timed_status);
+    void update_positions(std::vector<Direction>& mover, Ghost::Status timed_status);
     void update(std::vector<Direction>& mover);
 
     Sound sound;
@@ -77,7 +77,7 @@ private:
     cen::u64ms scatter_time_ {7000};
     cen::u64ms chasing_time_ {20000};
     cen::u64ms ghost_timer_target_ {chasing_time_};
-    bool timed_status_ = false;
+    Ghost::Status timed_status_ = Ghost::Status::Chase;
     unsigned short scorer_ = 200;
     std::list<std::tuple<Timer,Position,unsigned short>> little_score_entries_;
     cen::u64ms little_timer_target_ {1000};

@@ -29,20 +29,11 @@ public:
         return identity_;
     }
 
-    unsigned int facing() const
-    {
-        return facing_;
-    }
-
-    void facing(unsigned int facing)
-    {
-        facing_ = facing;
-    }
-
     Position position {};
     unsigned int speed {2};
     bool is_alive {true};
     Direction direction {Direction::Right};
+    unsigned int facing {};
 
 protected:
     void move(Direction mover);
@@ -53,5 +44,4 @@ protected:
 
 private:
     Type identity_;
-    unsigned int facing_ {};
 };
