@@ -25,20 +25,14 @@ auto Board::entity_start_position(Entity const& e) const -> Position
 
 void Board::set_score()
 {
-    score_texture_.set_new_text(std::to_string(score_), cen::colors::white);
-}
-
-void Board::set_high_score()
-{
-    unsigned int high;
-    std::fstream high_score_file("HighScore.txt");
-    high_score_file >> high;
-    if (score_ > high) {
-        high = score_;
-        high_score_file << high;
+    score_texture_.set_new_text(std::to_string(score_));
+    if (score_ > high_score_) {
+        high_score_ = score_;
+        std::ofstream high_score_file("HighScore.txt");
+        high_score_file << high_score_;
+        high_score_texture_.set_new_text(std::to_string(high_score_));
+        high_score_file.close();
     }
-    high_score_texture_.set_new_text(std::to_string(high), cen::colors::white);
-    high_score_file.close();
 }
 
 void Board::draw(board_type const& actual_map, Timer map_animation_timer)

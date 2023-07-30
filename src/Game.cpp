@@ -316,7 +316,6 @@ auto Game::process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms&
 
 void Game::draw()
 {
-    board_.set_high_score();
     board_.set_score();
     board_.draw(actual_map_, map_animation_timer_);
     if (!is_game_started_) {

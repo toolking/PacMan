@@ -8,6 +8,7 @@
 #include <array>
 #include <ranges>
 #include <string_view>
+#include <fstream>
 
 constexpr std::string_view CHAR_BOARD = "                            "
                                         "                            "
@@ -92,11 +93,14 @@ public:
       , high_score_texture_ {renderer_, "0"}
     {
         map_texture_.set_color(cen::colors::blue);
+        std::ifstream high_score_file("HighScore.txt");
+        high_score_file >> high_score_;
+        high_score_texture_.set_new_text(std::to_string(high_score_), cen::colors::white);
+        high_score_file.close();
     }
     auto map() const -> board_type;
     auto entity_start_position(Entity const&) const -> Position;
     void set_score();
-    void set_high_score();
     bool is_extra_life();
     void increase_lives();
     void decrease_lives();
@@ -117,6 +121,7 @@ private:
     TextureFont<> high_score_texture_;
     board_type numeric_board_ {char_board_2_bin_board(CHAR_BOARD)};
     unsigned int score_ {};
+    unsigned int high_score_ {};
     bool is_extra_ {};
     unsigned int lives_ {4};
 };
