@@ -242,16 +242,13 @@ void Game::mod_death_sound_statement(bool new_death_sound_statement)
 
 void Game::draw_little_score()
 {
-    for (auto i = little_score_entries_.begin(); i != little_score_entries_.end(); i++) {
-        auto const& this_lil_timer {std::get<Timer>(*i)};
-        if (this_lil_timer.get_ticks() >= little_timer_target_) {
-            little_score_entries_.erase(i);
-            --i;
-            continue;
-        }
-        auto const score {std::get<2>(*i)};
-        auto const& position {std::get<Position>(*i)};
-        TextureFont<true> this_lil_texture {renderer_, std::to_string(score), cen::colors::white};
+    little_score_entries_.remove_if([&](auto const& i) {
+        return std::get<Timer>(i).get_ticks() >= little_timer_target_;
+    });
+    for (auto& i : little_score_entries_) {
+        auto const score {std::get<unsigned short>(i)};
+        auto const& position {std::get<Position>(i)};
+        TextureFont<true> this_lil_texture {renderer_, std::to_string(score)};
         this_lil_texture.render(position.x(), position.y() - BLOCK_SIZE_24 / 2);
     }
 }
