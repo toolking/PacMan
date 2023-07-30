@@ -338,7 +338,7 @@ void Game::run()
     Timer game_timer;
     cen::u64ms start_ticks {START_WAIT_TICKS};
     std::vector<Direction> mover;
-    mover.push_back(Direction::Right);
+    mover.push_back(Direction::Nowhere);
     game_timer.start();
     sound.play_intro();
 
@@ -357,18 +357,19 @@ void Game::run()
                     continue;
                 }
                 namespace sc = cen::scancodes;
+                using enum Direction;
                 if (keyboardEvent.is_active(sc::right)
                     || keyboardEvent.is_active(sc::d)) {
-                    mover.emplace_back(Direction::Right);
+                    mover.emplace_back(Right);
                 } else if (keyboardEvent.is_active(sc::up)
                     || keyboardEvent.is_active(sc::w)) {
-                    mover.emplace_back(Direction::Up);
+                    mover.emplace_back(Up);
                 } else if (keyboardEvent.is_active(sc::left)
                     || keyboardEvent.is_active(sc::a)) {
-                    mover.emplace_back(Direction::Left);
+                    mover.emplace_back(Left);
                 } else if (keyboardEvent.is_active(sc::down)
                     || keyboardEvent.is_active(sc::s)) {
-                    mover.emplace_back(Direction::Down);
+                    mover.emplace_back(Down);
                 }
             }
             if (mover.size() > 2) {

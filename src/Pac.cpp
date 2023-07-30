@@ -3,17 +3,15 @@
 void Pac::update_pos(std::vector<Direction>& mover, board_type const& actual_map)
 {
     for (unsigned char i = 0; i < speed; i++) {
-        auto const pos = get_possible_position(position, mover[0]);
-        if (!wall_collision(pos, actual_map)) {
+        if (!wall_collision(get_possible_position(position, mover[0]), actual_map)) {
             update_current_living_pac_frame();
             move(mover[0]);
             set_facing(mover[0]);
             direction = mover[0];
         } else
             wall_collision_frame();
-        if (mover.size() != 1 && mover[0] != mover[1]) {
-            auto const pos = get_possible_position(position, mover[1]);
-            if (!wall_collision(pos, actual_map)) {
+        if (mover.size() > 1 && mover[0] != mover[1]) {
+            if (!wall_collision(get_possible_position(position, mover[1]), actual_map)) {
                 update_current_living_pac_frame();
                 move(mover[1]);
                 set_facing(mover[1]);

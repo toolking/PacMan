@@ -31,9 +31,10 @@ auto Entity::wall_collision(Position const& pos, board_type const& actual_map, b
     cen::fpoint const cell_pos = {cell.x() / BLOCK_SIZE_24, cell.y() / BLOCK_SIZE_24};
     for (unsigned char side_dir = 0; side_dir < 4; side_dir++) {
         Position board_pos = char_board_pos(side_dir, cell_pos);
-        if (BlockType::Wall == actual_map[BOARD_WIDTH * board_pos.y() + abs(board_pos.x() % BOARD_WIDTH)]) {
+        auto const current_block_type = actual_map[BOARD_WIDTH * board_pos.y() + abs(board_pos.x() % BOARD_WIDTH)];
+        if (BlockType::Wall == current_block_type) {
             return true;
-        } else if (BlockType::Door == actual_map[BOARD_WIDTH * board_pos.y() + abs(board_pos.x() % BOARD_WIDTH)]) {
+        } else if (BlockType::Door == current_block_type) {
             return !can_use_door;
         }
     }

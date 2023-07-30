@@ -70,6 +70,7 @@ void Ghost::calculate_direction(board_type const& actual_map)
 {
     std::vector<float> distances;
     std::vector<Direction> possible_directions;
+    std::vector<std::pair<float,Direction>> possibilities;
     using enum Direction;
     for (Direction i : {Right, Up, Left, Down}) {
         auto const pos = get_possible_position(position, i);
