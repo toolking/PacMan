@@ -40,7 +40,7 @@ protected:
     void check_wrap();
     auto get_possible_position(Position const& position, Direction mover) -> Position;
     bool wall_collision(Position const& pos, board_type const& actual_map, bool can_use_door = false);
-    auto char_board_pos(unsigned char side_dir, float cell_x, float cell_y) -> Position;
+    auto char_board_pos(unsigned char side_dir, cen::fpoint const& pos) -> Position;
 
 private:
     Type identity_;

@@ -3,21 +3,21 @@
 void Pac::update_pos(std::vector<Direction>& mover, board_type const& actual_map)
 {
     for (unsigned char i = 0; i < speed; i++) {
-        auto const pos = get_possible_position(position, mover.at(0));
+        auto const pos = get_possible_position(position, mover[0]);
         if (!wall_collision(pos, actual_map)) {
             update_current_living_pac_frame();
-            move(mover.at(0));
-            set_facing(mover.at(0));
-            direction = mover.at(0);
+            move(mover[0]);
+            set_facing(mover[0]);
+            direction = mover[0];
         } else
             wall_collision_frame();
-        if (mover.size() != 1 && mover.at(0) != mover.at(1)) {
-            auto const pos = get_possible_position(position, mover.at(1));
+        if (mover.size() != 1 && mover[0] != mover[1]) {
+            auto const pos = get_possible_position(position, mover[1]);
             if (!wall_collision(pos, actual_map)) {
                 update_current_living_pac_frame();
-                move(mover.at(1));
-                set_facing(mover.at(1));
-                direction = mover.at(1);
+                move(mover[1]);
+                set_facing(mover[1]);
+                direction = mover[1];
                 mover.erase(mover.begin());
             }
         }
@@ -27,10 +27,10 @@ void Pac::update_pos(std::vector<Direction>& mover, board_type const& actual_map
 
 auto Pac::food_collision(board_type& actual_map) -> unsigned char
 {
-    float const cell_x = position.x() / static_cast<float>(BLOCK_SIZE_24);
-    float const cell_y = position.y() / static_cast<float>(BLOCK_SIZE_24);
+    cen::fpoint const cell = position.as_f();
+    cen::fpoint const cell_pos = {cell.x() / BLOCK_SIZE_24, cell.y() / BLOCK_SIZE_24};
     for (unsigned char side_dir = 0; side_dir < 4; side_dir++) {
-        Position board_pos = char_board_pos(side_dir, cell_x, cell_y);
+        Position board_pos = char_board_pos(side_dir, cell_pos);
         auto& act_pos = actual_map[BOARD_WIDTH * board_pos.y() + board_pos.x()];
         if (BlockType::Pellet == act_pos) {
             act_pos = BlockType::Nothing;
