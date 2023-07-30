@@ -15,12 +15,12 @@ Inky::Inky(cen::renderer_handle& renderer)
 void Inky::calculate_target(Entity pac, Position pos_blinky)
 {
     auto const x = pac.position.x()
-                  + ((pac.direction() == Direction::Right) ?  2 * BLOCK_SIZE_24 :
-                     (pac.direction() == Direction::Left)  ? -2 * BLOCK_SIZE_24 :
+                  + ((pac.direction == Direction::Right) ?  2 * BLOCK_SIZE_24 :
+                     (pac.direction == Direction::Left)  ? -2 * BLOCK_SIZE_24 :
                                                               0);
     auto const y = pac.position.y()
-                  + ((pac.direction() == Direction::Down) ?  2 * BLOCK_SIZE_24 :
-                     (pac.direction() == Direction::Up)   ? -2 * BLOCK_SIZE_24 :
+                  + ((pac.direction == Direction::Down) ?  2 * BLOCK_SIZE_24 :
+                     (pac.direction == Direction::Up)   ? -2 * BLOCK_SIZE_24 :
                                                              0);
     Target = Position(x + x - pos_blinky.x(), y + y - pos_blinky.y());
 }
@@ -29,13 +29,13 @@ void Inky::update_pos(board_type const& actual_board, Pac const& pac, Position c
 {
     update_speed(pac);
     update_status(pac, timed_status);
-    for (unsigned char i = 0; i < speed(); i++) {
+    for (unsigned char i = 0; i < speed; i++) {
         update_facing(pac);
         if (is_target_to_calculate(pac)) {
             calculate_target(pac, pos_blinky);
         }
         calculate_direction(actual_board);
-        move(direction());
+        move(direction);
         check_wrap();
     }
 }

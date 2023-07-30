@@ -2,26 +2,22 @@
 
 void Pac::update_pos(std::vector<Direction>& mover, board_type const& actual_map)
 {
-    for (unsigned char i = 0; i < speed(); i++) {
-        short TempX = position.x();
-        short TempY = position.y();
-        get_possible_position(TempX, TempY, mover.at(0));
-        if (!wall_collision(TempX, TempY, actual_map)) {
+    for (unsigned char i = 0; i < speed; i++) {
+        auto const pos = get_possible_position(position, mover.at(0));
+        if (!wall_collision(pos, actual_map)) {
             update_current_living_pac_frame();
             move(mover.at(0));
             set_facing(mover.at(0));
-            direction(mover.at(0));
+            direction = mover.at(0);
         } else
             wall_collision_frame();
         if (mover.size() != 1 && mover.at(0) != mover.at(1)) {
-            TempX = position.x();
-            TempY = position.y();
-            get_possible_position(TempX, TempY, mover.at(1));
-            if (!wall_collision(TempX, TempY, actual_map)) {
+            auto const pos = get_possible_position(position, mover.at(1));
+            if (!wall_collision(pos, actual_map)) {
                 update_current_living_pac_frame();
                 move(mover.at(1));
                 set_facing(mover.at(1));
-                direction(mover.at(1));
+                direction = mover.at(1);
                 mover.erase(mover.begin());
             }
         }
@@ -59,21 +55,13 @@ void Pac::change_energy_status(bool energy_status)
 
 void Pac::set_facing(Direction mover)
 {
+    using enum Direction;
     switch (mover) {
-    case Direction::Right:
-        facing(0);
-        break;
-    case Direction::Up:
-        facing(3);
-        break;
-    case Direction::Left:
-        facing(2);
-        break;
-    case Direction::Down:
-        facing(1);
-        break;
-    default:
-        break;
+    case Right: facing(0); break;
+    case Up: facing(3); break;
+    case Left: facing(2); break;
+    case Down: facing(1); break;
+    default: break;
     }
 }
 
@@ -107,7 +95,7 @@ void Pac::wall_collision_frame()
 
 void Pac::draw()
 {
-    if (is_alive()) {
+    if (is_alive) {
         auto clip = living_pac_sprite_clips_[curr_living_pac_frame_ / (LIVING_PAC_FRAMES * 4)];
         living_pac_.render(position.x() - 4, position.y() - 4, facing(), clip);
     } else {

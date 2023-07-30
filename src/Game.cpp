@@ -7,10 +7,10 @@
 
 void Game::reset_ghosts_life_statement()
 {
-    blinky_.life_statement(true);
-    inky_.life_statement(true);
-    pinky_.life_statement(true);
-    clyde_.life_statement(true);
+    blinky_.is_alive = true;
+    inky_.is_alive = true;
+    pinky_.is_alive = true;
+    clyde_.is_alive = true;
 }
 
 void Game::reset_ghosts_facing()
@@ -199,17 +199,17 @@ void Game::clear_mover(std::vector<Direction>& mover)
 
 void Game::deadly_pac_ghost_coll()
 {
-    if ((is_colliding(pac_.position, blinky_.position) && blinky_.is_alive())
-        || (is_colliding(pac_.position, inky_.position) && inky_.is_alive())
-        || (is_colliding(pac_.position, pinky_.position) && pinky_.is_alive())
-        || (is_colliding(pac_.position, clyde_.position) && clyde_.is_alive()))
-        pac_.life_statement(false);
+    if ((is_colliding(pac_.position, blinky_.position) && blinky_.is_alive)
+        || (is_colliding(pac_.position, inky_.position) && inky_.is_alive)
+        || (is_colliding(pac_.position, pinky_.position) && pinky_.is_alive)
+        || (is_colliding(pac_.position, clyde_.position) && clyde_.is_alive))
+        pac_.is_alive = false;
 }
 
 void Game::deadly_ghost_pac_coll(Ghost& ghost)
 {
-    if (is_colliding(pac_.position, ghost.position) && ghost.is_alive()) {
-        ghost.life_statement(false);
+    if (is_colliding(pac_.position, ghost.position) && ghost.is_alive) {
+        ghost.is_alive = false;
         board_.score_increase(scorer_);
         Timer little_score_timer;
         little_score_timer.start();
@@ -262,7 +262,7 @@ auto Game::process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms&
         start();
         return true;
     }
-    if (pac_.is_alive()) {
+    if (pac_.is_alive) {
         if (!is_level_completed()) {
             update(mover);
         } else {
@@ -294,7 +294,7 @@ auto Game::process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms&
                     start_ticks = 2500ms;
                 clear_mover(mover);
                 pac_.mod_dead_animation_statement(false);
-                pac_.life_statement(true);
+                pac_.is_alive = true;
                 board_.decrease_lives();
                 fruit_.despawn();
                 mod_to_waka(true);

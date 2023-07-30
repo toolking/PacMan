@@ -27,13 +27,13 @@ void Clyde::update_pos(board_type const& actual_board, Pac const& pac, bool time
 {
     update_speed(pac);
     update_status(pac, timed_status);
-    for (unsigned char i = 0; i < speed(); i++) {
+    for (unsigned char i = 0; i < speed; i++) {
         update_facing(pac);
         if (is_target_to_calculate(pac)) {
             calculate_target(pac.position);
         }
         calculate_direction(actual_board);
-        move(direction());
+        move(direction);
         check_wrap();
     }
 }

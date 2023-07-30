@@ -1,23 +1,15 @@
 #include "Entity.hpp"
 #include "Globals.hpp"
 
-void Entity::get_possible_position(short& x, short& y, Direction mover)
+auto Entity::get_possible_position(Position const& position, Direction mover) -> Position
 {
+    using enum Direction;
     switch (mover) {
-    case Direction::Right:
-        x++;
-        break;
-    case Direction::Up:
-        y--;
-        break;
-    case Direction::Left:
-        x--;
-        break;
-    case Direction::Down:
-        y++;
-        break;
-    default:
-        break;
+    case Right: return position + Position{1, 0};
+    case Up: return position + Position{0, -1};
+    case Left: return position + Position{-1, 0};
+    case Down: return position + Position{0, 1};
+    default: return position;
     }
 }
 
@@ -33,10 +25,10 @@ auto Entity::char_board_pos(unsigned char side_dir, float cell_x, float cell_y) 
     return {};
 }
 
-auto Entity::wall_collision(short x, short y, board_type const& actual_map, bool can_use_door) -> bool
+auto Entity::wall_collision(Position const& pos, board_type const& actual_map, bool can_use_door) -> bool
 {
-    float const cell_x = x / static_cast<float>(BLOCK_SIZE_24);
-    float const cell_y = y / static_cast<float>(BLOCK_SIZE_24);
+    float const cell_x = pos.x() / static_cast<float>(BLOCK_SIZE_24);
+    float const cell_y = pos.y() / static_cast<float>(BLOCK_SIZE_24);
     for (unsigned char side_dir = 0; side_dir < 4; side_dir++) {
         Position board_pos = char_board_pos(side_dir, cell_x, cell_y);
         if (BlockType::Wall == actual_map[BOARD_WIDTH * board_pos.y() + abs(board_pos.x() % BOARD_WIDTH)]) {
