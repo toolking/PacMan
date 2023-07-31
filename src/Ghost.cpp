@@ -154,11 +154,14 @@ void Ghost::draw(Pac const& pac, Timer ghost_timer, cen::u64ms timer_target)
     }
 
     if (is_alive) {
-        auto const clip = ghost_body_sprite_clips_[current_body_frame_ / GHOST_BODY_FRAMES];
+        auto const clip = ghost_body_sprite_clips_[current_body_frame_/GHOST_BODY_FRAMES];
         body_.render(position.x() - 4, position.y() - 4, 0, clip);
     }
     auto const clip = ghost_eye_sprite_clips_[facing];
     eyes_.render(position.x() - 4, position.y() - 4, 0, clip);
+
     current_body_frame_++;
-    current_body_frame_ %= GHOST_BODY_FRAMES;
+    if (current_body_frame_ / GHOST_BODY_FRAMES >= GHOST_BODY_FRAMES) {
+        current_body_frame_ = 0;
+    }
 }

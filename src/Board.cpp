@@ -6,23 +6,6 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_map>
-
-auto Board::entity_start_position(Entity const& e) const -> Position
-{
-    using enum Entity::Type;
-    auto const et {e.identity()};
-    char const c = (et == PacMan) ? '0'
-        : (et == Blinky)          ? '1'
-        : (et == Inky)            ? '2'
-        : (et == Pinky)           ? '3'
-        : (et == Clyde)           ? '4'
-                                  : ' ';
-    auto const i = CHAR_BOARD.find(c);
-    unsigned char const x = i % BOARD_WIDTH;
-    unsigned char const y = i / BOARD_WIDTH;
-    return Position(x * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, y * BLOCK_SIZE_24);
-}
-
 void Board::set_score()
 {
     score_texture_.set_new_text(std::to_string(score_));
@@ -65,11 +48,6 @@ void Board::draw(board_type const& actual_map, Timer map_animation_timer)
     }
 }
 
-auto Board::map() const -> board_type
-{
-    return numeric_board_;
-}
-
 auto Board::is_extra_life() -> bool
 {
     if (is_extra_ || score_ < 10000) {
@@ -78,11 +56,6 @@ auto Board::is_extra_life() -> bool
     is_extra_ = true;
     lives_++;
     return true;
-}
-
-void Board::increase_lives()
-{
-    lives_++;
 }
 
 void Board::decrease_lives()

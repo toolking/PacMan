@@ -22,7 +22,7 @@ constexpr unsigned char GHOST_BODY_FRAMES = 6;
 constexpr unsigned char GHOST_EYE_FRAMES = 5;
 constexpr unsigned char FRUIT_FRAMES = 8;
 
-constexpr unsigned short SCORE_TABLE[FRUIT_FRAMES] = {100, 300, 500, 700, 1000, 2000, 3000, 5000};
+constexpr std::array<unsigned short,FRUIT_FRAMES> SCORE_TABLE = {100, 300, 500, 700, 1000, 2000, 3000, 5000};
 
 enum class Direction : unsigned char
 {

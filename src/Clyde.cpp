@@ -14,7 +14,7 @@ Clyde::Clyde(cen::renderer_handle& renderer)
     Home = coord_to_position(15,17);
 }
 
-void Clyde::calculate_target(Position pac_pos)
+void Clyde::calculate_target(cen::ipoint pac_pos)
 {
     auto dist_x = static_cast<float>(abs(position.x() - pac_pos.x()));
     if (dist_x > WINDOW_WIDTH / 2)

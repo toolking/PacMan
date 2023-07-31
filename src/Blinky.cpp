@@ -12,7 +12,7 @@ Blinky::Blinky(cen::renderer_handle& renderer)
     Home = coord_to_position(13, 17);
 }
 
-void Blinky::calculate_target(Position pac)
+void Blinky::calculate_target(cen::ipoint pac)
 {
     Target = pac;
 }

@@ -28,7 +28,7 @@ auto Pac::food_collision(board_type& actual_map) -> unsigned char
     cen::fpoint const cell = position.as_f();
     cen::fpoint const cell_pos = {cell.x() / BLOCK_SIZE_24, cell.y() / BLOCK_SIZE_24};
     for (unsigned char side_dir = 0; side_dir < 4; side_dir++) {
-        Position board_pos = char_board_pos(side_dir, cell_pos);
+        cen::ipoint board_pos = char_board_pos(side_dir, cell_pos);
         auto& act_pos = actual_map[BOARD_WIDTH * board_pos.y() + board_pos.x()];
         if (BlockType::Pellet == act_pos) {
             act_pos = BlockType::Nothing;

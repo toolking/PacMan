@@ -11,8 +11,7 @@ TextureImg::TextureImg(cen::renderer_handle& renderer, std::string path)
 
 void TextureImg::render(short x, short y, unsigned char facing, cen::irect const& clip)
 {
-    cen::irect render_quad {x, y, surface_.width(), surface_.height()};
-    render_quad.set_size(clip.width(), clip.height());
+    cen::irect const render_quad {x, y, clip.width(), clip.height()};
     renderer_.render(texture_, clip, render_quad, facing * 90.0f);
 }
 

@@ -16,13 +16,12 @@ public:
     bool is_eatable();
     unsigned short get_score_value();
     void start_score_timer();
-    void reset_score_timer();
     bool check_despawn();
     void despawn();
     void reset_food_counter();
     void draw();
 
-    Position position {13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 20 * BLOCK_SIZE_24};
+    cen::ipoint position {13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 20 * BLOCK_SIZE_24};
 
 private:
     cen::renderer_handle& renderer_;

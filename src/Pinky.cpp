@@ -14,15 +14,16 @@ Pinky::Pinky(cen::renderer_handle& renderer)
 
 void Pinky::calculate_target(Entity pac)
 {
-    short const target_x = pac.position.x()
-                  + ((pac.direction == Direction::Right) ?  4 * BLOCK_SIZE_24 :
-                     (pac.direction == Direction::Left)  ? -4 * BLOCK_SIZE_24 :
-                                                              0);
-    short const target_y = pac.position.y()
-                  + ((pac.direction == Direction::Down) ?  4 * BLOCK_SIZE_24 :
-                     (pac.direction == Direction::Up)   ? -4 * BLOCK_SIZE_24 :
-                                                             0);
-    Target = {target_x, target_y};
+    // Pinky's target is 4 blocks ahead of Pacman
+    using enum Direction;
+    constexpr auto dist = 4 * BLOCK_SIZE_24;
+    switch(pac.direction) {
+    case Right: Target = pac.position + cen::ipoint{  dist,     0}; break;
+    case Up:    Target = pac.position + cen::ipoint{     0, -dist}; break;
+    case Left:  Target = pac.position + cen::ipoint{ -dist,     0}; break;
+    case Down:  Target = pac.position + cen::ipoint{     0,  dist}; break;
+    default:    Target = pac.position;
+    }
 }
 
 void Pinky::update_pos(board_type const& actual_board, Pac const& pac, Status timed_status)

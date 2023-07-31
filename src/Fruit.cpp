@@ -38,13 +38,6 @@ void Fruit::start_score_timer()
     score_timer_.start();
 }
 
-void Fruit::reset_score_timer()
-{
-    using namespace std::chrono_literals;
-    if (score_timer_.get_ticks() > 1000ms)
-        score_timer_.reset();
-}
-
 auto Fruit::check_despawn() -> bool
 {
     return fruit_timer_.get_ticks() > fruit_duration_;

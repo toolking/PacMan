@@ -31,10 +31,10 @@ public:
     void draw(Pac const& pac, Timer timer, cen::u64ms timer_target);
 
 protected:
-    Position Target;
-    Position ScatterTarget;
-    Position DoorTarget = Position(13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 15 * BLOCK_SIZE_24);
-    Position Home;
+    cen::ipoint Target;
+    cen::ipoint ScatterTarget;
+    cen::ipoint DoorTarget = cen::ipoint(13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 15 * BLOCK_SIZE_24);
+    cen::ipoint Home;
 
 private:
     cen::renderer_handle& renderer_;

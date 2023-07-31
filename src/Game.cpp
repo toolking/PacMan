@@ -5,16 +5,12 @@
 #include <iostream>
 #include <sstream>
 
-void Game::reset_ghosts_life_statement()
+void Game::reset_ghosts()
 {
-    blinky_.is_alive = true;
-    inky_.is_alive = true;
-    pinky_.is_alive = true;
-    clyde_.is_alive = true;
-}
-
-void Game::reset_ghosts_facing()
-{
+    blinky_.reset();
+    inky_.reset();
+    pinky_.reset();
+    clyde_.reset();
     blinky_.facing = 0;
     inky_.facing = 1;
     pinky_.facing = 1;
@@ -28,16 +24,11 @@ void Game::start()
         return;
     }
     if (is_level_completed()) {
-        actual_map_ = board_.map();
+        actual_map_ = Board::BIN_BOARD;
     }
-    pac_.position = board_.entity_start_position(pac_);
-    blinky_.position = board_.entity_start_position(blinky_);
-    inky_.position = board_.entity_start_position(inky_);
-    pinky_.position = board_.entity_start_position(pinky_);
-    clyde_.position = board_.entity_start_position(clyde_);
+    pac_.reset();
     pac_.change_energy_status(false);
-    reset_ghosts_life_statement();
-    reset_ghosts_facing();
+    reset_ghosts();
     pac_.reset_current_living_frame();
     ghost_timer_.restart();
     is_game_started_ = true;
@@ -247,7 +238,7 @@ void Game::draw_little_score()
     });
     for (auto& i : little_score_entries_) {
         auto const score {std::get<unsigned short>(i)};
-        auto const& position {std::get<Position>(i)};
+        auto const& position {std::get<cen::ipoint>(i)};
         TextureFont<true> this_lil_texture {renderer_, std::to_string(score)};
         this_lil_texture.render(position.x(), position.y() - BLOCK_SIZE_24 / 2);
     }
@@ -267,8 +258,7 @@ auto Game::process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms&
             update(mover);
         } else {
             if (!map_animation_timer_.is_started()) {
-                if (start_ticks != 2500ms)
-                    start_ticks = 2500ms;
+                start_ticks = 2500ms;
                 pac_.reset_current_living_frame();
                 fruit_.despawn();
                 fruit_.reset_food_counter();
@@ -290,8 +280,7 @@ auto Game::process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms&
     } else {
         if (board_.get_lives() > 0) {
             if (pac_.is_dead_animation_ended()) {
-                if (start_ticks != 2500ms)
-                    start_ticks = 2500ms;
+                start_ticks = 2500ms;
                 clear_mover(mover);
                 pac_.mod_dead_animation_statement(false);
                 pac_.is_alive = true;

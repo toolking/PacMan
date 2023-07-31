@@ -12,7 +12,7 @@ Inky::Inky(cen::renderer_handle& renderer)
     Home = coord_to_position(11,17);
 }
 
-void Inky::calculate_target(Entity pac, Position pos_blinky)
+void Inky::calculate_target(Entity pac, cen::ipoint pos_blinky)
 {
     auto const x = pac.position.x()
                   + ((pac.direction == Direction::Right) ?  2 * BLOCK_SIZE_24 :
@@ -22,10 +22,10 @@ void Inky::calculate_target(Entity pac, Position pos_blinky)
                   + ((pac.direction == Direction::Down) ?  2 * BLOCK_SIZE_24 :
                      (pac.direction == Direction::Up)   ? -2 * BLOCK_SIZE_24 :
                                                              0);
-    Target = Position(x + x - pos_blinky.x(), y + y - pos_blinky.y());
+    Target = cen::ipoint(x + x - pos_blinky.x(), y + y - pos_blinky.y());
 }
 
-void Inky::update_pos(board_type const& actual_board, Pac const& pac, Position const& pos_blinky, Status timed_status)
+void Inky::update_pos(board_type const& actual_board, Pac const& pac, cen::ipoint const& pos_blinky, Status timed_status)
 {
     update_speed(pac);
     update_status(pac, timed_status);

@@ -6,16 +6,6 @@
 
 using Position = cen::ipoint;
 
-//struct Position
-//{
-//    Position() = default;
-//    Position(short x, short y)
-//      : x {x}, y {y}
-//    {}
-//    std::weak_ordering operator<=>(Position const& other) const = default;
-//    short x{}, y{};
-//};
-
 inline
 bool is_colliding(Position const& a, Position const& b)
 {
