@@ -48,7 +48,7 @@ public:
         auto const i = Board::CHAR_BOARD.find(c);
         unsigned char const x = i % BOARD_WIDTH;
         unsigned char const y = i / BOARD_WIDTH;
-        return cen::ipoint(x * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, y * BLOCK_SIZE_24);
+        return cen::ipoint{x,y} * BLOCK_SIZE_24 + cen::ipoint{BLOCK_SIZE_24 / 2,0};
     }
 
     void reset()

@@ -57,8 +57,7 @@ void Fruit::draw()
 {
     using namespace std::chrono_literals;
     if (fruit_timer_.is_started()) {
-        auto clip = fruit_sprite_clips_[current_fruit_];
-        fruit_texture_.render(position.x() - 4, position.y() - 4, 0, clip);
+        fruit_texture_.render(position.x() - 4, position.y() - 4, 0, current_fruit_);
     }
     if (score_timer_.is_started() && score_timer_.get_ticks() < 1s) {
         TextureFont<true> score_texture{renderer_, std::to_string(get_score_value())};

@@ -63,7 +63,6 @@ public:
     }
     void set_score();
     bool is_extra_life();
-    // void increase_lives();
     void decrease_lives();
     void score_increase(unsigned short scorer);
     unsigned char get_lives();

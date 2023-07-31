@@ -47,12 +47,10 @@ private:
     void draw();
     void entity_collisions();
     void food();
-    auto get_level() -> unsigned short;
-    void increase_level();
     auto is_level_completed() -> bool;
-    void mod_death_sound_statement(bool new_death_sound_statement);
-    void mod_start_statement(bool new_start_statement);
-    void mod_to_waka(bool new_waka);
+    //void mod_death_sound_statement(bool new_death_sound_statement);
+    //void mod_start_statement(bool new_start_statement);
+    //void mod_to_waka(bool new_waka);
     auto process(std::vector<Direction>& mover, cen::u64ms& start_ticks) -> bool;
     void reset_ghosts();
     void start();

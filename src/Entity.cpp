@@ -61,4 +61,3 @@ void Entity::check_wrap()
     if (position.x() < -BLOCK_SIZE_24)
         position.set_x(WINDOW_WIDTH + BLOCK_SIZE_24);
 }
-

@@ -26,7 +26,8 @@ void Board::draw(board_type const& actual_map, Timer map_animation_timer)
     high_score_label_texture_.render(WINDOW_WIDTH / 2, 0);
     high_score_texture_.render(WINDOW_WIDTH / 2, BLOCK_SIZE_32);
     for (unsigned char i = 1; i <= lives_; i++) {
-        lives_texture_.render(i * BLOCK_SIZE_32, 26 * BLOCK_SIZE_32 - BLOCK_SIZE_32 / 4);
+        cen::ipoint const pos {i,26};
+        lives_texture_.render(pos * BLOCK_SIZE_32 - cen::ipoint{0,BLOCK_SIZE_32 / 4});
     }
     if (map_animation_timer.is_started()) {
         using namespace std::chrono_literals;
@@ -41,9 +42,9 @@ void Board::draw(board_type const& actual_map, Timer map_animation_timer)
     unsigned short i = 0;
     for (auto const& c : actual_map) {
         if (c == BlockType::Pellet)
-            pellet_texture_.render(i % BOARD_WIDTH * BLOCK_SIZE_24, i / BOARD_WIDTH * BLOCK_SIZE_24);
+            pellet_texture_.render(cen::ipoint{i % BOARD_WIDTH, i / BOARD_WIDTH} * BLOCK_SIZE_24);
         else if (c == BlockType::Energizer)
-            energizer_texture_.render(i % BOARD_WIDTH * BLOCK_SIZE_24, i / BOARD_WIDTH * BLOCK_SIZE_24);
+            energizer_texture_.render(cen::ipoint{i % BOARD_WIDTH, i / BOARD_WIDTH} * BLOCK_SIZE_24);
         ++i;
     }
 }
@@ -70,9 +71,5 @@ auto Board::get_lives() -> unsigned char
 
 void Board::score_increase(unsigned short scorer)
 {
-    switch (scorer) {
-    case 0: score_ += 10; break;
-    case 1: score_ += 50; break;
-    default: score_ += scorer; break;
-    }
+    score_ += scorer;
 }

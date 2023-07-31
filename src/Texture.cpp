@@ -5,8 +5,7 @@
 
 TextureImg::TextureImg(cen::renderer_handle& renderer, std::string path)
   : renderer_ {renderer}
-  , surface_ {path}
-  , texture_ {renderer_.make_texture(surface_)}
+  , texture_ {renderer_.make_texture(cen::surface{path})}
 {}
 
 void TextureImg::render(short x, short y, unsigned char facing, cen::irect const& clip)

@@ -8,8 +8,6 @@
 #include <vector>
 #include <array>
 
-
-
 class Ghost : public Entity
 {
 public:
@@ -33,15 +31,13 @@ public:
 protected:
     cen::ipoint Target;
     cen::ipoint ScatterTarget;
-    cen::ipoint DoorTarget = cen::ipoint(13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 15 * BLOCK_SIZE_24);
+    cen::ipoint const DoorTarget = cen::ipoint{13, 15} * BLOCK_SIZE_24 + cen::ipoint {BLOCK_SIZE_24 / 2,0};
     cen::ipoint Home;
 
 private:
     cen::renderer_handle& renderer_;
-    TextureImg body_;
-    TextureImg eyes_;
-    std::array<cen::irect,GHOST_BODY_FRAMES> ghost_body_sprite_clips_{init_frames<GHOST_BODY_FRAMES>()};
-    std::array<cen::irect,GHOST_EYE_FRAMES> ghost_eye_sprite_clips_{init_frames<GHOST_EYE_FRAMES>()};
+    TextureMultiImg<GHOST_BODY_FRAMES> body_;
+    TextureMultiImg<GHOST_EYE_FRAMES> eyes_;
     cen::color color_;
     unsigned char current_body_frame_ = 0;
     bool can_use_door_ = false;

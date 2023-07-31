@@ -44,17 +44,3 @@ inline Direction operator- (Direction const& dir)
     default: return Nowhere;
     }
 }
-
-template<std::size_t Size>
-inline constexpr
-auto init_frames() -> auto
-{
-    std::array<cen::irect, Size> sprite_clips;
-    auto x = 0;
-    for (auto& sprite : sprite_clips) {
-        sprite.set_position(x, 0);
-        sprite.set_size(BLOCK_SIZE_32, BLOCK_SIZE_32);
-        x += BLOCK_SIZE_32;
-    }
-    return sprite_clips;
-}

@@ -23,7 +23,7 @@ void Pac::update_pos(std::vector<Direction>& mover, board_type const& actual_map
     }
 }
 
-auto Pac::food_collision(board_type& actual_map) -> unsigned char
+auto Pac::food_collision(board_type& actual_map) -> BlockType
 {
     cen::fpoint const cell = position.as_f();
     cen::fpoint const cell_pos = {cell.x() / BLOCK_SIZE_24, cell.y() / BLOCK_SIZE_24};
@@ -32,13 +32,13 @@ auto Pac::food_collision(board_type& actual_map) -> unsigned char
         auto& act_pos = actual_map[BOARD_WIDTH * board_pos.y() + board_pos.x()];
         if (BlockType::Pellet == act_pos) {
             act_pos = BlockType::Nothing;
-            return 0;
+            return BlockType::Pellet;
         } else if (BlockType::Energizer == act_pos) {
             act_pos = BlockType::Nothing;
-            return 1;
+            return BlockType::Energizer;
         }
     }
-    return 2;
+    return BlockType::Nothing;
 }
 
 auto Pac::is_energized() const -> bool
@@ -94,11 +94,9 @@ void Pac::wall_collision_frame()
 void Pac::draw()
 {
     if (is_alive) {
-        auto clip = living_pac_sprite_clips_[curr_living_pac_frame_ / (LIVING_PAC_FRAMES * 4)];
-        living_pac_.render(position.x() - 4, position.y() - 4, facing, clip);
+        living_pac_.render(position.x() - 4, position.y() - 4, facing, curr_living_pac_frame_ / (LIVING_PAC_FRAMES * 4));
     } else {
-        auto clip = death_pac_sprite_clips_[curr_death_pac_frame_ / DEATH_PAC_FRAMES];
-        death_pac_.render(position.x() - 4, position.y() - 4, facing, clip);
+        death_pac_.render(position.x() - 4, position.y() - 4, facing, curr_death_pac_frame_ / DEATH_PAC_FRAMES);
         curr_death_pac_frame_++;
         if (curr_death_pac_frame_ / DEATH_PAC_FRAMES >= DEATH_PAC_FRAMES) {
             dead_animation_statement_ = true;

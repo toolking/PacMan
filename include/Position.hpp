@@ -12,11 +12,6 @@ inline constexpr auto is_colliding(cen::ipoint const& a_point, cen::ipoint const
     return b_rect.contains(a_point);
 }
 
-inline constexpr auto coord_to_position(int x, int y) -> cen::ipoint
-{
-    return cen::ipoint {x * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, y * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2};
-}
-
 inline constexpr auto operator*(cen::ipoint const& point, std::integral auto scalar) -> cen::ipoint
 {
     return cen::ipoint {point.x() * scalar, point.y() * scalar};
@@ -30,4 +25,9 @@ inline constexpr auto operator*(std::integral auto scalar, cen::ipoint const& po
 inline constexpr auto operator/(cen::ipoint const& point, std::integral auto scalar) -> cen::ipoint
 {
     return cen::ipoint {point.x() / scalar, point.y() / scalar};
+}
+
+inline constexpr auto coord_to_position(int x, int y) -> cen::ipoint
+{
+    return cen::ipoint {x,y} * BLOCK_SIZE_24 + cen::ipoint{BLOCK_SIZE_24 / 2, BLOCK_SIZE_24 / 2};
 }

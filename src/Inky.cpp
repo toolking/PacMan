@@ -22,7 +22,7 @@ void Inky::calculate_target(Entity const& pac, cen::ipoint const& pos_blinky)
     case Up: Target = pac.position + cen::ipoint {0, -dist}; break;
     case Left: Target = pac.position + cen::ipoint {-dist, 0}; break;
     case Down: Target = pac.position + cen::ipoint {0, dist}; break;
-    default: Target = pac.position;
+    default: Target = pac.position; break;
     }
     Target = Target + Target - pos_blinky;
 }

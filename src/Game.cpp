@@ -37,11 +37,6 @@ void Game::start()
     ready_.render(11 * BLOCK_SIZE_24, 20 * BLOCK_SIZE_24 - 5);
 }
 
-void Game::mod_start_statement(bool new_start_statement)
-{
-    is_game_started_ = new_start_statement;
-}
-
 void Game::clock()
 {
     if (ghost_timer_.get_ticks() <= ghost_timer_target_)
@@ -72,8 +67,8 @@ void Game::update_positions(std::vector<Direction>& mover, Ghost::Status timed_s
 void Game::food()
 {
     switch (pac_.food_collision(actual_map_)) {
-    case 0:
-        board_.score_increase(0);
+    case BlockType::Pellet:
+        board_.score_increase(10);
         fruit_.update_food_counter();
         if (is_to_waka_sound_) {
             sound.play_waka();
@@ -81,8 +76,8 @@ void Game::food()
         }
         waka_timer_.reset();
         break;
-    case 1:
-        board_.score_increase(1);
+    case BlockType::Energizer:
+        board_.score_increase(50);
         fruit_.update_food_counter();
         pac_.change_energy_status(true);
         scorer_ = 200;
@@ -153,16 +148,6 @@ void Game::update(std::vector<Direction>& mover)
     entity_collisions();
 }
 
-auto Game::get_level() -> unsigned short
-{
-    return level_;
-}
-
-void Game::increase_level()
-{
-    level_++;
-}
-
 void Game::update_difficulty()
 {
     using namespace std::chrono_literals;
@@ -212,11 +197,6 @@ void Game::deadly_ghost_pac_coll(Ghost& ghost)
     }
 }
 
-void Game::mod_to_waka(bool new_waka)
-{
-    is_to_waka_sound_ = new_waka;
-}
-
 void Game::death_sound()
 {
     if (!is_to_death_pac_sound_) {
@@ -225,11 +205,6 @@ void Game::death_sound()
     sound.stop_waka();
     sound.play_pac_death();
     is_to_death_pac_sound_ = false;
-}
-
-void Game::mod_death_sound_statement(bool new_death_sound_statement)
-{
-    is_to_death_pac_sound_ = new_death_sound_statement;
 }
 
 void Game::draw_little_score()
@@ -257,26 +232,28 @@ auto Game::process(std::vector<Direction>& mover, cen::u64ms& start_ticks) -> bo
     if (pac_.is_alive) {
         if (!is_level_completed()) {
             update(mover);
-        } else {
-            if (!map_animation_timer_.is_started()) {
-                start_ticks = 2500ms;
-                pac_.reset_current_living_frame();
-                fruit_.despawn();
-                fruit_.reset_food_counter();
-                sound.stop_waka();
-                sound.stop_scatter_ghost();
-                mod_to_waka(true);
-                map_animation_timer_.start();
-            } else if (map_animation_timer_.get_ticks() > 2100ms) {
-                clear_mover(mover);
-                increase_level();
-                fruit_.mod_current_fruit(get_level());
-                update_difficulty();
-                mod_start_statement(false);
-                map_animation_timer_.reset();
-                game_timer_.start();
-                return false;
-            }
+            return true;
+        }
+        if (!map_animation_timer_.is_started()) {
+            start_ticks = 2500ms;
+            pac_.reset_current_living_frame();
+            fruit_.despawn();
+            fruit_.reset_food_counter();
+            sound.stop_waka();
+            sound.stop_scatter_ghost();
+            is_to_waka_sound_ = true;
+            map_animation_timer_.start();
+            return true;
+        }
+        if (map_animation_timer_.get_ticks() > 2100ms) {
+            clear_mover(mover);
+            level_++;
+            fruit_.mod_current_fruit(level_);
+            update_difficulty();
+            is_game_started_ = false;
+            map_animation_timer_.reset();
+            game_timer_.start();
+            return false;
         }
     } else {
         if (board_.get_lives() > 0) {
@@ -287,16 +264,14 @@ auto Game::process(std::vector<Direction>& mover, cen::u64ms& start_ticks) -> bo
                 pac_.is_alive = true;
                 board_.decrease_lives();
                 fruit_.despawn();
-                mod_to_waka(true);
-                mod_death_sound_statement(true);
-                mod_start_statement(false);
+                is_to_waka_sound_ = true;
+                is_to_death_pac_sound_ = true;
+                is_game_started_ = false;
                 game_timer_.restart();
                 return false;
             }
         } else {
-            if (pac_.is_dead_animation_ended()) {
-                mod_start_statement(false);
-            }
+            is_game_started_ = !pac_.is_dead_animation_ended();
         }
         death_sound();
     }
@@ -343,7 +318,7 @@ void Game::run()
             if (handler.is<cen::keyboard_event>()) {
                 namespace sc = cen::scancodes;
                 const auto& keyboardEvent = handler.get<cen::keyboard_event>();
-                if (keyboardEvent.released()&&keyboardEvent.is_active(sc::escape)) {
+                if (keyboardEvent.released() && keyboardEvent.is_active(sc::escape)) {
                     running = false;
                     break;
                 }

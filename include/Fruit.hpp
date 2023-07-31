@@ -21,14 +21,13 @@ public:
     void reset_food_counter();
     void draw();
 
-    cen::ipoint position {13 * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, 20 * BLOCK_SIZE_24};
+    cen::ipoint const position {cen::ipoint {13, 20} * BLOCK_SIZE_24 + cen::ipoint {BLOCK_SIZE_24 / 2, 0}};
 
 private:
     cen::renderer_handle& renderer_;
-    TextureImg fruit_texture_;
+    TextureMultiImg<FRUIT_FRAMES> fruit_texture_;
     Timer fruit_timer_;
     Timer score_timer_;
-    std::array<cen::irect,FRUIT_FRAMES> fruit_sprite_clips_{init_frames<FRUIT_FRAMES>()};
     unsigned char current_fruit_ {0};
     cen::u64ms fruit_duration_ {9000};
     unsigned char food_counter_ {0};
