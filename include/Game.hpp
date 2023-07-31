@@ -31,8 +31,8 @@ public:
       , pinky_ {renderer_}
       , clyde_ {renderer_}
       , fruit_ {renderer_}
-      , ready_ {renderer_, "ready!", cen::colors::yellow}
       , game_over_texture_ {renderer_, "game  over", cen::colors::red}
+      , ready_ {renderer_, "ready!", cen::colors::yellow}
     {}
 
     void run();
@@ -53,7 +53,7 @@ private:
     void mod_death_sound_statement(bool new_death_sound_statement);
     void mod_start_statement(bool new_start_statement);
     void mod_to_waka(bool new_waka);
-    auto process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms& start_ticks) -> bool;
+    auto process(std::vector<Direction>& mover, cen::u64ms& start_ticks) -> bool;
     void reset_ghosts();
     void start();
     void update_difficulty();
@@ -72,23 +72,25 @@ private:
     Clyde clyde_;
     Fruit fruit_;
 
-    Timer map_animation_timer_;
-    TextureFont<> ready_;
     TextureFont<> game_over_texture_;
+    TextureFont<> ready_;
+
     board_type actual_map_ {Board::BIN_BOARD};
     bool is_game_started_ {false};
-    Timer ghost_timer_;
-    cen::u64ms scatter_time_ {7s};
-    cen::u64ms chasing_time_ {20s};
-    cen::u64ms ghost_timer_target_ {chasing_time_};
-    Ghost::Status timed_status_ {Ghost::Status::Chase};
-    unsigned short scorer_ {200};
-    std::list<std::tuple<Timer,cen::ipoint,unsigned short>> little_score_entries_;
-    cen::u64ms little_timer_target_ {1s};
-    unsigned short level_ {1};
+    bool is_to_death_pac_sound_ {true};
     bool is_to_scatter_sound_ {true};
     bool is_to_waka_sound_ {true};
+    cen::u64ms chasing_time_ {20s};
+    cen::u64ms ghost_timer_target_ {chasing_time_};
+    cen::u64ms little_timer_target_ {1s};
+    cen::u64ms scatter_time_ {7s};
+    Ghost::Status timed_status_ {Ghost::Status::Chase};
+    std::list<std::tuple<Timer,cen::ipoint,unsigned short>> little_score_entries_;
+    Timer game_timer_;
+    Timer ghost_timer_;
+    Timer map_animation_timer_;
     Timer waka_timer_;
-    bool is_to_death_pac_sound_ {true};
     unsigned char dead_ghosts_counter_ {0};
+    unsigned short level_ {1};
+    unsigned short scorer_ {200};
 };

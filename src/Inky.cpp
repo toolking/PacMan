@@ -8,21 +8,23 @@
 Inky::Inky(cen::renderer_handle& renderer)
   : Ghost(renderer, cen::colors::cyan, Entity::Type::Inky)
 {
-    ScatterTarget = coord_to_position(26,35);
-    Home = coord_to_position(11,17);
+    ScatterTarget = coord_to_position(26, 35);
+    Home = coord_to_position(11, 17);
 }
 
-void Inky::calculate_target(Entity pac, cen::ipoint pos_blinky)
+void Inky::calculate_target(Entity const& pac, cen::ipoint const& pos_blinky)
 {
-    auto const x = pac.position.x()
-                  + ((pac.direction == Direction::Right) ?  2 * BLOCK_SIZE_24 :
-                     (pac.direction == Direction::Left)  ? -2 * BLOCK_SIZE_24 :
-                                                              0);
-    auto const y = pac.position.y()
-                  + ((pac.direction == Direction::Down) ?  2 * BLOCK_SIZE_24 :
-                     (pac.direction == Direction::Up)   ? -2 * BLOCK_SIZE_24 :
-                                                             0);
-    Target = cen::ipoint(x + x - pos_blinky.x(), y + y - pos_blinky.y());
+    using enum Direction;
+    // Inky's target is twice the distance between Pac and Blinky in the direction of Pac
+    constexpr auto dist = 2 * BLOCK_SIZE_24;
+    switch (pac.direction) {
+    case Right: Target = pac.position + cen::ipoint {dist, 0}; break;
+    case Up: Target = pac.position + cen::ipoint {0, -dist}; break;
+    case Left: Target = pac.position + cen::ipoint {-dist, 0}; break;
+    case Down: Target = pac.position + cen::ipoint {0, dist}; break;
+    default: Target = pac.position;
+    }
+    Target = Target + Target - pos_blinky;
 }
 
 void Inky::update_pos(board_type const& actual_board, Pac const& pac, cen::ipoint const& pos_blinky, Status timed_status)

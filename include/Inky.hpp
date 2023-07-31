@@ -12,5 +12,5 @@ public:
     void update_pos(board_type const& actual_board, Pac const& pac, cen::ipoint  const& blinky, Status timed_status);
 
 private:
-    void calculate_target(Entity pac, cen::ipoint blinky);
+    void calculate_target(Entity const& pac, cen::ipoint const& blinky);
 };

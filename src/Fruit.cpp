@@ -60,10 +60,8 @@ void Fruit::draw()
         auto clip = fruit_sprite_clips_[current_fruit_];
         fruit_texture_.render(position.x() - 4, position.y() - 4, 0, clip);
     }
-    if (score_timer_.is_started() && score_timer_.get_ticks() < 1000ms) {
-        std::stringstream ss;
-        ss << SCORE_TABLE[current_fruit_];
-        TextureFont<true> score_texture{renderer_, ss.str(), cen::colors::white};
+    if (score_timer_.is_started() && score_timer_.get_ticks() < 1s) {
+        TextureFont<true> score_texture{renderer_, std::to_string(get_score_value())};
         score_texture.render(position.x(), position.y() - BLOCK_SIZE_24 / 2);
     }
 }

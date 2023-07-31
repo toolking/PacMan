@@ -4,16 +4,30 @@
 
 #include <compare>
 
-using Position = cen::ipoint;
-
-inline
-bool is_colliding(Position const& a, Position const& b)
+inline constexpr auto is_colliding(cen::ipoint const& a_point, cen::ipoint const& b_point) -> bool
 {
-    return (a.x() > b.x() - BLOCK_SIZE_24 && a.x() < b.x() + BLOCK_SIZE_24)
-        && (a.y() > b.y() - BLOCK_SIZE_24 && a.y() < b.y() + BLOCK_SIZE_24);
+    cen::irect const b_rect {
+        b_point.x() - BLOCK_SIZE_24, b_point.y() - BLOCK_SIZE_24,
+        2 * BLOCK_SIZE_24, 2 * BLOCK_SIZE_24};
+    return b_rect.contains(a_point);
 }
 
-constexpr auto coord_to_position(short x, short y) -> Position
+inline constexpr auto coord_to_position(int x, int y) -> cen::ipoint
 {
-    return Position {x * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, y * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2};
+    return cen::ipoint {x * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2, y * BLOCK_SIZE_24 + BLOCK_SIZE_24 / 2};
+}
+
+inline constexpr auto operator*(cen::ipoint const& point, std::integral auto scalar) -> cen::ipoint
+{
+    return cen::ipoint {point.x() * scalar, point.y() * scalar};
+}
+
+inline constexpr auto operator*(std::integral auto scalar, cen::ipoint const& point) -> cen::ipoint
+{
+    return point * scalar;
+}
+
+inline constexpr auto operator/(cen::ipoint const& point, std::integral auto scalar) -> cen::ipoint
+{
+    return cen::ipoint {point.x() / scalar, point.y() / scalar};
 }

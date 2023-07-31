@@ -12,7 +12,7 @@ Blinky::Blinky(cen::renderer_handle& renderer)
     Home = coord_to_position(13, 17);
 }
 
-void Blinky::calculate_target(cen::ipoint pac)
+void Blinky::calculate_target(cen::ipoint const& pac)
 {
     Target = pac;
 }
@@ -21,6 +21,7 @@ void Blinky::update_pos(board_type const& actual_board, Pac const& pac, Status t
 {
     update_speed(pac);
     update_status(pac, timed_status);
+    // the higher the speed, the more times we need to update the position
     for (unsigned char i = 0; i < speed; i++) {
         update_facing(pac);
         if (is_target_to_calculate(pac)) {

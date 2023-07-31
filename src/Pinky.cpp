@@ -12,7 +12,7 @@ Pinky::Pinky(cen::renderer_handle& renderer)
     Home = coord_to_position(13,17);
 }
 
-void Pinky::calculate_target(Entity pac)
+void Pinky::calculate_target(Entity const& pac)
 {
     // Pinky's target is 4 blocks ahead of Pacman
     using enum Direction;

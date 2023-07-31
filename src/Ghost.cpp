@@ -145,7 +145,7 @@ void Ghost::draw(Pac const& pac, Timer ghost_timer, cen::u64ms timer_target)
 
     if (pac.is_energized() && is_alive && !is_home()) {
         body_.set_color(cen::colors::blue);
-        if (ghost_timer.get_ticks() > timer_target - 2000ms) {
+        if (ghost_timer.get_ticks() > timer_target - 2s) {
             if ((ghost_timer.get_ticks() / 250) % 2 == 1ms) {
                 body_.set_color(cen::colors::white);
                 eyes_.set_color(cen::colors::red);

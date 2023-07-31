@@ -166,10 +166,11 @@ void Game::increase_level()
 void Game::update_difficulty()
 {
     using namespace std::chrono_literals;
+    // every 3 levels the ghosts will be chasing longer and scattering shorter
     if (level_ % 3 == 0) {
-        chasing_time_ += 1000ms;
-        if (scatter_time_ > 2000ms) {
-            scatter_time_ -= 1000ms;
+        chasing_time_ += 1s;
+        if (scatter_time_ > 2s) {
+            scatter_time_ -= 1s;
         }
     }
 }
@@ -244,12 +245,12 @@ void Game::draw_little_score()
     }
 }
 
-auto Game::process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms& start_ticks) -> bool
+auto Game::process(std::vector<Direction>& mover, cen::u64ms& start_ticks) -> bool
 {
     using namespace std::chrono_literals;
     // Returns false when should render the last animation frame.
     // It's bad looking, so I don't want to render it.
-    if (game_timer.get_ticks() < start_ticks) {
+    if (game_timer_.get_ticks() < start_ticks) {
         start();
         return true;
     }
@@ -273,7 +274,7 @@ auto Game::process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms&
                 update_difficulty();
                 mod_start_statement(false);
                 map_animation_timer_.reset();
-                game_timer.start();
+                game_timer_.start();
                 return false;
             }
         }
@@ -289,7 +290,7 @@ auto Game::process(Timer& game_timer, std::vector<Direction>& mover, cen::u64ms&
                 mod_to_waka(true);
                 mod_death_sound_statement(true);
                 mod_start_statement(false);
-                game_timer.restart();
+                game_timer_.restart();
                 return false;
             }
         } else {
@@ -324,11 +325,10 @@ void Game::draw()
 
 void Game::run()
 {
-    Timer game_timer;
     cen::u64ms start_ticks {START_WAIT_TICKS};
     std::vector<Direction> mover;
     mover.push_back(Direction::Nowhere);
-    game_timer.start();
+    game_timer_.start();
     sound.play_intro();
 
     cen::event_handler handler;
@@ -341,11 +341,15 @@ void Game::run()
                 break;
             }
             if (handler.is<cen::keyboard_event>()) {
+                namespace sc = cen::scancodes;
                 const auto& keyboardEvent = handler.get<cen::keyboard_event>();
+                if (keyboardEvent.released()&&keyboardEvent.is_active(sc::escape)) {
+                    running = false;
+                    break;
+                }
                 if (!keyboardEvent.pressed()) {
                     continue;
                 }
-                namespace sc = cen::scancodes;
                 using enum Direction;
                 if (keyboardEvent.is_active(sc::right)
                     || keyboardEvent.is_active(sc::d)) {
@@ -368,7 +372,7 @@ void Game::run()
 
         renderer_.clear();
 
-        if (process(game_timer, mover, start_ticks)) {
+        if (process(mover, start_ticks)) {
             draw();
             renderer_.present();
         }
