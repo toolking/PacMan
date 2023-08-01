@@ -1,15 +1,15 @@
 #include "Entity.hpp"
 #include "Globals.hpp"
 
-auto Entity::get_possible_position(cen::ipoint const& position, Direction mover) -> cen::ipoint
+auto Entity::get_possible_position(cen::ipoint const& pos, Direction mover) -> cen::ipoint
 {
     using enum Direction;
     switch (mover) {
-    case Right: return position + cen::ipoint{1, 0};
-    case Up: return position + cen::ipoint{0, -1};
-    case Left: return position + cen::ipoint{-1, 0};
-    case Down: return position + cen::ipoint{0, 1};
-    default: return position;
+    case Right: return pos + cen::ipoint{1, 0};
+    case Up: return pos + cen::ipoint{0, -1};
+    case Left: return pos + cen::ipoint{-1, 0};
+    case Down: return pos + cen::ipoint{0, 1};
+    default: return pos;
     }
 }
 

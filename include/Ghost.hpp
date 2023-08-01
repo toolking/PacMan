@@ -19,10 +19,8 @@ public:
 
     Ghost(cen::renderer_handle& renderer, cen::color color, Entity::Type identity);
     bool is_target_to_calculate(Pac const& pac);
-    void poss_dirs_bubble_sort(std::vector<float>& distances, std::vector<Direction>& possible_directions);
     void calculate_direction(board_type const& actual_map);
     bool is_home();
-    void mod_status(Status status);
     void update_status(Pac const& pac, Status timed_status);
     void update_facing(Pac const& pac);
     void update_speed(Pac const& pac);

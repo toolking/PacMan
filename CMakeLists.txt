@@ -44,11 +44,11 @@ target_compile_features( PacMan
 target_compile_options( PacMan
   PRIVATE
     -Wall
-    #-Wextra
-    #-Werror
+    -Wextra
+    -Werror
     #-Wconversion
     #-Wsign-conversion
-    #-Wshadow
-    #-pedantic
-    #-pedantic-errors
+    -Wshadow
+    -pedantic
+    -pedantic-errors
 )

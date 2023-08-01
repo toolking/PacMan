@@ -1,6 +1,8 @@
 #include "Ghost.hpp"
 
-inline auto direction2facing(Direction d) -> unsigned int
+namespace {
+
+auto direction2facing(Direction d) -> unsigned int
 {
     using enum Direction;
     switch (d) {
@@ -11,6 +13,18 @@ inline auto direction2facing(Direction d) -> unsigned int
     default: return 4;
     }
 }
+
+void order_by_distance(std::vector<std::pair<float,Direction>>& pos)
+{
+    for (auto i = 0U; i < pos.size(); i++) {
+        for (auto j = 0U; j < pos.size(); j++) {
+            if (pos[i].first < pos[j].first) {
+                std::swap(pos[j], pos[i]);
+            }
+        }
+    }
+}
+} // namespace
 
 Ghost::Ghost(cen::renderer_handle& renderer, cen::color color, Entity::Type identity)
   : Entity {identity}
@@ -54,43 +68,25 @@ auto Ghost::is_target_to_calculate(Pac const& pac) -> bool
     return true;
 }
 
-void Ghost::poss_dirs_bubble_sort(std::vector<float>& distances, std::vector<Direction>& possible_directions)
-{
-    for (auto i = 0U; i < distances.size(); i++) {
-        for (auto j = 0U; j < distances.size(); j++) {
-            if (distances[i] < distances[j]) {
-                std::swap(distances[j], distances[i]);
-                std::swap(possible_directions[j], possible_directions[i]);
-            }
-        }
-    }
-}
-
 void Ghost::calculate_direction(board_type const& actual_map)
 {
-    std::vector<float> distances;
-    std::vector<Direction> possible_directions;
     std::vector<std::pair<float,Direction>> possibilities;
     using enum Direction;
-    for (Direction i : {Right, Up, Left, Down}) {
+    for (Direction const i : {Right, Up, Left, Down}) {
         auto const pos = get_possible_position(position, i);
         if (!wall_collision(pos, actual_map, can_use_door_)) {
-            float dist_x = abs(pos.x() - Target.x());
-            dist_x = (dist_x > WINDOW_WIDTH / 2)?WINDOW_WIDTH - dist_x:dist_x;
-            auto dist = static_cast<float>(sqrt(pow(dist_x, 2) + pow(pos.y() - Target.y(), 2)));
-            distances.push_back(dist);
-            possible_directions.push_back(i);
+            possibilities.emplace_back(wrapped_distance(pos, Target), i);
         }
     }
 
-    if (possible_directions.size() == 1) {
-        direction = possible_directions[0];
+    if (possibilities.size() == 1) {
+        direction = possibilities[0].second;
         return;
     }
 
-    poss_dirs_bubble_sort(distances, possible_directions);
+    order_by_distance(possibilities);
 
-    for (auto const& dir : possible_directions) {
+    for (auto const& [dist, dir] : possibilities) {
         if (dir != -direction) {
             direction = dir;
             return;
@@ -102,11 +98,6 @@ auto Ghost::is_home() -> bool
 {
     constexpr cen::irect home {11 * BLOCK_SIZE_24, 15 * BLOCK_SIZE_24, 6 * BLOCK_SIZE_24, 3 * BLOCK_SIZE_24};
     return home.contains(position);
-}
-
-void Ghost::mod_status(Status status)
-{
-    status_ = status;
 }
 
 void Ghost::update_status(Pac const& pac, Status timed_status)
@@ -153,10 +144,11 @@ void Ghost::draw(Pac const& pac, Timer ghost_timer, cen::u64ms timer_target)
         }
     }
 
+    auto const renderpos = position - cen::ipoint{4,4};
     if (is_alive) {
-        body_.render(position.x() - 4, position.y() - 4, 0, current_body_frame_/GHOST_BODY_FRAMES);
+        body_.render(renderpos, 0, current_body_frame_/GHOST_BODY_FRAMES);
     }
-    eyes_.render(position.x() - 4, position.y() - 4, 0, facing);
+    eyes_.render(renderpos, 0, facing);
 
     current_body_frame_++;
     if (current_body_frame_ / GHOST_BODY_FRAMES >= GHOST_BODY_FRAMES) {

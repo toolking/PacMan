@@ -33,6 +33,13 @@ enum class Direction : unsigned char
     Down
 };
 
+constexpr inline auto wrapped_distance(cen::ipoint const& pos1, cen::ipoint const& pos2) -> float
+{
+    auto dist_x = abs(pos1.x() - pos2.x());
+    dist_x = (dist_x > WINDOW_WIDTH / 2)?WINDOW_WIDTH - dist_x:dist_x;
+    return sqrt(dist_x*dist_x + pow(pos1.y() - pos2.y(), 2));
+}
+
 inline Direction operator- (Direction const& dir)
 {
     using enum Direction;

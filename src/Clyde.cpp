@@ -16,10 +16,7 @@ Clyde::Clyde(cen::renderer_handle& renderer)
 
 void Clyde::calculate_target(cen::ipoint const& pac_pos)
 {
-    auto dist_x = static_cast<float>(abs(position.x() - pac_pos.x()));
-    if (dist_x > WINDOW_WIDTH / 2)
-        dist_x = WINDOW_WIDTH - dist_x;
-    auto const dist = static_cast<float>(sqrt(pow(dist_x, 2) + pow(position.y() - pac_pos.y(), 2)));
+    auto const dist = wrapped_distance(position, pac_pos);
     Target = (dist > 8 * BLOCK_SIZE_24) ? pac_pos : ScatterTarget;
 }
 
