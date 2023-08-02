@@ -17,13 +17,7 @@ void Inky::calculate_target(Entity const& pac, cen::ipoint const& pos_blinky)
     using enum Direction;
     // Inky's target is twice the distance between Pac and Blinky in the direction of Pac
     constexpr auto dist = 2 * BLOCK_SIZE_24;
-    switch (pac.direction) {
-    case Right: Target = pac.position + cen::ipoint {dist, 0}; break;
-    case Up: Target = pac.position + cen::ipoint {0, -dist}; break;
-    case Left: Target = pac.position + cen::ipoint {-dist, 0}; break;
-    case Down: Target = pac.position + cen::ipoint {0, dist}; break;
-    default: Target = pac.position; break;
-    }
+    Target = pac.position + direction_to_point(pac.direction) * dist;
     Target = Target + Target - pos_blinky;
 }
 

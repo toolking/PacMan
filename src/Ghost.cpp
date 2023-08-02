@@ -4,14 +4,8 @@ namespace {
 
 auto direction2facing(Direction d) -> unsigned int
 {
-    using enum Direction;
-    switch (d) {
-    case Right: return 0;
-    case Up: return 1;
-    case Left: return 2;
-    case Down: return 3;
-    default: return 4;
-    }
+    auto a = cen::to_underlying(d);
+    return (a-1)%5;
 }
 
 void order_by_distance(std::vector<std::pair<float,Direction>>& pos)
@@ -73,7 +67,7 @@ void Ghost::calculate_direction(board_type const& actual_map)
     std::vector<std::pair<float,Direction>> possibilities;
     using enum Direction;
     for (Direction const i : {Right, Up, Left, Down}) {
-        auto const pos = get_possible_position(position, i);
+        auto const pos = position_in_direction(position, i);
         if (!wall_collision(pos, actual_map, can_use_door_)) {
             possibilities.emplace_back(wrapped_distance(pos, Target), i);
         }
@@ -96,7 +90,7 @@ void Ghost::calculate_direction(board_type const& actual_map)
 
 auto Ghost::is_home() -> bool
 {
-    constexpr cen::irect home {11 * BLOCK_SIZE_24, 15 * BLOCK_SIZE_24, 6 * BLOCK_SIZE_24, 3 * BLOCK_SIZE_24};
+    static constexpr cen::irect home {cen::irect{11,15,6,3} * BLOCK_SIZE_24};
     return home.contains(position);
 }
 
@@ -136,8 +130,8 @@ void Ghost::draw(Pac const& pac, Timer ghost_timer, cen::u64ms timer_target)
 
     if (pac.is_energized() && is_alive && !is_home()) {
         body_.set_color(cen::colors::blue);
-        if (ghost_timer.get_ticks() > timer_target - 2s) {
-            if ((ghost_timer.get_ticks() / 250) % 2 == 1ms) {
+        if (ghost_timer.get_ticks() > timer_target - 2s) { // 2 seconds left
+            if ((ghost_timer.get_ticks() / 250) % 2 == 1ms) { // blink every 250ms
                 body_.set_color(cen::colors::white);
                 eyes_.set_color(cen::colors::red);
             }
